@@ -5,7 +5,7 @@
 
   const clock = document.createElement('span');
   clock.id = 'headerClock';
-  clock.style.cssText = 'display:inline-block;margin-left:10px;font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap';
+  clock.style.cssText = 'display:inline-block;margin-left:10px;font-size:inherit;font-weight:inherit;line-height:inherit;font-variant-numeric:tabular-nums;white-space:nowrap';
   clock.setAttribute('aria-label', 'Current Philippine time');
   dateEl.insertAdjacentElement('afterend', clock);
 
