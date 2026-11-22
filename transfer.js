@@ -9,8 +9,10 @@ const accounts=['Cash','GCash','SeaBank','Bank Account'];
 let transfers=read('myday_transfers',[]);if(!Array.isArray(transfers))transfers=[];
 const normalize=n=>n==='MariBank'?'SeaBank':n==='Other Bank'?'Bank Account':accounts.includes(n)?n:'Cash';
 function balanceFor(w){
+ const starting=read('myday_startingBalances',{});
  const base=transactions.reduce((s,t)=>s+(normalize(t.wallet||'Cash')===w?(t.type==='income'?1:-1)*Number(t.amount||0):0),0);
- return base+transfers.filter(t=>t.to===w).reduce((s,t)=>s+Number(t.amount||0),0)-transfers.filter(t=>t.from===w).reduce((s,t)=>s+Number(t.amount||0),0);
+ const opening=Number(starting[w]||0);
+ return opening+base+transfers.filter(t=>normalize(t.to)===w).reduce((s,t)=>s+Number(t.amount||0),0)-transfers.filter(t=>normalize(t.from)===w).reduce((s,t)=>s+Number(t.amount||0),0);
 }
 const mw=$('moneyWallet');if(mw)mw.innerHTML=accounts.map(a=>`<option value="${a}">${a}</option>`).join('');
 const wp=$('walletBalances')?.closest('.panel');if(!wp)return;
