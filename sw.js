@@ -1,4 +1,4 @@
-const CACHE_NAME='learninglife-shell-v16';
+const CACHE_NAME='learninglife-shell-v17';
 const APP_SHELL=['./','./index.html','./bible.js','./debt.js','./transfer.js','./debt-installments.js','./debt-wallet.js','./finance-tools.js','./reset-money.js','./dashboard.js','./clock.js','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon-maskable-512.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(APP_SHELL)));self.skipWaiting()});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('learninglife-shell-')&&k!==CACHE_NAME).map(k=>caches.delete(k)))));self.clients.claim()});
