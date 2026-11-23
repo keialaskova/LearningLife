@@ -1,29 +1,28 @@
-// Keep Goal Milestones in sync with the saved Goals list without a page refresh.
+// Keep Goal Milestones synchronized whenever the Goals list is rendered.
 (function () {
-  function connectGoalRefresh() {
-    const goalList = document.getElementById('goalList');
-    const milestoneSelect = document.getElementById('milestoneGoal');
-    if (!goalList || !milestoneSelect || typeof window.renderMilestones !== 'function') return;
+  function installGoalRefresh() {
+    if (typeof window.renderGoals !== 'function' ||
+        typeof window.renderMilestones !== 'function' ||
+        window.renderGoals.__milestoneRefreshInstalled) return;
 
-    let scheduled = false;
-    const observer = new MutationObserver(() => {
-      if (scheduled) return;
-      scheduled = true;
-      queueMicrotask(() => {
-        scheduled = false;
-        if (typeof window.renderMilestones === 'function') window.renderMilestones();
-      });
-    });
-    observer.observe(goalList, { childList: true, subtree: true });
-    window.addEventListener('pageshow', () => {
-      if (typeof window.renderMilestones === 'function') window.renderMilestones();
-    });
+    const originalRenderGoals = window.renderGoals;
+    function refreshedRenderGoals() {
+      const result = originalRenderGoals.apply(this, arguments);
+      if (typeof window.renderMilestones === 'function') {
+        window.renderMilestones();
+      }
+      return result;
+    }
+    refreshedRenderGoals.__milestoneRefreshInstalled = true;
+    window.renderGoals = refreshedRenderGoals;
+
+    // Keep the dropdown correct on initial load as well.
     window.renderMilestones();
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', connectGoalRefresh, { once: true });
+    document.addEventListener('DOMContentLoaded', installGoalRefresh, { once: true });
   } else {
-    connectGoalRefresh();
+    installGoalRefresh();
   }
 })();
