@@ -89,4 +89,89 @@ body.dark[data-design="glass"] .welcome{background:rgba(35,38,68,.88);border-col
  body[data-design="luxury"] .stats .stat{border-right:0;border-bottom:1px solid var(--line)}
  body[data-design="notion"] nav{padding:8px}
  body[data-design="glass"] header{padding:12px}
+/* v30 — reliable light and dark palettes for all six designs */
+
+/* LIGHT MODE */
+body:not(.dark)[data-design="zen"]{
+ --bg:#f7f7f2;--panel:#ffffff;--ink:#30352f;--muted:#777d73;--line:#e2e5dc;--accent:#71866c;--accent2:#e8eee4;
 }
+body:not(.dark)[data-design="luxury"]{
+ --bg:#f5f0e8;--panel:#fffaf2;--ink:#30251f;--muted:#85766b;--line:#dfd1bf;--accent:#9a7548;--accent2:#eee3d3;
+}
+body:not(.dark)[data-design="linear"]{
+ --bg:#f7f8fc;--panel:#ffffff;--ink:#202536;--muted:#737b8d;--line:#e2e6ef;--accent:#6258d9;--accent2:#eeedff;
+}
+body:not(.dark)[data-design="notion"]{
+ --bg:#ffffff;--panel:#fafaf9;--ink:#292929;--muted:#777777;--line:#e8e8e6;--accent:#555555;--accent2:#eeeeec;
+}
+body:not(.dark)[data-design="glass"]{
+ --bg:#e9edff;--panel:rgba(255,255,255,.62);--ink:#292c48;--muted:#666b8b;--line:rgba(255,255,255,.8);--accent:#7772d9;--accent2:rgba(255,255,255,.55);
+}
+body:not(.dark)[data-design="cozy"]{
+ --bg:#fff5ee;--panel:#fffaf6;--ink:#493b43;--muted:#927e88;--line:#f0dedb;--accent:#bd8cae;--accent2:#f4e5ef;
+}
+
+/* DARK MODE */
+body.dark[data-design="zen"]{
+ --bg:#20251f;--panel:#2b3229;--ink:#edf1e8;--muted:#b3bcae;--line:#424b3e;--accent:#a3bd91;--accent2:#394735;
+}
+body.dark[data-design="luxury"]{
+ --bg:#17130f;--panel:#262019;--ink:#f4eadb;--muted:#c0ad96;--line:#514333;--accent:#d0aa70;--accent2:#403326;
+}
+body.dark[data-design="linear"]{
+ --bg:#111522;--panel:#1b2233;--ink:#edf1ff;--muted:#a6b0c8;--line:#303b52;--accent:#9a91ff;--accent2:#30304f;
+}
+body.dark[data-design="notion"]{
+ --bg:#191919;--panel:#242424;--ink:#eeeeec;--muted:#b0b0aa;--line:#3b3b39;--accent:#c4c4bd;--accent2:#363634;
+}
+body.dark[data-design="glass"]{
+ --bg:#171a30;--panel:rgba(35,38,68,.88);--ink:#f0f0ff;--muted:#c0c2df;--line:rgba(160,164,220,.35);--accent:#b5aaff;--accent2:rgba(110,105,170,.35);
+}
+body.dark[data-design="cozy"]{
+ --bg:#28202b;--panel:#382d3c;--ink:#fff0f4;--muted:#d0b9ca;--line:#57465b;--accent:#e2a9d1;--accent2:#4b3a50;
+}
+
+/* Apply each palette consistently */
+body[data-design]{
+ background:var(--bg)!important;
+ color:var(--ink)!important;
+}
+body[data-design] nav,
+body[data-design] .panel,
+body[data-design] .card,
+body[data-design] .welcome,
+body[data-design] .stat,
+body[data-design] .stats .stat,
+body[data-design] .field{
+ color:var(--ink);
+ background:var(--panel);
+ border-color:var(--line);
+}
+body[data-design] .navbtn{color:var(--ink)!important}
+body[data-design] .navbtn.active{
+ color:var(--ink)!important;
+ background:var(--accent2)!important;
+}
+body[data-design] input,
+body[data-design] textarea,
+body[data-design] select{
+ color:var(--ink)!important;
+ background:var(--panel)!important;
+ border-color:var(--line)!important;
+}
+body[data-design] .sub,
+body[data-design] .empty,
+body[data-design] .today,
+body[data-design] .navlabel,
+body[data-design] .stat small{
+ color:var(--muted)!important;
+}
+
+/* Keep Glass translucent */
+body[data-design="glass"] nav,
+body[data-design="glass"] .panel,
+body[data-design="glass"] .card,
+body[data-design="glass"] .welcome{
+ background:var(--panel)!important;
+ backdrop-filter:blur(22px);
+}}
