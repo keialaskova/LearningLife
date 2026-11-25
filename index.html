@@ -434,15 +434,37 @@ function renderWeekly(){let start=new Date();start.setHours(0,0,0,0);let end=new
 $('notesText').value=load('notes','');$('notesText').oninput=()=>{save('notes',$('notesText').value);$('notesSaved').textContent='Saved automatically'};
 $('reflection').value=load('reflection','');$('reflection').oninput=()=>save('reflection',$('reflection').value);
 let calDate=new Date();function dateKey(y,m,d){return [y,String(m+1).padStart(2,'0'),String(d).padStart(2,'0')].join('-')}
-function renderCalendar(){let y=calDate.getFullYear(),m=calDate.getMonth();$('monthLabel').textContent=calDate.toLocaleDateString(undefined,{month:'long',year:'numeric'});let g=$('calendarGrid');g.innerHTML='';['S','M','T','W','T','F','S'].forEach(x=>{let el=document.createElement('b');el.style.color='#85877f';el.textContent=x;g.append(el)});let first=new Date(y,m,1).getDay(),days=new Date(y,m+1,0).getDate(),todayKey=today();for(let i=0;i<first;i++)g.append(document.createElement('span'));for(let d=1;d<=days;d++){let key=dateKey(y,m,d),b=document.createElement('button'),hasItems=calendarEntries.some(x=>x.date===key);b.textContent=d+(hasItems?' ·':'');b.style.cssText='border:0;border-radius:9px;padding:9px 0;background:'+(key===todayKey?'#e9eee6':'transparent')+';color:#30332d;font-weight:'+(hasItems?'750':'500');b.title=hasItems?'Has saved notes or schedules':'Select date';b.onclick=()=>openCalendarDate(key);g.append(b)}}
-function openCalendarDate(key){selectedCalendarDate=key;$('modalTitle').textContent=new Date(key+'T12:00:00').toLocaleDateString(undefined,{dateStyle:'full'});$('calendarEditId').value='';$('calendarEntryType').value='note';$('calendarEntryTime').value='';$('calendarEntryTime').style.display='none';$('calendarEntryText').value='';$('calendarEntryText').placeholder='Write a note...';$('calendarSaveButton').textContent='Add';$('calendarCancelEdit').style.display='none';renderCalendarEntries();$('modal').classList.add('show')}
-function renderCalendarEntries(){let area=$('calendarEntries');area.innerHTML='';let entries=calendarEntries.filter(x=>x.date===selectedCalendarDate);if(!entries.length){area.innerHTML='<div class="empty">Nothing planned for this date yet.</div>';return}entries.forEach(item=>{let row=document.createElement('div');row.className='rowitem';let content=document.createElement('div');content.className='grow';let heading=document.createElement('strong');heading.textContent=item.type==='schedule'?'◷ Schedule':'▤ Note';let body=document.createElement('small');body.textContent=(item.time?new Date('2000-01-01T'+item.time).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})+' · ':'')+item.text;content.append(heading,body);let edit=document.createElement('button');edit.className='btn ghost';edit.textContent='Edit';edit.onclick=()=>{ $('calendarEditId').value=item.id;$('calendarEntryType').value=item.type;$('calendarEntryTime').value=item.time||'';$('calendarEntryTime').style.display=item.type==='schedule'?'block':'none';$('calendarEntryText').value=item.text;$('calendarEntryText').placeholder=item.type==='note'?'Write a note...':'What is scheduled?';$('calendarSaveButton').textContent='Save changes';$('calendarCancelEdit').style.display='inline-block'};let del=document.createElement('button');del.className='btn ghost';del.textContent='Delete';del.onclick=()=>{if(!confirm('Remove this item?'))return;calendarEntries=calendarEntries.filter(x=>x.id!==item.id);save('calendarEntries',calendarEntries);renderCalendarEntries();renderCalendar()};row.append(content,edit,del);area.append(row)})}
-$('calendarEntryType').onchange=()=>{let isSchedule=$('calendarEntryType').value==='schedule';$('calendarEntryTime').style.display=isSchedule?'block':'none';$('calendarEntryTime').required=isSchedule;$('calendarEntryText').placeholder=isSchedule?'What is scheduled?':'Write a note...'};
-$('calendarEntryForm').onsubmit=e=>{e.preventDefault();let id=$('calendarEditId').value,type=$('calendarEntryType').value,text=$('calendarEntryText').value.trim(),time=$('calendarEntryTime').value;if(!text)return;if(type==='schedule'&&!time){alert('Please choose a time for your schedule.');return}if(id){let item=calendarEntries.find(x=>x.id===id);if(item)Object.assign(item,{type,text,time:type==='schedule'?time:''})}else calendarEntries.push({id:String(Date.now())+Math.random().toString(16).slice(2),date:selectedCalendarDate,type,text,time:type==='schedule'?time:''});save('calendarEntries',calendarEntries);$('calendarEditId').value='';$('calendarEntryText').value='';$('calendarEntryTime').value='';$('calendarSaveButton').textContent='Add';$('calendarCancelEdit').style.display='none';$('calendarEntryType').value='note';$('calendarEntryTime').style.display='none';$('calendarEntryTime').required=false;$('calendarEntryText').placeholder='Write a note...';renderCalendarEntries();renderCalendar()};
-$('calendarCancelEdit').onclick=()=>{ $('calendarEditId').value='';$('calendarEntryType').value='note';$('calendarEntryTime').value='';$('calendarEntryTime').style.display='none';$('calendarEntryTime').required=false;$('calendarEntryText').value='';$('calendarEntryText').placeholder='Write a note...';$('calendarSaveButton').textContent='Add';$('calendarCancelEdit').style.display='none'};
-$('prevMonth').onclick=()=>{calDate.setMonth(calDate.getMonth()-1);renderCalendar()};$('nextMonth').onclick=()=>{calDate.setMonth(calDate.getMonth()+1);renderCalendar()};
-function closeModal(){$('modal').classList.remove('show')}
-
+function renderCalendar(){
+let y=calDate.getFullYear(),m=calDate.getMonth();
+$('monthLabel').textContent=calDate.toLocaleDateString(undefined,{month:'long',year:'numeric'});
+let g=$('calendarGrid');
+g.innerHTML='';
+let dark=document.body.classList.contains('dark');
+let styles=getComputedStyle(document.body);
+let ink=styles.getPropertyValue('--ink').trim()||(dark?'#f4f4f4':'#30332d');
+let muted=styles.getPropertyValue('--muted').trim()||(dark?'#c6c6c6':'#777');
+['S','M','T','W','T','F','S'].forEach(x=>{
+let el=document.createElement('b');
+el.style.color=muted;
+el.textContent=x;
+g.append(el);
+});
+let first=new Date(y,m,1).getDay();
+let days=new Date(y,m+1,0).getDate();
+let todayKey=today();
+for(let i=0;i<first;i++)g.append(document.createElement('span'));
+for(let d=1;d<=days;d++){
+let key=dateKey(y,m,d);
+let b=document.createElement('button');
+let hasItems=calendarEntries.some(x=>x.date===key);
+let isToday=key===todayKey;
+b.textContent=d+(hasItems?' ·':'');
+b.style.cssText='border:0;border-radius:9px;padding:9px 0;background:'+(isToday?(dark?'var(--accent2)':'#e9eee6'):'transparent')+';color:'+ink+';-webkit-text-fill-color:'+ink+';font-weight:'+(hasItems?'750':'500');
+b.title=hasItems?'Has saved notes or schedules':'Select date';
+b.onclick=()=>openCalendarDate(key);
+g.append(b);
+}
+}
 // Savings tracker
 function renderSavings(){
  const total=savingsEntries.reduce((a,x)=>a+x.amount,0);
