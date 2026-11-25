@@ -150,3 +150,8 @@ body.dark #calendarGrid button {
 body.dark #calendarGrid button[style*="#e9eee6"] {
   color: #30332d !important;
 }
+/* Make the selected calendar date readable in dark mode */
+body.dark #calendarGrid button[style*="background"] {
+  color: #242424 !important;
+  -webkit-text-fill-color: #242424 !important;
+}
