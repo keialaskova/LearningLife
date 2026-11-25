@@ -137,3 +137,16 @@ body.dark[data-design] #calendarGrid,
 body.dark[data-design] #calendarGrid * {
   color: #ffffff !important;
 }
+/* Fix calendar weekday and date visibility in dark mode */
+body.dark #calendarGrid b {
+  color: var(--ink) !important;
+}
+
+body.dark #calendarGrid button {
+  color: var(--ink) !important;
+}
+
+/* Keep today's date readable on its light highlight */
+body.dark #calendarGrid button[style*="#e9eee6"] {
+  color: #30332d !important;
+}
