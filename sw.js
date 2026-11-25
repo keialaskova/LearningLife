@@ -1,4 +1,4 @@
-const CACHE_NAME='learninglife-shell-v31';
+const CACHE_NAME='learninglife-shell-v32';
 
 const APP_SHELL=[
 './',
@@ -21,6 +21,7 @@ const APP_SHELL=[
 './transfer.js',
 './wallet-sync.js',
 './calendar-fix.js',
+'./text-size.js',
 './icon-192.png',
 './icon-512.png',
 './icon-maskable-512.png'
@@ -46,11 +47,20 @@ async function withAppScripts(response){
  const html=await response.clone().text();
  let updated=html;
 
+ // Restore the original product name without changing the repository name.
+ updated=updated
+  .replace('<title>Working Life — Personal Planner</title>','<title>Learning Life — Personal Planner</title>')
+  .replace('id="brandName">Working Life.</div>','id="brandName">Learning Life.</div>')
+  .replace('<span id="aboutAppName">Working Life</span>','<span id="aboutAppName">Learning Life</span>')
+  .replace('<h2 id="lockTitle">Working Life is locked</h2>','<h2 id="lockTitle">Learning Life is locked</h2>')
+  .replace("localStorage.getItem('workinglife_app_name')||'Working Life'","localStorage.getItem('workinglife_app_name')||'Learning Life'");
+
  for(const file of [
   'bible.js','debt.js','transfer.js','debt-installments.js',
   'debt-wallet.js','finance-tools.js','reset-money.js',
   'dashboard.js','clock.js','goals-refresh.js','wallet-sync.js',
-  'money-layout.js','learninglife-update.js','calendar-fix.js'
+  'money-layout.js','learninglife-update.js','calendar-fix.js',
+  'text-size.js'
  ]){
   if(!updated.includes(`src="./${file}"`)){
    updated=updated.replace(
