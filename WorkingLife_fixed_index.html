@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f7f7f5">
+<title>Working Life — Personal Planner</title>
+<style>
+:root{--bg:#f7f7f5;--panel:#fff;--ink:#242522;--muted:#85877f;--line:#e9e9e4;--accent:#64745f;--accent2:#e9eee6;--danger:#b65d54;--shadow:0 8px 30px rgba(30,35,25,.045)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+button,input,textarea,select{font:inherit}button{cursor:pointer}
+.app{max-width:1100px;margin:auto;padding:28px 22px 60px}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
+.brand{font-size:20px;font-weight:750;letter-spacing:-.6px}.brand span{color:var(--accent)}
+.today{color:var(--muted);font-size:13px}
+.layout{display:grid;grid-template-columns:220px 1fr;gap:24px}
+nav{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:12px;height:max-content;position:sticky;top:18px}
+.navlabel{font-size:10px;color:var(--muted);letter-spacing:1.3px;font-weight:700;padding:12px 10px 7px}
+.navbtn{display:flex;align-items:center;gap:11px;width:100%;border:0;background:transparent;padding:11px 12px;border-radius:11px;text-align:left;color:#66695f;margin:2px 0}
+.navbtn.active,.navbtn:hover{background:var(--accent2);color:#344333}.ico{width:20px;text-align:center}
+main{min-width:0}.welcome{margin:4px 0 22px}.welcome h1{font-size:30px;letter-spacing:-1.1px;margin:0 0 4px}.welcome p{margin:0;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+.card,.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;box-shadow:var(--shadow)}
+.stat{padding:17px 18px}.stat small{color:var(--muted)}.stat strong{display:block;font-size:24px;margin-top:6px;letter-spacing:-.6px}
+.panel{padding:20px;margin-bottom:16px}.panelhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px}
+h2{font-size:17px;margin:0;letter-spacing:-.3px}.sub{color:var(--muted);font-size:12px;margin-top:3px}
+.btn{border:0;background:var(--accent);color:white;border-radius:10px;padding:9px 13px;font-size:13px;font-weight:650}
+.btn.secondary{background:var(--accent2);color:#40513d}.btn.ghost{background:transparent;color:var(--muted);padding:7px}
+.rowitem{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.rowitem:first-child{border-top:0}.rowitem .grow{flex:1;min-width:0}.rowitem strong{font-weight:600}.rowitem small{display:block;color:var(--muted);font-size:12px}
+.time{font-variant-numeric:tabular-nums;color:var(--accent);font-size:13px;min-width:76px}
+.check{width:18px;height:18px;accent-color:var(--accent)}
+.done{text-decoration:line-through;color:#a4a69f}
+.empty{padding:22px 10px;text-align:center;color:var(--muted);font-size:13px}
+.field{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:white;outline:none;color:var(--ink)}
+.field:focus{border-color:#9aa892}.formrow{display:flex;gap:9px;margin:12px 0}.formrow>*{min-width:0}
+.formrow .field{flex:1}
+.listtools{display:flex;gap:8px;flex-wrap:wrap}
+.pill{background:var(--accent2);color:#52634d;border-radius:30px;padding:5px 10px;font-size:12px}
+.moneygrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+.moneybox{background:#fafbf9;border:1px solid var(--line);border-radius:12px;padding:13px}.moneybox small{color:var(--muted)}.moneybox b{display:block;font-size:19px;margin-top:5px}
+.positive{color:var(--accent)}.negative{color:var(--danger)}
+.section{display:none}.section.active{display:block}
+.note{min-height:110px;resize:vertical}
+.transaction{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-top:1px solid var(--line)}
+.transaction small{display:block;color:var(--muted)}
+.modalback{position:fixed;inset:0;background:#17191466;display:none;align-items:center;justify-content:center;padding:18px;z-index:5}
+.modalback.show{display:flex}.modal{width:min(440px,100%);background:white;border-radius:18px;padding:22px;box-shadow:0 20px 70px #0002}
+.modal h2{margin-bottom:14px}.modal .field{margin:6px 0 10px}.actions{display:flex;justify-content:flex-end;gap:8px;margin-top:10px}
+footer{text-align:center;color:var(--muted);font-size:11px;margin-top:22px}
+@media(max-width:720px){.app{padding:19px 14px 40px}.layout{grid-template-columns:1fr;gap:14px}nav{position:static;display:flex;overflow-x:auto;gap:4px;padding:8px}.navlabel{display:none}.navbtn{white-space:nowrap;width:auto;padding:9px 11px}.stats{gap:8px}.stat{padding:13px}.stat strong{font-size:18px}.welcome h1{font-size:26px}.panel{padding:16px}}
+@media(max-width:420px){.stats{grid-template-columns:1fr 1fr}.stats .stat:last-child{grid-column:span 2}.moneygrid{grid-template-columns:1fr 1fr}.moneybox:last-child{grid-column:span 2}}
+
+/* Night mode */
+.headeractions{display:flex;align-items:center;gap:14px}
+.theme-toggle{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:10px;padding:8px 11px;font-size:12px;font-weight:650;white-space:nowrap}
+body.dark{--bg:#171a17;--panel:#222722;--ink:#edf0e9;--muted:#a1aa9d;--line:#353d35;--accent:#9aaf91;--accent2:#303b30;--danger:#e28b80;--shadow:0 8px 30px rgba(0,0,0,.18)}
+body.dark .navbtn{color:#c0c8bc}
+body.dark .navbtn.active,body.dark .navbtn:hover{background:var(--accent2);color:#e5eee0}
+body.dark .field{background:#1b211c;color:var(--ink);border-color:var(--line)}
+body.dark .moneybox{background:#1d241e;border-color:var(--line)}
+body.dark .modal{background:var(--panel);color:var(--ink)}
+body.dark .btn.secondary,body.dark .pill{background:var(--accent2);color:#dce8d6}
+body.dark .done{color:#788176}
+body.dark .calendar-day,body.dark #calendarGrid button{color:var(--ink)!important}
+@media(max-width:720px){.headeractions{gap:8px;flex-wrap:wrap;justify-content:flex-end}.today{font-size:11px}}
+
+/* Six selectable visual styles. Layout and planner data stay unchanged. */
+.theme-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:16px}
+.theme-choice{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:13px;padding:13px;text-align:left;display:flex;flex-direction:column;gap:6px;min-width:0}
+.theme-choice strong{font-size:13px}.theme-choice small{font-size:11px;color:var(--muted)}.theme-choice.selected{outline:2px solid var(--accent);border-color:var(--accent);background:var(--accent2)}
+.swatches{display:flex;gap:5px;margin-bottom:4px}.swatches i{width:17px;height:17px;border-radius:50%;display:block;border:1px solid #0001}
+.theme-choice[data-design="zen"] .swatches i:nth-child(1){background:#f4eee3}.theme-choice[data-design="zen"] .swatches i:nth-child(2){background:#d8c6ad}.theme-choice[data-design="zen"] .swatches i:nth-child(3){background:#87947b}.theme-choice[data-design="zen"] .swatches i:nth-child(4){background:#3d4439}
+.theme-choice[data-design="luxury"] .swatches i:nth-child(1){background:#211811}.theme-choice[data-design="luxury"] .swatches i:nth-child(2){background:#755337}.theme-choice[data-design="luxury"] .swatches i:nth-child(3){background:#e9dfd0}.theme-choice[data-design="luxury"] .swatches i:nth-child(4){background:#c99c55}
+.theme-choice[data-design="linear"] .swatches i:nth-child(1){background:#171a2b}.theme-choice[data-design="linear"] .swatches i:nth-child(2){background:#39366e}.theme-choice[data-design="linear"] .swatches i:nth-child(3){background:#9278ed}.theme-choice[data-design="linear"] .swatches i:nth-child(4){background:#c7b9ff}
+.theme-choice[data-design="notion"] .swatches i:nth-child(1){background:#fff}.theme-choice[data-design="notion"] .swatches i:nth-child(2){background:#e8e8e6}.theme-choice[data-design="notion"] .swatches i:nth-child(3){background:#aaa}.theme-choice[data-design="notion"] .swatches i:nth-child(4){background:#444}
+.theme-choice[data-design="glass"] .swatches i:nth-child(1){background:#b8c8ed}.theme-choice[data-design="glass"] .swatches i:nth-child(2){background:#a9a1e9}.theme-choice[data-design="glass"] .swatches i:nth-child(3){background:#edc3df}.theme-choice[data-design="glass"] .swatches i:nth-child(4){background:#f7f4ff}
+.theme-choice[data-design="cozy"] .swatches i:nth-child(1){background:#f8e9df}.theme-choice[data-design="cozy"] .swatches i:nth-child(2){background:#e9c5dc}.theme-choice[data-design="cozy"] .swatches i:nth-child(3){background:#c5b2e0}.theme-choice[data-design="cozy"] .swatches i:nth-child(4){background:#8d79ae}
+.mode-row{display:flex;align-items:center;justify-content:space-between;gap:14px;border-top:1px solid var(--line);margin-top:18px;padding-top:16px}.mode-row .sub{margin:2px 0 0}
+body[data-design="zen"]{--bg:#f4eee3;--panel:#fffaf2;--ink:#302d27;--muted:#81796d;--line:#e6dac9;--accent:#71816a;--accent2:#e9e4d8;--shadow:0 8px 28px rgba(77,62,43,.06)}
+body[data-design="luxury"]{--bg:#211811;--panel:#302319;--ink:#f4eadb;--muted:#b8a58f;--line:#51402f;--accent:#c99c55;--accent2:#493626;--shadow:0 10px 28px rgba(0,0,0,.2)}
+body[data-design="linear"]{--bg:#171a2b;--panel:#22263d;--ink:#f0efff;--muted:#aaaac5;--line:#373b5a;--accent:#9a80ff;--accent2:#343052;--shadow:0 8px 28px rgba(0,0,0,.18)}
+body[data-design="notion"]{--bg:#f7f7f5;--panel:#fff;--ink:#242424;--muted:#777;--line:#e8e8e5;--accent:#444;--accent2:#ededeb;--shadow:0 5px 20px rgba(0,0,0,.035)}
+body[data-design="glass"]{--bg:#e9eafb;--panel:rgba(255,255,255,.78);--ink:#292b45;--muted:#777b9c;--line:rgba(255,255,255,.85);--accent:#7775c8;--accent2:rgba(164,163,225,.22);--shadow:0 10px 30px rgba(82,83,150,.12)}
+body[data-design="cozy"]{--bg:#fbf0eb;--panel:#fff9f6;--ink:#403347;--muted:#927f91;--line:#f0dedf;--accent:#9678b5;--accent2:#eee3f4;--shadow:0 8px 26px rgba(116,83,112,.07)}
+body.dark[data-design="zen"]{--bg:#24251f;--panel:#303129;--ink:#f0eadf;--muted:#b8ae9e;--line:#4a493e;--accent:#a8b69b;--accent2:#3d4439}
+body.dark[data-design="notion"]{--bg:#191919;--panel:#242424;--ink:#f2f2f2;--muted:#aaa;--line:#3c3c3c;--accent:#ddd;--accent2:#383838}
+body.dark[data-design="glass"]{--bg:#202239;--panel:rgba(47,49,82,.88);--ink:#f3f2ff;--muted:#b8b8d8;--line:#55577d;--accent:#b2a8ff;--accent2:#39385f}
+body.dark[data-design="cozy"]{--bg:#28212d;--panel:#382e40;--ink:#f8eef8;--muted:#c2aec4;--line:#59485e;--accent:#d1a9df;--accent2:#4a3a54}
+body.dark[data-design="luxury"] .field,body.dark[data-design="linear"] .field{background:#211b23;color:var(--ink);border-color:var(--line)}
+body[data-design="glass"] .panel,body[data-design="glass"] .card,body[data-design="glass"] nav{backdrop-filter:blur(14px)}
+body:not(.dark)[data-design="luxury"] .field{background:#f7efe4}body:not(.dark)[data-design="linear"] .field{background:#2a2e49;color:#f0efff;border-color:#414568}
+@media(max-width:720px){.theme-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.mode-row{align-items:flex-start;flex-direction:column}.mode-row .field{max-width:none!important;width:100%}}
+
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="brand" id="brandName">Working Life.</div><div class="headeractions"><div class="today" id="headerDate"></div></div></header>
+<div class="layout">
+<nav>
+<div class="navlabel">WORKSPACE</div>
+<button class="navbtn active" data-page="home"><span class="ico">⌂</span>Dashboard</button>
+<button class="navbtn" data-page="tasks"><span class="ico">☑</span>Daily Tasks</button>
+<button class="navbtn" data-page="schedule"><span class="ico">◷</span>Schedule</button>
+<button class="navbtn" data-page="money"><span class="ico">₱</span>Money Tracker</button>
+<div class="navlabel">PERSONAL</div>
+<button class="navbtn" data-page="calendar"><span class="ico">▦</span>Calendar</button>
+<button class="navbtn" data-page="notes"><span class="ico">▤</span>Notes</button>
+<button class="navbtn" data-page="bible"><span class="ico">✧</span>Bible</button>
+<button class="navbtn" data-page="goals"><span class="ico">◎</span>Goals &amp; Milestones</button>
+<button class="navbtn" data-page="savings"><span class="ico">▣</span>Savings</button>
+<button class="navbtn" data-page="habits"><span class="ico">✓</span>Habit Tracker</button>
+<button class="navbtn" data-page="reminders"><span class="ico">♧</span>Reminders</button>
+<button class="navbtn" data-page="reports"><span class="ico">▥</span>Monthly Reports</button>
+<button class="navbtn" data-page="weekly"><span class="ico">▦</span>Weekly Overview</button>
+<button class="navbtn" data-page="journal"><span class="ico">✎</span>Daily Journal</button>
+<button class="navbtn" data-page="settings"><span class="ico">⚙</span>Settings</button>
+</nav>
+<main>
+<section class="section active" id="home">
+<div class="welcome"><h1 id="greeting">Good day.</h1><p>A little progress each day adds up.</p></div>
+<div class="stats">
+<div class="card stat"><small>Tasks completed</small><strong id="taskStat">0 / 0</strong></div>
+<div class="card stat"><small>Today's schedules</small><strong id="scheduleStat">0</strong></div>
+<div class="card stat"><small>Available balance</small><strong id="balanceStat">₱0.00</strong></div>
+</div>
+<div class="panel"><div class="panelhead"><div><h2>Daily Tasks</h2><div class="sub">What you want to accomplish today</div></div><button class="btn secondary" onclick="showPage('tasks')">View all</button></div><div id="homeTasks"></div></div>
+<div class="panel"><div class="panelhead"><div><h2>Today's Schedule</h2><div class="sub">Time · Schedule</div></div><button class="btn secondary" onclick="showPage('schedule')">View all</button></div><div id="homeSchedule"></div></div>
+</section>
+<section class="section" id="tasks">
+<div class="welcome"><h1>Daily Tasks</h1><p>Keep track of what needs to get done today.</p></div>
+<div class="panel"><div class="panelhead"><h2>Today's task list</h2><span class="pill" id="taskCount">0 tasks</span></div>
+<form class="formrow" id="taskForm"><input class="field" id="taskInput" placeholder="Add a task..." required><select class="field" id="taskRepeat" style="max-width:125px"><option value="once">One-time</option><option value="daily">Daily</option><option value="weekly">Weekly</option><option value="monthly">Monthly</option></select><button class="btn">Add</button></form><div id="taskList"></div></div>
+</section>
+<section class="section" id="schedule">
+<div class="welcome"><h1>Today's Schedule</h1><p>Your day, arranged by time.</p></div>
+<div class="panel"><div class="panelhead"><h2>Schedule list</h2><span class="pill" id="scheduleCount">0 items</span></div>
+<form class="formrow" id="scheduleForm"><input class="field" id="scheduleTime" type="time" required style="max-width:135px"><input class="field" id="scheduleInput" placeholder="Schedule..." required><button class="btn">Add</button></form><div id="scheduleList"></div></div>
+</section>
+<section class="section" id="money">
+<div class="welcome"><h1>Money Tracker</h1><p>Keep an eye on your income and expenses.</p></div>
+<div class="panel"><h2>Money overview</h2><div class="moneygrid"><div class="moneybox"><small>Income</small><b class="positive" id="incomeTotal">₱0.00</b></div><div class="moneybox"><small>Expenses</small><b class="negative" id="expenseTotal">₱0.00</b></div><div class="moneybox"><small>Balance</small><b id="moneyBalance">₱0.00</b></div></div>
+<form id="moneyForm"><div class="formrow"><select class="field" id="moneyType"><option value="income">Income</option><option value="expense">Expense</option></select><input class="field" id="moneyAmount" type="number" min="0.01" step="0.01" placeholder="Amount (₱)" required></div><div class="formrow"><select class="field" id="moneyWallet" required><option value="Cash">Cash</option><option value="GCash">GCash</option><option value="MariBank">MariBank</option><option value="Other Bank">Other Bank</option></select><input class="field" id="moneyCategory" placeholder="Category (e.g. Food, Salary)" required></div><div class="formrow"><input class="field" id="moneyDate" type="date" required></div><button class="btn">Add transaction</button></form></div>
+<div class="panel"><div class="panelhead"><div><h2>Wallet balances</h2><div class="sub">Your balance in each cash or online account</div></div></div><div id="walletBalances" class="moneygrid"></div></div>
+<div class="panel"><div class="panelhead"><div><h2>Debt Tracker</h2><div class="sub">Track your Shopee credit card balance and payments</div></div><span class="pill">Shopee Credit</span></div>
+<div class="moneygrid"><div class="moneybox"><small>Total borrowed</small><b id="debtBorrowed">₱0.00</b></div><div class="moneybox"><small>Total paid</small><b id="debtPaid">₱0.00</b></div><div class="moneybox"><small>Outstanding debt</small><b class="negative" id="debtOutstanding">₱0.00</b></div></div>
+<form id="debtForm"><div class="formrow"><select class="field" id="debtAction"><option value="borrow">Add credit used</option><option value="payment">Record payment</option></select><input class="field" id="debtAmount" type="number" min="0.01" step="0.01" placeholder="Amount (₱)" required></div><div class="formrow"><input class="field" id="debtNote" placeholder="Note (e.g. purchase or payment)" required><input class="field" id="debtDate" type="date" required></div><button class="btn">Save debt record</button></form>
+<div class="sub" style="margin-top:10px">Enter purchases charged to Shopee Credit as credit used, and enter repayments as payments. This tracker does not connect to Shopee.</div>
+<div id="debtHistory" style="margin-top:12px"></div></div>
+<div class="panel"><div class="panelhead"><h2>Transaction history</h2></div><div id="transactions"></div></div>
+</section>
+<section class="section" id="calendar">
+<div class="welcome"><h1>Calendar</h1><p>A simple view of your dates and plans.</p></div>
+<div class="panel"><div class="panelhead"><button class="btn secondary" id="prevMonth">←</button><h2 id="monthLabel"></h2><button class="btn secondary" id="nextMonth">→</button></div><div id="calendarGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:5px;text-align:center"></div><div class="sub" style="margin-top:14px">Select any date to add, view, edit, or remove notes and schedules for that day. Dates with saved items are marked.</div></div>
+</section>
+<section class="section" id="notes">
+<div class="welcome"><h1>Notes</h1><p>Keep your thoughts in one place.</p></div>
+<div class="panel"><h2>My notes</h2><textarea class="field note" id="notesText" placeholder="Write your notes here..."></textarea><div class="sub" id="notesSaved">Saved on this device</div></div>
+</section>
+<section class="section" id="bible">
+<div class="welcome"><h1>Bible</h1><p>A quiet space for reflection.</p></div>
+<div class="panel"><h2>Verse of the day</h2><p style="font-size:18px;line-height:1.7">“Trust in the Lord with all your heart and lean not on your own understanding.”</p><span class="pill">Proverbs 3:5 · NIV</span><p class="sub" style="margin-top:16px">Reflection</p><textarea class="field note" id="reflection" placeholder="Write what this verse means to you..."></textarea></div>
+</section>
+<section class="section" id="goals">
+<div class="welcome"><h1>Goals</h1><p>Small steps toward what matters.</p></div>
+<div class="panel"><h2>My goals</h2><form class="formrow" id="goalForm"><input class="field" id="goalInput" placeholder="Add a goal..." required><button class="btn">Add</button></form><div id="goalList"></div></div>
+<div class="panel"><h2>Goal milestones</h2><p class="sub">Break a goal into smaller steps and check them off as you go.</p><form id="milestoneForm"><div class="formrow"><select class="field" id="milestoneGoal" required><option value="">Choose a goal</option></select><input class="field" id="milestoneInput" placeholder="Add a small step..." required></div><button class="btn">Add milestone</button></form><div id="milestoneList"></div></div>
+</section>
+
+<section class="section" id="savings">
+<div class="welcome"><h1>Savings Tracker</h1><p>Set a target and record your savings progress.</p></div>
+<div class="panel"><h2>Savings goal</h2><form id="savingsGoalForm" class="formrow"><input class="field" id="savingsName" placeholder="Goal name (e.g. Emergency fund)" required><input class="field" id="savingsTarget" type="number" min="1" step=".01" placeholder="Target (₱)" required><button class="btn">Set goal</button></form><div id="savingsSummary" class="empty">No savings goal set yet.</div></div>
+<div class="panel"><h2>Record savings</h2><form id="savingsAddForm" class="formrow"><input class="field" id="savingsAmount" type="number" min=".01" step=".01" placeholder="Amount saved (₱)" required><input class="field" id="savingsNote" placeholder="Note (optional)"><button class="btn">Add</button></form><div id="savingsHistory"></div></div>
+</section>
+<section class="section" id="habits">
+<div class="welcome"><h1>Habit Tracker</h1><p>Check off the habits you complete today.</p></div>
+<div class="panel"><h2>Today's habits</h2><form id="habitForm" class="formrow"><input class="field" id="habitInput" placeholder="Add a habit..." required><button class="btn">Add habit</button></form><div id="habitList"></div></div>
+</section>
+<section class="section" id="reminders">
+<div class="welcome"><h1>Reminders</h1><p>Keep important tasks and dates in view.</p></div>
+<div class="panel"><h2>Add a reminder</h2><form id="reminderForm"><div class="formrow"><input class="field" id="reminderText" placeholder="What should you remember?" required></div><div class="formrow"><input class="field" id="reminderDate" type="date" required><input class="field" id="reminderTime" type="time"></div><button class="btn">Save reminder</button></form><div id="reminderList" style="margin-top:14px"></div><div class="sub">Reminders appear in this app. Browser notifications are not enabled in this version.</div></div>
+</section>
+<section class="section" id="reports">
+<div class="welcome"><h1>Monthly Reports</h1><p>A monthly view of your money activity.</p></div>
+<div class="panel"><div class="panelhead"><h2>Choose month</h2><input class="field" id="reportMonth" type="month" style="max-width:180px"></div><div class="moneygrid"><div class="moneybox"><small>Income</small><b class="positive" id="reportIncome">₱0.00</b></div><div class="moneybox"><small>Expenses</small><b class="negative" id="reportExpense">₱0.00</b></div><div class="moneybox"><small>Net</small><b id="reportNet">₱0.00</b></div></div><div class="sub" id="reportCount">No transactions in this month.</div></div>
+</section>
+<section class="section" id="weekly">
+<div class="welcome"><h1>Weekly Overview</h1><p>A simple look at your plans for the next seven days.</p></div>
+<div class="panel"><div class="panelhead"><h2>This week</h2><span class="pill" id="weeklyRange"></span></div><div id="weeklyList"></div></div>
+<div class="panel"><h2>Today's progress</h2><div class="moneygrid"><div class="moneybox"><small>Tasks completed</small><b id="weeklyTasks">0 / 0</b></div><div class="moneybox"><small>Habits checked</small><b id="weeklyHabits">0 / 0</b></div><div class="moneybox"><small>Calendar items</small><b id="weeklyEvents">0</b></div></div></div>
+</section>
+<section class="section" id="journal">
+<div class="welcome"><h1>Daily Journal</h1><p>Write about your day, thoughts, experiences, and lessons learned.</p></div>
+<div class="panel"><h2>Today's entry</h2><form id="journalForm"><div class="formrow"><input class="field" id="journalDate" type="date" required></div><textarea class="field note" id="journalText" placeholder="How was your day? What did you learn or appreciate?" required></textarea><div class="actions"><button class="btn">Save journal entry</button></div></form></div>
+<div class="panel"><h2>Past entries</h2><div id="journalList"></div></div>
+</section>
+<section class="section" id="settings">
+<div class="welcome"><h1>Settings</h1><p>Personalize the name and appearance of your planner.</p></div>
+<div class="panel">
+<h2>General</h2><p class="sub">Set the name of your personal planner.</p>
+<h3>App name</h3><p class="sub">Change the name shown at the top of the app and in the browser tab.</p>
+<form id="appNameForm" class="formrow"><input class="field" id="appNameInput" maxlength="32" placeholder="Enter app name" required><button class="btn">Save name</button></form>
+<div class="sub" id="appNameStatus" role="status">Your app name is saved on this device.</div>
+</div>
+<div class="panel appearance-panel">
+<h2>Appearance</h2><p class="sub">Choose one of six styles. Your choice is saved automatically on this device.</p>
+<div class="theme-grid" id="designChoices">
+<button type="button" class="theme-choice" data-design="zen"><span class="swatches"><i></i><i></i><i></i><i></i></span><strong>Japanese Zen</strong><small>Calm · warm · balanced</small></button>
+<button type="button" class="theme-choice" data-design="luxury"><span class="swatches"><i></i><i></i><i></i><i></i></span><strong>Luxury Editorial</strong><small>Rich · elegant · refined</small></button>
+<button type="button" class="theme-choice" data-design="linear"><span class="swatches"><i></i><i></i><i></i><i></i></span><strong>Linear Inspired</strong><small>Focused · sleek · modern</small></button>
+<button type="button" class="theme-choice" data-design="notion"><span class="swatches"><i></i><i></i><i></i><i></i></span><strong>Notion Inspired</strong><small>Simple · clear · organized</small></button>
+<button type="button" class="theme-choice" data-design="glass"><span class="swatches"><i></i><i></i><i></i><i></i></span><strong>Glassmorphism</strong><small>Soft · translucent · fresh</small></button>
+<button type="button" class="theme-choice" data-design="cozy"><span class="swatches"><i></i><i></i><i></i><i></i></span><strong>Cozy Pastel</strong><small>Gentle · friendly · warm</small></button>
+</div>
+<div class="mode-row"><div><strong>Color mode</strong><p class="sub">Switch between light and dark appearance.</p></div><select class="field" id="settingsTheme" style="max-width:160px"><option value="light">Light mode</option><option value="dark">Dark mode</option></select></div>
+<p class="sub" id="designStatus" role="status">Current style: Japanese Zen</p>
+</div>
+<div class="panel" id="privacySettings">
+<h2>Privacy &amp; Security</h2><p class="sub">Add a PIN prompt when opening this planner on this browser. This is a basic privacy screen, not strong encryption.</p>
+<form id="pinForm"><div class="formrow"><input class="field" id="pinInput" inputmode="numeric" pattern="[0-9]{4,8}" minlength="4" maxlength="8" placeholder="Create 4–8 digit PIN" required></div><button class="btn">Save PIN</button></form>
+<button class="btn secondary" id="removePin" style="margin-top:10px">Remove PIN</button><div class="sub" id="pinStatus" style="margin-top:10px"></div>
+</div>
+<div class="panel" id="dataSettings">
+<h2>Data Management</h2><p class="sub">Keep a copy of your planner information or restore it on this browser. Your App Lock PIN is not included in backups.</p>
+<div class="actions"><button class="btn" id="downloadBackup">Download backup</button></div>
+<div style="margin-top:14px"><h3>Restore data</h3><input class="field" id="restoreFile" type="file" accept=".json,application/json"><button class="btn secondary" id="restoreBackup" style="margin-top:10px">Restore backup</button><p class="sub" id="backupStatus" role="status" style="margin-top:10px">Restoring replaces the planner data currently stored in this browser.</p></div>
+</div>
+<div class="panel" id="aboutSettings">
+<h2>About</h2><p class="sub">Your personal planner for daily tasks, schedules, notes, goals, and everyday organization.</p>
+<p class="sub">Your planner information is stored locally in this browser on this device. Use Backup &amp; Restore before changing devices or clearing browser data.</p>
+<p class="sub">© 2026 <span id="aboutAppName">Working Life</span>. Personal planner.</p>
+</div>
+</section>
+</main>
+</div>
+<footer id="appFooter">Your information is saved in this browser on this device.</footer>
+</div>
+<div class="modalback" id="modal"><div class="modal" style="max-height:90vh;overflow:auto"><div class="panelhead"><h2 id="modalTitle">Selected date</h2><button class="btn ghost" onclick="closeModal()">✕</button></div><div id="calendarEntries"></div><form id="calendarEntryForm"><input type="hidden" id="calendarEditId"><label class="sub" for="calendarEntryType">Add a</label><select class="field" id="calendarEntryType" style="margin:6px 0 10px"><option value="note">Note</option><option value="schedule">Schedule</option></select><input class="field" id="calendarEntryTime" type="time" style="display:none;margin-bottom:10px"><textarea class="field" id="calendarEntryText" rows="3" placeholder="Write a note..." required></textarea><div class="actions"><button type="button" class="btn secondary" id="calendarCancelEdit" style="display:none">Cancel edit</button><button class="btn" id="calendarSaveButton">Add</button></div></form></div></div>
+<div class="modalback" id="lockScreen" style="z-index:10"><div class="modal"><h2 id="lockTitle">Working Life is locked</h2><p>Enter your PIN to continue.</p><input class="field" id="unlockPin" type="password" inputmode="numeric" maxlength="8" placeholder="PIN"><div class="actions"><button class="btn" id="unlockButton">Unlock</button></div><p class="sub" id="unlockError"></p></div></div>
+<script>
+const $=id=>document.getElementById(id);
+const today=()=>new Date().toISOString().slice(0,10);
+const load=(k,d)=>{try{return JSON.parse(localStorage.getItem('myday_'+k))??d}catch{return d}};
+const save=(k,v)=>localStorage.setItem('myday_'+k,JSON.stringify(v));
+// Appearance preferences are stored separately; planner records are untouched.
+const themeToggle=$('themeToggle');
+const designNames={zen:'Japanese Zen',luxury:'Luxury Editorial',linear:'Linear Inspired',notion:'Notion Inspired',glass:'Glassmorphism',cozy:'Cozy Pastel'};
+let savedDesign=localStorage.getItem('workinglife_design')||'zen';
+function applyDesign(name){if(!designNames[name])name='zen';savedDesign=name;document.body.dataset.design=name;localStorage.setItem('workinglife_design',name);document.querySelectorAll('.theme-choice').forEach(b=>{const active=b.dataset.design===name;b.classList.toggle('selected',active);b.setAttribute('aria-pressed',String(active))});if($('designStatus'))$('designStatus').textContent='Current style: '+designNames[name]}
+function applyTheme(mode){document.body.classList.toggle('dark',mode==='dark');if(themeToggle){themeToggle.textContent=mode==='dark'?'☀ Light mode':'☾ Dark mode';themeToggle.setAttribute('aria-label',mode==='dark'?'Switch to light mode':'Switch to dark mode')}if($('settingsTheme'))$('settingsTheme').value=mode}
+let savedTheme=localStorage.getItem('learninglife_theme')||'light';applyDesign(savedDesign);applyTheme(savedTheme);
+document.querySelectorAll('.theme-choice').forEach(b=>b.addEventListener('click',()=>applyDesign(b.dataset.design)));
+// Theme changes are handled by the Settings color-mode selector.
+
+// App identity is customizable; existing planner data keys remain unchanged.
+let appName=localStorage.getItem('workinglife_app_name')||'Working Life';
+function applyAppName(){ $('brandName').textContent=appName+'.'; document.title=appName+' — Personal Planner'; $('aboutAppName').textContent=appName; $('lockTitle').textContent=appName+' is locked'; $('appNameInput').value=appName }
+
+let tasks=load('tasks',[]), schedules=load('schedules',[]), transactions=load('transactions',[]), goals=load('goals',[]), debts=load('debts',[]), calendarEntries=load('calendarEntries',[]);
+let selectedCalendarDate='';
+let goalMilestones=load('goalMilestones',[]), journalEntries=load('journalEntries',[]);
+let savingsGoal=load('savingsGoal',null), savingsEntries=load('savingsEntries',[]), habits=load('habits',[]), habitChecks=load('habitChecks',{}), reminders=load('reminders',[]);
+const money=n=>'₱'+Number(n||0).toLocaleString('en-PH',{minimumFractionDigits:2,maximumFractionDigits:2});
+function showPage(p){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.navbtn').forEach(x=>x.classList.toggle('active',x.dataset.page===p));$(p).classList.add('active');if(p==='calendar')renderCalendar();if(p==='weekly')renderWeekly();if(p==='journal')renderJournal()}
+document.querySelectorAll('.navbtn').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+$('appNameForm').onsubmit=e=>{e.preventDefault();let next=$('appNameInput').value.trim();if(!next){$('appNameStatus').textContent='Please enter an app name.';return}appName=next;localStorage.setItem('workinglife_app_name',appName);applyAppName();$('appNameStatus').textContent='App name updated.'};
+$('settingsTheme').onchange=e=>{savedTheme=e.target.value;localStorage.setItem('learninglife_theme',savedTheme);applyTheme(savedTheme)};
+applyAppName();
+function renderTasks(){let list=$('taskList');list.innerHTML='';$('taskCount').textContent=tasks.length+' tasks';tasks.forEach((t,i)=>{let d=document.createElement('div');d.className='rowitem';d.innerHTML=`<input class="check" type="checkbox" ${t.done?'checked':''} aria-label="Complete task"><div class="grow"><strong class="${t.done?'done':''}"></strong></div><button class="btn ghost" aria-label="Delete task">×</button>`;d.querySelector('strong').textContent=t.text;d.querySelector('input').onchange=e=>{tasks[i].done=e.target.checked;save('tasks',tasks);renderAll()};d.querySelector('button').onclick=()=>{tasks.splice(i,1);save('tasks',tasks);renderAll()};list.append(d)});if(!tasks.length)list.innerHTML='<div class="empty">No tasks yet. Add your first task above.</div>'}
+$('taskForm').onsubmit=e=>{e.preventDefault();tasks.push({text:$('taskInput').value.trim(),done:false,repeat:$('taskRepeat').value});save('tasks',tasks);$('taskInput').value='';renderAll()};
+function renderSchedules(){let sorted=[...schedules].sort((a,b)=>a.time.localeCompare(b.time));$('scheduleCount').textContent=sorted.length+' items';let list=$('scheduleList');list.innerHTML='';sorted.forEach((s)=>{let i=schedules.indexOf(s),d=document.createElement('div');d.className='rowitem';let time=document.createElement('div');time.className='time';time.textContent=new Date('2000-01-01T'+s.time).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});let grow=document.createElement('div');grow.className='grow';let strong=document.createElement('strong');strong.textContent=s.text;grow.append(strong);let del=document.createElement('button');del.className='btn ghost';del.textContent='×';del.onclick=()=>{schedules.splice(i,1);save('schedules',schedules);renderAll()};d.append(time,grow,del);list.append(d)});if(!sorted.length)list.innerHTML='<div class="empty">No schedule added for today.</div>'}
+$('scheduleForm').onsubmit=e=>{e.preventDefault();schedules.push({time:$('scheduleTime').value,text:$('scheduleInput').value.trim()});save('schedules',schedules);$('scheduleInput').value='';renderAll()};
+function renderMoney(){let inc=transactions.filter(x=>x.type==='income').reduce((a,x)=>a+x.amount,0),exp=transactions.filter(x=>x.type==='expense').reduce((a,x)=>a+x.amount,0),bal=inc-exp;$('incomeTotal').textContent=money(inc);$('expenseTotal').textContent=money(exp);$('moneyBalance').textContent=money(bal);$('balanceStat').textContent=money(bal);
+let wallets=['Cash','GCash','MariBank','Other Bank'];let walletArea=$('walletBalances');walletArea.innerHTML='';wallets.forEach(w=>{let total=transactions.filter(x=>(x.wallet||'Cash')===w).reduce((a,x)=>a+(x.type==='income'?x.amount:-x.amount),0);let box=document.createElement('div');box.className='moneybox';let label=document.createElement('small');label.textContent=w;let amount=document.createElement('b');amount.textContent=money(total);amount.className=total<0?'negative':'positive';box.append(label,amount);walletArea.append(box)});
+let list=$('transactions');list.innerHTML='';[...transactions].reverse().forEach(t=>{let d=document.createElement('div');d.className='transaction';let left=document.createElement('div');left.textContent=t.category;let sm=document.createElement('small');sm.textContent=t.date+' · '+(t.type==='income'?'Income':'Expense')+' · '+(t.wallet||'Cash');left.append(sm);let right=document.createElement('strong');right.className=t.type==='income'?'positive':'negative';right.textContent=(t.type==='income'?'+':'−')+money(t.amount);d.append(left,right);list.append(d)});if(!transactions.length)list.innerHTML='<div class="empty">No transactions yet.</div>';
+let borrowed=debts.filter(x=>x.action==='borrow').reduce((a,x)=>a+x.amount,0),paid=debts.filter(x=>x.action==='payment').reduce((a,x)=>a+x.amount,0);$('debtBorrowed').textContent=money(borrowed);$('debtPaid').textContent=money(paid);$('debtOutstanding').textContent=money(borrowed-paid);let dh=$('debtHistory');dh.innerHTML='';[...debts].map((x,i)=>({...x,_index:i})).reverse().forEach(x=>{let d=document.createElement('div');d.className='transaction';let l=document.createElement('div');l.style.flex='1';l.textContent=x.note;let sm=document.createElement('small');sm.textContent=x.date+' · '+(x.action==='borrow'?'Debt added':'Payment recorded');l.append(sm);let r=document.createElement('strong');r.className=x.action==='payment'?'positive':'negative';r.textContent=(x.action==='payment'?'-':'+')+money(x.amount);let del=document.createElement('button');del.className='btn ghost';del.textContent='Delete';del.setAttribute('aria-label','Delete debt record');del.onclick=()=>{if(!confirm('Delete this debt record? The outstanding balance will be recalculated.'))return;debts.splice(x._index,1);save('debts',debts);renderAll()};d.append(l,r,del);dh.append(d)});if(!debts.length)dh.innerHTML='<div class="empty">No Shopee Credit records yet. Use “Add credit used” above to add a debt.</div>'}
+$('moneyDate').value=today();$('debtDate').value=today();$('moneyForm').onsubmit=e=>{e.preventDefault();transactions.push({type:$('moneyType').value,amount:Number($('moneyAmount').value),wallet:$('moneyWallet').value,category:$('moneyCategory').value.trim(),date:$('moneyDate').value});save('transactions',transactions);$('moneyAmount').value='';$('moneyCategory').value='';renderAll()};
+$('debtForm').onsubmit=e=>{e.preventDefault();let action=$('debtAction').value,amount=Number($('debtAmount').value),borrowed=debts.filter(x=>x.action==='borrow').reduce((a,x)=>a+x.amount,0),paid=debts.filter(x=>x.action==='payment').reduce((a,x)=>a+x.amount,0),outstanding=borrowed-paid;if(action==='payment'&&amount>outstanding){alert('Payment cannot be greater than the outstanding debt.');return}debts.push({action,amount,note:$('debtNote').value.trim(),date:$('debtDate').value});save('debts',debts);$('debtAmount').value='';$('debtNote').value='';renderAll()};
+function renderHome(){let done=tasks.filter(t=>t.done).length;$('taskStat').textContent=done+' / '+tasks.length;$('scheduleStat').textContent=schedules.length;let ht=$('homeTasks');ht.innerHTML='';tasks.slice(0,5).forEach(t=>{let d=document.createElement('div');d.className='rowitem';let s=document.createElement('strong');s.className=t.done?'done':'';s.textContent=t.text;d.append(s);ht.append(d)});if(!tasks.length)ht.innerHTML='<div class="empty">Your daily tasks will appear here.</div>';let hs=$('homeSchedule');hs.innerHTML='';[...schedules].sort((a,b)=>a.time.localeCompare(b.time)).slice(0,5).forEach(s=>{let d=document.createElement('div');d.className='rowitem';let tm=document.createElement('div');tm.className='time';tm.textContent=new Date('2000-01-01T'+s.time).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});let tx=document.createElement('strong');tx.textContent=s.text;d.append(tm,tx);hs.append(d)});if(!schedules.length)hs.innerHTML='<div class="empty">Your schedule will appear here.</div>'}
+function renderGoals(){let l=$('goalList');l.innerHTML='';goals.forEach((g,i)=>{let d=document.createElement('div');d.className='rowitem';let s=document.createElement('strong');s.textContent=g;let del=document.createElement('button');del.className='btn ghost';del.textContent='×';del.onclick=()=>{goals.splice(i,1);save('goals',goals);renderGoals()};d.append(s,del);l.append(d)});if(!goals.length)l.innerHTML='<div class="empty">Add a goal you want to work toward.</div>'}
+$('goalForm').onsubmit=e=>{e.preventDefault();goals.push($('goalInput').value.trim());save('goals',goals);$('goalInput').value='';renderGoals()};
+function renderMilestones(){let sel=$('milestoneGoal'),current=sel.value;sel.innerHTML='<option value="">Choose a goal</option>';goals.forEach((g,i)=>{let o=document.createElement('option');o.value=String(i);o.textContent=g;sel.append(o)});if(current!==''&&goals[Number(current)])sel.value=current;let list=$('milestoneList');list.innerHTML='';goalMilestones.forEach((m,i)=>{let row=document.createElement('div');row.className='rowitem';let cb=document.createElement('input');cb.type='checkbox';cb.className='check';cb.checked=!!m.done;cb.onchange=()=>{m.done=cb.checked;save('goalMilestones',goalMilestones);renderMilestones()};let wrap=document.createElement('div');wrap.className='grow';let strong=document.createElement('strong');strong.textContent=(goals[m.goalIndex]||'Goal')+' · '+m.text;strong.className=m.done?'done':'';wrap.append(strong);let del=document.createElement('button');del.className='btn ghost';del.textContent='Delete';del.onclick=()=>{goalMilestones.splice(i,1);save('goalMilestones',goalMilestones);renderMilestones()};row.append(cb,wrap,del);list.append(row)});if(!goalMilestones.length)list.innerHTML='<div class="empty">Your smaller goal steps will appear here.</div>'}
+$('milestoneForm').onsubmit=e=>{e.preventDefault();goalMilestones.push({goalIndex:Number($('milestoneGoal').value),text:$('milestoneInput').value.trim(),done:false});save('goalMilestones',goalMilestones);$('milestoneInput').value='';renderMilestones()};
+function renderJournal(){let date=$('journalDate').value||today();let entry=journalEntries.find(x=>x.date===date);$('journalText').value=entry?entry.text:'';let list=$('journalList');list.innerHTML='';[...journalEntries].sort((a,b)=>b.date.localeCompare(a.date)).forEach(x=>{let row=document.createElement('div');row.className='rowitem';let wrap=document.createElement('div');wrap.className='grow';let title=document.createElement('strong');title.textContent=x.date;let body=document.createElement('small');body.textContent=x.text.length>130?x.text.slice(0,130)+'…':x.text;wrap.append(title,body);let edit=document.createElement('button');edit.className='btn ghost';edit.textContent='Open';edit.onclick=()=>{$('journalDate').value=x.date;$('journalText').value=x.text};let del=document.createElement('button');del.className='btn ghost';del.textContent='Delete';del.onclick=()=>{if(confirm('Delete this journal entry?')){journalEntries=journalEntries.filter(y=>y.date!==x.date);save('journalEntries',journalEntries);renderJournal()}};row.append(wrap,edit,del);list.append(row)});if(!journalEntries.length)list.innerHTML='<div class="empty">No journal entries yet.</div>'}
+$('journalDate').value=today();$('journalDate').onchange=renderJournal;$('journalForm').onsubmit=e=>{e.preventDefault();let date=$('journalDate').value,text=$('journalText').value.trim(),existing=journalEntries.find(x=>x.date===date);if(existing)existing.text=text;else journalEntries.push({date,text});save('journalEntries',journalEntries);renderJournal();alert('Journal entry saved.')};
+function renderWeekly(){let start=new Date();start.setHours(0,0,0,0);let end=new Date(start);end.setDate(end.getDate()+6);$('weeklyRange').textContent=start.toLocaleDateString(undefined,{month:'short',day:'numeric'})+' – '+end.toLocaleDateString(undefined,{month:'short',day:'numeric'});let list=$('weeklyList');list.innerHTML='';for(let i=0;i<7;i++){let d=new Date(start);d.setDate(start.getDate()+i);let key=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');let entries=calendarEntries.filter(x=>x.date===key);let row=document.createElement('div');row.className='rowitem';let day=document.createElement('div');day.className='time';day.textContent=d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});let content=document.createElement('div');content.className='grow';let strong=document.createElement('strong');strong.textContent=entries.length?entries.map(x=>(x.time?x.time+' · ':'')+x.text).join(' | '):'No calendar plans';content.append(strong);row.append(day,content);list.append(row)}$('weeklyTasks').textContent=tasks.filter(x=>x.done).length+' / '+tasks.length;let checked=Object.values(habitChecks[today()]||{}).filter(Boolean).length;$('weeklyHabits').textContent=checked+' / '+habits.length;$('weeklyEvents').textContent=calendarEntries.filter(x=>x.date>=today()&&x.date<=end.toISOString().slice(0,10)).length}
+
+$('notesText').value=load('notes','');$('notesText').oninput=()=>{save('notes',$('notesText').value);$('notesSaved').textContent='Saved automatically'};
+$('reflection').value=load('reflection','');$('reflection').oninput=()=>save('reflection',$('reflection').value);
+let calDate=new Date();function dateKey(y,m,d){return [y,String(m+1).padStart(2,'0'),String(d).padStart(2,'0')].join('-')}
+function renderCalendar(){let y=calDate.getFullYear(),m=calDate.getMonth();$('monthLabel').textContent=calDate.toLocaleDateString(undefined,{month:'long',year:'numeric'});let g=$('calendarGrid');g.innerHTML='';['S','M','T','W','T','F','S'].forEach(x=>{let el=document.createElement('b');el.style.color='#85877f';el.textContent=x;g.append(el)});let first=new Date(y,m,1).getDay(),days=new Date(y,m+1,0).getDate(),todayKey=today();for(let i=0;i<first;i++)g.append(document.createElement('span'));for(let d=1;d<=days;d++){let key=dateKey(y,m,d),b=document.createElement('button'),hasItems=calendarEntries.some(x=>x.date===key);b.textContent=d+(hasItems?' ·':'');b.style.cssText='border:0;border-radius:9px;padding:9px 0;background:'+(key===todayKey?'#e9eee6':'transparent')+';color:#30332d;font-weight:'+(hasItems?'750':'500');b.title=hasItems?'Has saved notes or schedules':'Select date';b.onclick=()=>openCalendarDate(key);g.append(b)}}
+function openCalendarDate(key){selectedCalendarDate=key;$('modalTitle').textContent=new Date(key+'T12:00:00').toLocaleDateString(undefined,{dateStyle:'full'});$('calendarEditId').value='';$('calendarEntryType').value='note';$('calendarEntryTime').value='';$('calendarEntryTime').style.display='none';$('calendarEntryText').value='';$('calendarEntryText').placeholder='Write a note...';$('calendarSaveButton').textContent='Add';$('calendarCancelEdit').style.display='none';renderCalendarEntries();$('modal').classList.add('show')}
+function renderCalendarEntries(){let area=$('calendarEntries');area.innerHTML='';let entries=calendarEntries.filter(x=>x.date===selectedCalendarDate);if(!entries.length){area.innerHTML='<div class="empty">Nothing planned for this date yet.</div>';return}entries.forEach(item=>{let row=document.createElement('div');row.className='rowitem';let content=document.createElement('div');content.className='grow';let heading=document.createElement('strong');heading.textContent=item.type==='schedule'?'◷ Schedule':'▤ Note';let body=document.createElement('small');body.textContent=(item.time?new Date('2000-01-01T'+item.time).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})+' · ':'')+item.text;content.append(heading,body);let edit=document.createElement('button');edit.className='btn ghost';edit.textContent='Edit';edit.onclick=()=>{ $('calendarEditId').value=item.id;$('calendarEntryType').value=item.type;$('calendarEntryTime').value=item.time||'';$('calendarEntryTime').style.display=item.type==='schedule'?'block':'none';$('calendarEntryText').value=item.text;$('calendarEntryText').placeholder=item.type==='note'?'Write a note...':'What is scheduled?';$('calendarSaveButton').textContent='Save changes';$('calendarCancelEdit').style.display='inline-block'};let del=document.createElement('button');del.className='btn ghost';del.textContent='Delete';del.onclick=()=>{if(!confirm('Remove this item?'))return;calendarEntries=calendarEntries.filter(x=>x.id!==item.id);save('calendarEntries',calendarEntries);renderCalendarEntries();renderCalendar()};row.append(content,edit,del);area.append(row)})}
+$('calendarEntryType').onchange=()=>{let isSchedule=$('calendarEntryType').value==='schedule';$('calendarEntryTime').style.display=isSchedule?'block':'none';$('calendarEntryTime').required=isSchedule;$('calendarEntryText').placeholder=isSchedule?'What is scheduled?':'Write a note...'};
+$('calendarEntryForm').onsubmit=e=>{e.preventDefault();let id=$('calendarEditId').value,type=$('calendarEntryType').value,text=$('calendarEntryText').value.trim(),time=$('calendarEntryTime').value;if(!text)return;if(type==='schedule'&&!time){alert('Please choose a time for your schedule.');return}if(id){let item=calendarEntries.find(x=>x.id===id);if(item)Object.assign(item,{type,text,time:type==='schedule'?time:''})}else calendarEntries.push({id:String(Date.now())+Math.random().toString(16).slice(2),date:selectedCalendarDate,type,text,time:type==='schedule'?time:''});save('calendarEntries',calendarEntries);$('calendarEditId').value='';$('calendarEntryText').value='';$('calendarEntryTime').value='';$('calendarSaveButton').textContent='Add';$('calendarCancelEdit').style.display='none';$('calendarEntryType').value='note';$('calendarEntryTime').style.display='none';$('calendarEntryTime').required=false;$('calendarEntryText').placeholder='Write a note...';renderCalendarEntries();renderCalendar()};
+$('calendarCancelEdit').onclick=()=>{ $('calendarEditId').value='';$('calendarEntryType').value='note';$('calendarEntryTime').value='';$('calendarEntryTime').style.display='none';$('calendarEntryTime').required=false;$('calendarEntryText').value='';$('calendarEntryText').placeholder='Write a note...';$('calendarSaveButton').textContent='Add';$('calendarCancelEdit').style.display='none'};
+$('prevMonth').onclick=()=>{calDate.setMonth(calDate.getMonth()-1);renderCalendar()};$('nextMonth').onclick=()=>{calDate.setMonth(calDate.getMonth()+1);renderCalendar()};
+function closeModal(){$('modal').classList.remove('show')}
+
+// Savings tracker
+function renderSavings(){
+ const total=savingsEntries.reduce((a,x)=>a+x.amount,0);
+ const summary=$('savingsSummary');summary.innerHTML='';
+ if(!savingsGoal){summary.textContent='No savings goal set yet.'}
+ else{
+  let title=document.createElement('strong');title.textContent=savingsGoal.name+' · '+money(total)+' of '+money(savingsGoal.target);
+  let track=document.createElement('div');track.style.cssText='height:10px;background:#edf0ea;border-radius:20px;overflow:hidden;margin-top:12px';
+  let bar=document.createElement('div');bar.style.cssText='height:100%;background:#64745f;width:'+Math.min(100,total/savingsGoal.target*100)+'%;border-radius:20px';track.append(bar);
+  let pct=document.createElement('small');pct.className='sub';pct.textContent=Math.min(100,Math.round(total/savingsGoal.target*100))+'% saved';summary.append(title,track,pct)
+ }
+ let hist=$('savingsHistory');hist.innerHTML='';[...savingsEntries].reverse().forEach((x,idx)=>{let d=document.createElement('div');d.className='transaction';let l=document.createElement('span');l.textContent=x.note||'Savings deposit';let r=document.createElement('strong');r.className='positive';r.textContent='+'+money(x.amount);let del=document.createElement('button');del.className='btn ghost';del.textContent='Delete';del.onclick=()=>{let i=savingsEntries.length-1-idx;savingsEntries.splice(i,1);save('savingsEntries',savingsEntries);renderSavings()};d.append(l,r,del);hist.append(d)});if(!savingsEntries.length)hist.innerHTML='<div class="empty">No savings deposits yet.</div>'
+}
+$('savingsGoalForm').onsubmit=e=>{e.preventDefault();savingsGoal={name:$('savingsName').value.trim(),target:Number($('savingsTarget').value)};save('savingsGoal',savingsGoal);renderSavings();$('savingsName').value='';$('savingsTarget').value=''};
+$('savingsAddForm').onsubmit=e=>{e.preventDefault();savingsEntries.push({amount:Number($('savingsAmount').value),note:$('savingsNote').value.trim(),date:today()});save('savingsEntries',savingsEntries);$('savingsAmount').value='';$('savingsNote').value='';renderSavings()};
+
+// Habits: completion checks are stored by date
+function renderHabits(){let list=$('habitList');list.innerHTML='';habits.forEach((h,i)=>{let d=document.createElement('div');d.className='rowitem';let cb=document.createElement('input');cb.type='checkbox';cb.className='check';cb.checked=!!(habitChecks[today()]&&habitChecks[today()][i]);cb.onchange=()=>{habitChecks[today()]??={};habitChecks[today()][i]=cb.checked;save('habitChecks',habitChecks)};let label=document.createElement('strong');label.textContent=h;let del=document.createElement('button');del.className='btn ghost';del.textContent='×';del.onclick=()=>{habits.splice(i,1);save('habits',habits);renderHabits()};d.append(cb,label,del);list.append(d)});if(!habits.length)list.innerHTML='<div class="empty">Add habits you want to build.</div>'}
+$('habitForm').onsubmit=e=>{e.preventDefault();habits.push($('habitInput').value.trim());save('habits',habits);$('habitInput').value='';renderHabits()};
+
+// Reminders are shown in-app; no push notification permission is requested
+$('reminderDate').value=today();
+function renderReminders(){let list=$('reminderList');list.innerHTML='';[...reminders].map((r,i)=>({...r,_i:i})).sort((a,b)=>(a.date+(a.time||'')).localeCompare(b.date+(b.time||''))).forEach(r=>{let d=document.createElement('div');d.className='rowitem';let l=document.createElement('div');l.className='grow';let s=document.createElement('strong');s.textContent=r.text;let sm=document.createElement('small');sm.textContent=r.date+(r.time?' · '+r.time:'');l.append(s,sm);let del=document.createElement('button');del.className='btn ghost';del.textContent='Delete';del.onclick=()=>{reminders.splice(r._i,1);save('reminders',reminders);renderReminders()};d.append(l,del);list.append(d)});if(!reminders.length)list.innerHTML='<div class="empty">No reminders yet.</div>'}
+$('reminderForm').onsubmit=e=>{e.preventDefault();reminders.push({text:$('reminderText').value.trim(),date:$('reminderDate').value,time:$('reminderTime').value});save('reminders',reminders);$('reminderText').value='';$('reminderTime').value='';renderReminders()};
+
+// Monthly report from recorded transactions
+$('reportMonth').value=new Date().toISOString().slice(0,7);
+function renderReport(){let m=$('reportMonth').value;let ts=transactions.filter(t=>(t.date||'').slice(0,7)===m);let inc=ts.filter(t=>t.type==='income').reduce((a,t)=>a+t.amount,0),exp=ts.filter(t=>t.type==='expense').reduce((a,t)=>a+t.amount,0);$('reportIncome').textContent=money(inc);$('reportExpense').textContent=money(exp);$('reportNet').textContent=money(inc-exp);$('reportCount').textContent=ts.length+' transaction(s) recorded for '+m}
+$('reportMonth').onchange=renderReport;
+
+
+// Manual backup and restore. The App Lock PIN is deliberately excluded.
+const BACKUP_KEYS=['tasks','schedules','transactions','goals','goalMilestones','journalEntries','debts','calendarEntries','savingsGoal','savingsEntries','habits','habitChecks','reminders','notes','reflection'];
+$('downloadBackup').onclick=()=>{
+ const data={app:'LearningLife',formatVersion:1,exportedAt:new Date().toISOString(),data:{}};
+ BACKUP_KEYS.forEach(k=>{try{data.data[k]=JSON.parse(localStorage.getItem('myday_'+k)??(k==='savingsGoal'?'null':(['tasks','schedules','transactions','goals','goalMilestones','journalEntries','debts','calendarEntries','savingsEntries','habits','reminders'].includes(k)?'[]':'{}')))}catch{}});
+ const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download='workinglife-backup-'+today()+'.json';document.body.append(a);a.click();a.remove();URL.revokeObjectURL(url);$('backupStatus').textContent='Backup downloaded. Keep the file somewhere safe.';
+};
+$('restoreBackup').onclick=async()=>{
+ const file=$('restoreFile').files[0];if(!file){$('backupStatus').textContent='Please choose a planner backup file first.';return}
+ try{
+  const parsed=JSON.parse(await file.text());
+  if(!['LearningLife','MyDay'].includes(parsed.app)||parsed.formatVersion!==1||!parsed.data||typeof parsed.data!=='object')throw new Error('This does not look like a supported planner backup.');
+  if(!confirm('Restore this backup? Your current planner data on this browser will be replaced.'))return;
+  BACKUP_KEYS.forEach(k=>{if(Object.prototype.hasOwnProperty.call(parsed.data,k))localStorage.setItem('myday_'+k,JSON.stringify(parsed.data[k]));else localStorage.removeItem('myday_'+k)});
+  alert('Backup restored. The app will now reload.');location.reload();
+ }catch(err){$('backupStatus').textContent=err.message||'Could not read this backup file.'}
+};
+
+// Basic browser-local PIN prompt. This is not encryption or account-grade security.
+function refreshPinStatus(){$('pinStatus').textContent=load('appPin',null)?'A PIN is currently set on this browser.':'No PIN is currently set.'}
+$('pinForm').onsubmit=e=>{e.preventDefault();let pin=$('pinInput').value;if(!/^\d{4,8}$/.test(pin)){alert('Use 4 to 8 digits.');return}save('appPin',pin);$('pinInput').value='';refreshPinStatus();alert('PIN saved for this browser.')};
+$('removePin').onclick=()=>{if(!load('appPin',null)){refreshPinStatus();return}if(confirm('Remove your app PIN?')){localStorage.removeItem('myday_appPin');refreshPinStatus()}};
+$('unlockButton').onclick=()=>{if($('unlockPin').value===load('appPin',null)){$('lockScreen').classList.remove('show');$('unlockPin').value='';$('unlockError').textContent=''}else{$('unlockError').textContent='That PIN is not correct.'}};
+$('unlockPin').addEventListener('keydown',e=>{if(e.key==='Enter')$('unlockButton').click()});
+
+function renderAll(){renderTasks();renderSchedules();renderMoney();renderHome();renderGoals();renderMilestones();renderJournal();renderWeekly();renderSavings();renderHabits();renderReminders();renderReport();refreshPinStatus()}
+let now=new Date();$('headerDate').textContent=now.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric',year:'numeric'});$('greeting').textContent=(now.getHours()<12?'Good morning.':now.getHours()<18?'Good afternoon.':'Good evening.');
+renderAll();
+if(load('appPin',null))$('lockScreen').classList.add('show');
+</script>
+</body>
+</html>
