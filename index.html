@@ -141,6 +141,100 @@ body:not(.dark)[data-design="linear"] .field{background:#2a2e49;color:#f0efff;bo
 #changeProfileName{display:none!important}
 @media(max-width:720px){.layout{grid-template-columns:1fr}}
 
+
+/* Working Life v28 — real visual treatments + accessible reading sizes */
+body{font-size:16px;line-height:1.65}
+.app{max-width:1360px;padding:34px 30px 72px}
+header{margin-bottom:34px}.brand{font-size:24px}.today{font-size:14px}
+.layout{grid-template-columns:250px minmax(0,1fr);gap:30px}
+nav{padding:15px;border-radius:20px}
+.navlabel{font-size:12px;padding:14px 12px 8px}
+.navbtn{font-size:15px;padding:13px 14px;gap:13px;color:var(--ink)}
+.ico{font-size:18px}
+.welcome{margin:8px 0 28px}.welcome h1{font-size:36px;line-height:1.2}.welcome p{font-size:16px}
+h2{font-size:20px}.sub{font-size:14px;line-height:1.5}
+.stat{padding:22px}.stat small,.moneybox small{font-size:14px}.stat strong{font-size:28px}
+.panel{padding:25px;margin-bottom:20px}.card,.panel{border-radius:18px}
+.btn{font-size:15px;padding:11px 16px}.btn.secondary,.pill{font-size:14px}
+.rowitem{padding:15px 0}.rowitem strong{font-size:16px}.rowitem small,.transaction small{font-size:14px}
+.field{font-size:16px;padding:13px 14px;min-height:48px}.empty{font-size:15px}
+.moneybox{padding:17px}.moneybox b{font-size:22px}
+.theme-choice{padding:16px}.theme-choice strong{font-size:15px}.theme-choice small{font-size:13px}
+#calendarGrid button{font-size:15px!important;min-height:42px}
+/* Japanese Zen — airy, natural, editorial calm */
+body[data-design="zen"]{font-family:Georgia,"Noto Serif",serif;--bg:#f3eee4;--panel:#fffdf8;--ink:#292c25;--muted:#625f55;--line:#ded5c5;--accent:#65765d;--accent2:#e5eadf}
+body[data-design="zen"] .app{max-width:1240px;padding-top:46px}
+body[data-design="zen"] .layout{grid-template-columns:230px minmax(0,1fr);gap:38px}
+body[data-design="zen"] nav{background:transparent;border:0;border-right:1px solid var(--line);border-radius:0;box-shadow:none;padding:10px 22px 10px 0}
+body[data-design="zen"] .panel{box-shadow:none;border-radius:4px;padding:30px}
+body[data-design="zen"] .stats{gap:22px}body[data-design="zen"] .stat{border:0;border-bottom:2px solid var(--accent);border-radius:0;background:transparent}
+body[data-design="zen"] .welcome h1{font-weight:400;font-size:42px}
+/* Luxury Editorial — dark, magazine-like hierarchy and gold details */
+body[data-design="luxury"]{font-family:Georgia,"Times New Roman",serif;--bg:#17120f;--panel:#241b16;--ink:#fff5e9;--muted:#d2bda8;--line:#604b39;--accent:#d4a85e;--accent2:#493426}
+body[data-design="luxury"] .app{max-width:1440px}
+body[data-design="luxury"] header{border-bottom:1px solid var(--line);padding-bottom:22px}
+body[data-design="luxury"] .brand{font-family:Georgia,serif;font-size:29px;letter-spacing:1px}
+body[data-design="luxury"] .welcome h1{font-size:44px;font-weight:400}
+body[data-design="luxury"] .panel,body[data-design="luxury"] .card{border-radius:3px;box-shadow:0 14px 36px #0004}
+body[data-design="luxury"] .panel{border-top:2px solid var(--accent);padding:28px}
+body[data-design="luxury"] nav{border-radius:3px;background:#201711}
+body[data-design="luxury"] .navbtn{font-family:system-ui,sans-serif;letter-spacing:.2px}
+body[data-design="luxury"] .field{background:#fff9f0;color:#261b13;border-color:#8a6a49}
+body[data-design="luxury"] .sub,body[data-design="luxury"] .today{color:#e1cdb8}
+/* Linear Inspired — dense product workspace, crisp rail and structured cards */
+body[data-design="linear"]{font-family:Inter,system-ui,sans-serif;--bg:#101321;--panel:#191e31;--ink:#f5f5ff;--muted:#c3c6df;--line:#343b59;--accent:#a99aff;--accent2:#2b2b4c}
+body[data-design="linear"] .app{max-width:1500px;padding:24px 26px 56px}
+body[data-design="linear"] .layout{grid-template-columns:205px minmax(0,1fr);gap:22px}
+body[data-design="linear"] nav{border-radius:12px;background:#171b2c;padding:10px}
+body[data-design="linear"] .navbtn{border-radius:8px;padding:10px 12px}
+body[data-design="linear"] .welcome{padding:10px 0 18px;border-bottom:1px solid var(--line)}
+body[data-design="linear"] .welcome h1{font-size:30px}
+body[data-design="linear"] .stats{gap:12px}
+body[data-design="linear"] .card,body[data-design="linear"] .panel{border-radius:12px;box-shadow:0 5px 18px #0002}
+body[data-design="linear"] .panel{padding:20px}
+body[data-design="linear"] .field{background:#222943;color:#fff;border-color:#4a5275}
+body[data-design="linear"] .btn{border-radius:8px}
+/* Notion Inspired — paper-like page, restrained sidebar and flat blocks */
+body[data-design="notion"]{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;--bg:#fff;--panel:#fff;--ink:#252525;--muted:#555;--line:#e4e4e1;--accent:#555;--accent2:#f0f0ed;--shadow:none}
+body[data-design="notion"] .app{max-width:1180px;padding-top:38px}
+body[data-design="notion"] .layout{grid-template-columns:220px minmax(0,900px);gap:42px}
+body[data-design="notion"] nav{background:#fafaf8;border:0;border-right:1px solid #e5e5e1;border-radius:0;box-shadow:none;padding:10px 18px 10px 0}
+body[data-design="notion"] .navbtn{padding:9px 12px;border-radius:6px}
+body[data-design="notion"] .welcome h1{font-size:38px;font-weight:650}
+body[data-design="notion"] .panel,body[data-design="notion"] .card{border:0;border-radius:0;box-shadow:none;background:transparent}
+body[data-design="notion"] .panel{border-top:1px solid var(--line);padding:22px 4px}
+body[data-design="notion"] .stat{background:#f7f7f5;border-radius:8px;padding:18px}
+body[data-design="notion"] .field{background:#fff;color:#222;border-color:#d8d8d4}
+/* Glassmorphism — layered translucent surfaces and soft floating depth */
+body[data-design="glass"]{font-family:Inter,system-ui,sans-serif;--bg:#dfe6f6;--panel:#ffffffb8;--ink:#242746;--muted:#555d83;--line:#ffffffd9;--accent:#6665bd;--accent2:#d7d9f5;--shadow:0 18px 45px #555b9830;background:radial-gradient(circle at 10% 5%,#fff 0,transparent 34%),linear-gradient(130deg,#dce8fa,#e9dcf4 55%,#d8e9ee)}
+body[data-design="glass"] .app{max-width:1450px}
+body[data-design="glass"] nav,body[data-design="glass"] .panel,body[data-design="glass"] .card{background:#ffffffa8;border:1px solid #ffffffd9;backdrop-filter:blur(22px);box-shadow:0 16px 40px #58619a24;border-radius:24px}
+body[data-design="glass"] nav{padding:16px}
+body[data-design="glass"] .panel{padding:26px}
+body[data-design="glass"] .welcome h1{font-size:38px;color:#252746}
+body[data-design="glass"] .field{background:#ffffffd9;color:#252746;border-color:#c7cbed}
+body[data-design="glass"] .navbtn{color:#303454}
+/* Cozy Pastel — warm scrapbook feel, generous rounded cards */
+body[data-design="cozy"]{font-family:"Trebuchet MS",system-ui,sans-serif;--bg:#fbf0e9;--panel:#fffaf7;--ink:#403044;--muted:#655568;--line:#ecd9df;--accent:#8b68a7;--accent2:#f0e2f2;--shadow:0 10px 28px #9e78951c}
+body[data-design="cozy"] .app{max-width:1320px;padding-top:30px}
+body[data-design="cozy"] .brand{font-size:27px}
+body[data-design="cozy"] .welcome h1{font-size:39px}
+body[data-design="cozy"] nav{border-radius:28px;background:#fff8f5;padding:16px}
+body[data-design="cozy"] .panel,body[data-design="cozy"] .card{border-radius:26px;border:1px solid #f0dfe6;box-shadow:0 10px 26px #a17c9418}
+body[data-design="cozy"] .panel{padding:25px}
+body[data-design="cozy"] .stat{background:#fff8f5}
+body[data-design="cozy"] .btn{border-radius:999px}
+body[data-design="cozy"] .field{background:#fff;color:#403044;border-color:#e4cfdc;border-radius:14px}
+/* Dark mode readability and smaller-screen layout */
+body.dark{--muted:#d0d3ce}
+body.dark[data-design="luxury"]{--bg:#17120f;--panel:#241b16;--ink:#fff5e9;--muted:#e0cdb8;--line:#604b39}
+body.dark[data-design="linear"]{--muted:#d2d4eb}
+body.dark[data-design="notion"]{--bg:#191919;--panel:#242424;--ink:#f4f4f4;--muted:#c6c6c6;--line:#454545}
+body.dark[data-design="glass"]{--bg:#20243d;--panel:#353957d9;--ink:#f7f6ff;--muted:#deddf4;--line:#666b9b;background:linear-gradient(135deg,#20243d,#34304c)}
+body.dark[data-design="cozy"]{--bg:#28212d;--panel:#382e40;--ink:#fff5ff;--muted:#e0cfe2;--line:#604e67}
+@media(max-width:900px){.app{padding:22px 18px 48px}.layout{grid-template-columns:1fr;gap:16px}nav{position:static;display:flex;overflow-x:auto;gap:5px;white-space:nowrap}.navlabel{display:none}.navbtn{width:auto;flex:0 0 auto}.welcome h1{font-size:30px}body[data-design="zen"] .layout,body[data-design="notion"] .layout,body[data-design="linear"] .layout{grid-template-columns:1fr}}
+@media(max-width:520px){body{font-size:15px}.app{padding:16px 12px 36px}.panel{padding:17px}.welcome h1{font-size:28px}.stats{grid-template-columns:1fr 1fr}.stats .stat:last-child{grid-column:span 2}.formrow{flex-wrap:wrap}.formrow>*{flex:1 1 100%}.theme-grid{grid-template-columns:1fr 1fr}}
+
 </style>
 </head>
 <body>
