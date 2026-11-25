@@ -132,3 +132,8 @@ body[data-design] .empty,
 body[data-design] .today,
 body[data-design] .navlabel,
 body[data-design] .stat small{color:var(--muted)!important}
+/* Calendar text visibility in all dark themes */
+body.dark[data-design] #calendarGrid,
+body.dark[data-design] #calendarGrid * {
+  color: #ffffff !important;
+}
