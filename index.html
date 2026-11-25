@@ -3,14 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#64745f">
-<meta name="description" content="LearningLife personal planner for tasks, schedules, notes, goals, savings and more.">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icons/icon-192.png" type="image/png">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
-<title>LearningLife — Personal Planner</title>
+<meta name="theme-color" content="#f7f7f5">
+<title>Working Life — Personal Planner</title>
 <style>
-:root{--bg:#f7f7f5;--panel:#fff;--ink:#242522;--muted:#85877f;--line:#e9e9e4;--accent:#64745f;--accent2:#e9eee6;--danger:#b65d54;--calendar-today:#e9eee6;--calendar-today-ink:#30332d;--shadow:0 8px 30px rgba(30,35,25,.045)}
+:root{--bg:#f7f7f5;--panel:#fff;--ink:#242522;--muted:#85877f;--line:#e9e9e4;--accent:#64745f;--accent2:#e9eee6;--danger:#b65d54;--shadow:0 8px 30px rgba(30,35,25,.045)}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,-apple-system,Segoe UI,sans-serif}
 button,input,textarea,select{font:inherit}button{cursor:pointer}
 .app{max-width:1100px;margin:auto;padding:28px 22px 60px}
@@ -58,29 +54,49 @@ footer{text-align:center;color:var(--muted);font-size:11px;margin-top:22px}
 /* Night mode */
 .headeractions{display:flex;align-items:center;gap:14px}
 .theme-toggle{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:10px;padding:8px 11px;font-size:12px;font-weight:650;white-space:nowrap}
-body.dark{--bg:#171a17;--panel:#222722;--ink:#edf0e9;--muted:#b5beb1;--line:#414a40;--accent:#a9c49e;--accent2:#303b30;--danger:#f09a90;--calendar-today:#435542;--calendar-today-ink:#ffffff;--shadow:0 8px 30px rgba(0,0,0,.18)}
+body.dark{--bg:#171a17;--panel:#222722;--ink:#edf0e9;--muted:#a1aa9d;--line:#353d35;--accent:#9aaf91;--accent2:#303b30;--danger:#e28b80;--shadow:0 8px 30px rgba(0,0,0,.18)}
 body.dark .navbtn{color:#c0c8bc}
 body.dark .navbtn.active,body.dark .navbtn:hover{background:var(--accent2);color:#e5eee0}
 body.dark .field{background:#1b211c;color:var(--ink);border-color:var(--line)}
 body.dark .moneybox{background:#1d241e;border-color:var(--line)}
 body.dark .modal{background:var(--panel);color:var(--ink)}
 body.dark .btn.secondary,body.dark .pill{background:var(--accent2);color:#dce8d6}
-body.dark .done{color:#a3ada0}
-body.dark .calendar-day,body.dark #calendarGrid button{color:var(--ink)}
-body.dark .btn{color:#172017}
-body.dark .btn.ghost{color:var(--muted)}
-body.dark .navbtn{color:#d0d8cc}
-body.dark .navbtn.active,body.dark .navbtn:hover{color:#f0f5ed}
-body.dark .field::placeholder{color:#a1aa9d}
-body.dark input,body.dark textarea,body.dark select{color-scheme:dark}
-body.dark .modalback{background:rgba(0,0,0,.72)}
+body.dark .done{color:#788176}
+body.dark .calendar-day,body.dark #calendarGrid button{color:var(--ink)!important}
 @media(max-width:720px){.headeractions{gap:8px;flex-wrap:wrap;justify-content:flex-end}.today{font-size:11px}}
+
+/* Six selectable visual styles. Layout and planner data stay unchanged. */
+.theme-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:16px}
+.theme-choice{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:13px;padding:13px;text-align:left;display:flex;flex-direction:column;gap:6px;min-width:0}
+.theme-choice strong{font-size:13px}.theme-choice small{font-size:11px;color:var(--muted)}.theme-choice.selected{outline:2px solid var(--accent);border-color:var(--accent);background:var(--accent2)}
+.swatches{display:flex;gap:5px;margin-bottom:4px}.swatches i{width:17px;height:17px;border-radius:50%;display:block;border:1px solid #0001}
+.theme-choice[data-design="zen"] .swatches i:nth-child(1){background:#f4eee3}.theme-choice[data-design="zen"] .swatches i:nth-child(2){background:#d8c6ad}.theme-choice[data-design="zen"] .swatches i:nth-child(3){background:#87947b}.theme-choice[data-design="zen"] .swatches i:nth-child(4){background:#3d4439}
+.theme-choice[data-design="luxury"] .swatches i:nth-child(1){background:#211811}.theme-choice[data-design="luxury"] .swatches i:nth-child(2){background:#755337}.theme-choice[data-design="luxury"] .swatches i:nth-child(3){background:#e9dfd0}.theme-choice[data-design="luxury"] .swatches i:nth-child(4){background:#c99c55}
+.theme-choice[data-design="linear"] .swatches i:nth-child(1){background:#171a2b}.theme-choice[data-design="linear"] .swatches i:nth-child(2){background:#39366e}.theme-choice[data-design="linear"] .swatches i:nth-child(3){background:#9278ed}.theme-choice[data-design="linear"] .swatches i:nth-child(4){background:#c7b9ff}
+.theme-choice[data-design="notion"] .swatches i:nth-child(1){background:#fff}.theme-choice[data-design="notion"] .swatches i:nth-child(2){background:#e8e8e6}.theme-choice[data-design="notion"] .swatches i:nth-child(3){background:#aaa}.theme-choice[data-design="notion"] .swatches i:nth-child(4){background:#444}
+.theme-choice[data-design="glass"] .swatches i:nth-child(1){background:#b8c8ed}.theme-choice[data-design="glass"] .swatches i:nth-child(2){background:#a9a1e9}.theme-choice[data-design="glass"] .swatches i:nth-child(3){background:#edc3df}.theme-choice[data-design="glass"] .swatches i:nth-child(4){background:#f7f4ff}
+.theme-choice[data-design="cozy"] .swatches i:nth-child(1){background:#f8e9df}.theme-choice[data-design="cozy"] .swatches i:nth-child(2){background:#e9c5dc}.theme-choice[data-design="cozy"] .swatches i:nth-child(3){background:#c5b2e0}.theme-choice[data-design="cozy"] .swatches i:nth-child(4){background:#8d79ae}
+.mode-row{display:flex;align-items:center;justify-content:space-between;gap:14px;border-top:1px solid var(--line);margin-top:18px;padding-top:16px}.mode-row .sub{margin:2px 0 0}
+body[data-design="zen"]{--bg:#f4eee3;--panel:#fffaf2;--ink:#302d27;--muted:#81796d;--line:#e6dac9;--accent:#71816a;--accent2:#e9e4d8;--shadow:0 8px 28px rgba(77,62,43,.06)}
+body[data-design="luxury"]{--bg:#211811;--panel:#302319;--ink:#f4eadb;--muted:#b8a58f;--line:#51402f;--accent:#c99c55;--accent2:#493626;--shadow:0 10px 28px rgba(0,0,0,.2)}
+body[data-design="linear"]{--bg:#171a2b;--panel:#22263d;--ink:#f0efff;--muted:#aaaac5;--line:#373b5a;--accent:#9a80ff;--accent2:#343052;--shadow:0 8px 28px rgba(0,0,0,.18)}
+body[data-design="notion"]{--bg:#f7f7f5;--panel:#fff;--ink:#242424;--muted:#777;--line:#e8e8e5;--accent:#444;--accent2:#ededeb;--shadow:0 5px 20px rgba(0,0,0,.035)}
+body[data-design="glass"]{--bg:#e9eafb;--panel:rgba(255,255,255,.78);--ink:#292b45;--muted:#777b9c;--line:rgba(255,255,255,.85);--accent:#7775c8;--accent2:rgba(164,163,225,.22);--shadow:0 10px 30px rgba(82,83,150,.12)}
+body[data-design="cozy"]{--bg:#fbf0eb;--panel:#fff9f6;--ink:#403347;--muted:#927f91;--line:#f0dedf;--accent:#9678b5;--accent2:#eee3f4;--shadow:0 8px 26px rgba(116,83,112,.07)}
+body.dark[data-design="zen"]{--bg:#24251f;--panel:#303129;--ink:#f0eadf;--muted:#b8ae9e;--line:#4a493e;--accent:#a8b69b;--accent2:#3d4439}
+body.dark[data-design="notion"]{--bg:#191919;--panel:#242424;--ink:#f2f2f2;--muted:#aaa;--line:#3c3c3c;--accent:#ddd;--accent2:#383838}
+body.dark[data-design="glass"]{--bg:#202239;--panel:rgba(47,49,82,.88);--ink:#f3f2ff;--muted:#b8b8d8;--line:#55577d;--accent:#b2a8ff;--accent2:#39385f}
+body.dark[data-design="cozy"]{--bg:#28212d;--panel:#382e40;--ink:#f8eef8;--muted:#c2aec4;--line:#59485e;--accent:#d1a9df;--accent2:#4a3a54}
+body.dark[data-design="luxury"] .field,body.dark[data-design="linear"] .field{background:#211b23;color:var(--ink);border-color:var(--line)}
+body[data-design="glass"] .panel,body[data-design="glass"] .card,body[data-design="glass"] nav{backdrop-filter:blur(14px)}
+body:not(.dark)[data-design="luxury"] .field{background:#f7efe4}body:not(.dark)[data-design="linear"] .field{background:#2a2e49;color:#f0efff;border-color:#414568}
+@media(max-width:720px){.theme-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.mode-row{align-items:flex-start;flex-direction:column}.mode-row .field{max-width:none!important;width:100%}}
 
 </style>
 </head>
 <body>
 <div class="app">
-<header><div class="brand">Learning<span>Life</span>.</div><div class="headeractions"><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to night mode">☾ Night mode</button><div class="today" id="headerDate"></div></div></header>
+<header><div class="brand" id="brandName">Working Life.</div><div class="headeractions"><div class="today" id="headerDate"></div></div></header>
 <div class="layout">
 <nav>
 <div class="navlabel">WORKSPACE</div>
@@ -99,8 +115,7 @@ body.dark .modalback{background:rgba(0,0,0,.72)}
 <button class="navbtn" data-page="reports"><span class="ico">▥</span>Monthly Reports</button>
 <button class="navbtn" data-page="weekly"><span class="ico">▦</span>Weekly Overview</button>
 <button class="navbtn" data-page="journal"><span class="ico">✎</span>Daily Journal</button>
-<button class="navbtn" data-page="security"><span class="ico">⌑</span>App Lock</button>
-<button class="navbtn" data-page="backup"><span class="ico">⇧</span>Backup &amp; Restore</button>
+<button class="navbtn" data-page="settings"><span class="ico">⚙</span>Settings</button>
 </nav>
 <main>
 <section class="section active" id="home">
@@ -170,10 +185,6 @@ body.dark .modalback{background:rgba(0,0,0,.72)}
 <div class="welcome"><h1>Monthly Reports</h1><p>A monthly view of your money activity.</p></div>
 <div class="panel"><div class="panelhead"><h2>Choose month</h2><input class="field" id="reportMonth" type="month" style="max-width:180px"></div><div class="moneygrid"><div class="moneybox"><small>Income</small><b class="positive" id="reportIncome">₱0.00</b></div><div class="moneybox"><small>Expenses</small><b class="negative" id="reportExpense">₱0.00</b></div><div class="moneybox"><small>Net</small><b id="reportNet">₱0.00</b></div></div><div class="sub" id="reportCount">No transactions in this month.</div></div>
 </section>
-<section class="section" id="security">
-<div class="welcome"><h1>App Lock</h1><p>Add a PIN prompt when opening this planner on this browser.</p></div>
-<div class="panel"><h2>PIN settings</h2><p class="sub">This is a basic privacy screen, not strong encryption. Your data remains stored in this browser.</p><form id="pinForm"><div class="formrow"><input class="field" id="pinInput" inputmode="numeric" pattern="[0-9]{4,8}" minlength="4" maxlength="8" placeholder="Create 4–8 digit PIN" required></div><button class="btn">Save PIN</button></form><button class="btn secondary" id="removePin" style="margin-top:10px">Remove PIN</button><div class="sub" id="pinStatus" style="margin-top:10px"></div></div>
-</section>
 <section class="section" id="weekly">
 <div class="welcome"><h1>Weekly Overview</h1><p>A simple look at your plans for the next seven days.</p></div>
 <div class="panel"><div class="panelhead"><h2>This week</h2><span class="pill" id="weeklyRange"></span></div><div id="weeklyList"></div></div>
@@ -184,27 +195,68 @@ body.dark .modalback{background:rgba(0,0,0,.72)}
 <div class="panel"><h2>Today's entry</h2><form id="journalForm"><div class="formrow"><input class="field" id="journalDate" type="date" required></div><textarea class="field note" id="journalText" placeholder="How was your day? What did you learn or appreciate?" required></textarea><div class="actions"><button class="btn">Save journal entry</button></div></form></div>
 <div class="panel"><h2>Past entries</h2><div id="journalList"></div></div>
 </section>
-<section class="section" id="backup">
-<div class="welcome"><h1>Backup &amp; Restore</h1><p>Save a copy of your LearningLife data and move it to another device whenever you need.</p></div>
-<div class="panel"><h2>Backup your data</h2><p class="sub">Download your tasks, schedules, calendar entries, notes, goals, money records, savings, habits, reminders, and app settings as a JSON file.</p><button class="btn" id="downloadBackup">Download backup</button></div>
-<div class="panel"><h2>Restore your data</h2><p class="sub">Choose a LearningLife backup file from this device. Restoring will replace the current LearningLife data on this browser with the data in the backup.</p><input class="field" id="restoreFile" type="file" accept=".json,application/json"><button class="btn secondary" id="restoreBackup" style="margin-top:10px">Restore backup</button><p class="sub" id="backupStatus" role="status" style="margin-top:10px">Your App Lock PIN is kept separately and is not included in backups.</p></div>
+<section class="section" id="settings">
+<div class="welcome"><h1>Settings</h1><p>Personalize the name and appearance of your planner.</p></div>
+<div class="panel">
+<h2>General</h2><p class="sub">Set the name of your personal planner.</p>
+<h3>App name</h3><p class="sub">Change the name shown at the top of the app and in the browser tab.</p>
+<form id="appNameForm" class="formrow"><input class="field" id="appNameInput" maxlength="32" placeholder="Enter app name" required><button class="btn">Save name</button></form>
+<div class="sub" id="appNameStatus" role="status">Your app name is saved on this device.</div>
+</div>
+<div class="panel appearance-panel">
+<h2>Appearance</h2><p class="sub">Choose one of six styles. Your choice is saved automatically on this device.</p>
+<div class="theme-grid" id="designChoices">
+<button type="button" class="theme-choice" data-design="zen"><span class="swatches"><i></i><i></i><i></i><i></i></span><strong>Japanese Zen</strong><small>Calm · warm · balanced</small></button>
+<button type="button" class="theme-choice" data-design="luxury"><span class="swatches"><i></i><i></i><i></i><i></i></span><strong>Luxury Editorial</strong><small>Rich · elegant · refined</small></button>
+<button type="button" class="theme-choice" data-design="linear"><span class="swatches"><i></i><i></i><i></i><i></i></span><strong>Linear Inspired</strong><small>Focused · sleek · modern</small></button>
+<button type="button" class="theme-choice" data-design="notion"><span class="swatches"><i></i><i></i><i></i><i></i></span><strong>Notion Inspired</strong><small>Simple · clear · organized</small></button>
+<button type="button" class="theme-choice" data-design="glass"><span class="swatches"><i></i><i></i><i></i><i></i></span><strong>Glassmorphism</strong><small>Soft · translucent · fresh</small></button>
+<button type="button" class="theme-choice" data-design="cozy"><span class="swatches"><i></i><i></i><i></i><i></i></span><strong>Cozy Pastel</strong><small>Gentle · friendly · warm</small></button>
+</div>
+<div class="mode-row"><div><strong>Color mode</strong><p class="sub">Switch between light and dark appearance.</p></div><select class="field" id="settingsTheme" style="max-width:160px"><option value="light">Light mode</option><option value="dark">Dark mode</option></select></div>
+<p class="sub" id="designStatus" role="status">Current style: Japanese Zen</p>
+</div>
+<div class="panel" id="privacySettings">
+<h2>Privacy &amp; Security</h2><p class="sub">Add a PIN prompt when opening this planner on this browser. This is a basic privacy screen, not strong encryption.</p>
+<form id="pinForm"><div class="formrow"><input class="field" id="pinInput" inputmode="numeric" pattern="[0-9]{4,8}" minlength="4" maxlength="8" placeholder="Create 4–8 digit PIN" required></div><button class="btn">Save PIN</button></form>
+<button class="btn secondary" id="removePin" style="margin-top:10px">Remove PIN</button><div class="sub" id="pinStatus" style="margin-top:10px"></div>
+</div>
+<div class="panel" id="dataSettings">
+<h2>Data Management</h2><p class="sub">Keep a copy of your planner information or restore it on this browser. Your App Lock PIN is not included in backups.</p>
+<div class="actions"><button class="btn" id="downloadBackup">Download backup</button></div>
+<div style="margin-top:14px"><h3>Restore data</h3><input class="field" id="restoreFile" type="file" accept=".json,application/json"><button class="btn secondary" id="restoreBackup" style="margin-top:10px">Restore backup</button><p class="sub" id="backupStatus" role="status" style="margin-top:10px">Restoring replaces the planner data currently stored in this browser.</p></div>
+</div>
+<div class="panel" id="aboutSettings">
+<h2>About</h2><p class="sub">Your personal planner for daily tasks, schedules, notes, goals, and everyday organization.</p>
+<p class="sub">Your planner information is stored locally in this browser on this device. Use Backup &amp; Restore before changing devices or clearing browser data.</p>
+<p class="sub">© 2026 <span id="aboutAppName">Working Life</span>. Personal planner.</p>
+</div>
 </section>
 </main>
 </div>
-<footer>Your information is saved in this browser on this device.</footer>
+<footer id="appFooter">Your information is saved in this browser on this device.</footer>
 </div>
 <div class="modalback" id="modal"><div class="modal" style="max-height:90vh;overflow:auto"><div class="panelhead"><h2 id="modalTitle">Selected date</h2><button class="btn ghost" onclick="closeModal()">✕</button></div><div id="calendarEntries"></div><form id="calendarEntryForm"><input type="hidden" id="calendarEditId"><label class="sub" for="calendarEntryType">Add a</label><select class="field" id="calendarEntryType" style="margin:6px 0 10px"><option value="note">Note</option><option value="schedule">Schedule</option></select><input class="field" id="calendarEntryTime" type="time" style="display:none;margin-bottom:10px"><textarea class="field" id="calendarEntryText" rows="3" placeholder="Write a note..." required></textarea><div class="actions"><button type="button" class="btn secondary" id="calendarCancelEdit" style="display:none">Cancel edit</button><button class="btn" id="calendarSaveButton">Add</button></div></form></div></div>
-<div class="modalback" id="lockScreen" style="z-index:10"><div class="modal"><h2>LearningLife is locked</h2><p>Enter your PIN to continue.</p><input class="field" id="unlockPin" type="password" inputmode="numeric" maxlength="8" placeholder="PIN"><div class="actions"><button class="btn" id="unlockButton">Unlock</button></div><p class="sub" id="unlockError"></p></div></div>
+<div class="modalback" id="lockScreen" style="z-index:10"><div class="modal"><h2 id="lockTitle">Working Life is locked</h2><p>Enter your PIN to continue.</p><input class="field" id="unlockPin" type="password" inputmode="numeric" maxlength="8" placeholder="PIN"><div class="actions"><button class="btn" id="unlockButton">Unlock</button></div><p class="sub" id="unlockError"></p></div></div>
 <script>
 const $=id=>document.getElementById(id);
 const today=()=>new Date().toISOString().slice(0,10);
 const load=(k,d)=>{try{return JSON.parse(localStorage.getItem('myday_'+k))??d}catch{return d}};
 const save=(k,v)=>localStorage.setItem('myday_'+k,JSON.stringify(v));
-// Theme preference is saved separately from planner data.
+// Appearance preferences are stored separately; planner records are untouched.
 const themeToggle=$('themeToggle');
-function applyTheme(mode){document.body.classList.toggle('dark',mode==='dark');if(themeToggle){themeToggle.textContent=mode==='dark'?'☀ Day mode':'☾ Night mode';themeToggle.setAttribute('aria-label',mode==='dark'?'Switch to day mode':'Switch to night mode')}}
-let savedTheme=localStorage.getItem('learninglife_theme')||'light';applyTheme(savedTheme);
+const designNames={zen:'Japanese Zen',luxury:'Luxury Editorial',linear:'Linear Inspired',notion:'Notion Inspired',glass:'Glassmorphism',cozy:'Cozy Pastel'};
+let savedDesign=localStorage.getItem('workinglife_design')||'zen';
+function applyDesign(name){if(!designNames[name])name='zen';savedDesign=name;document.body.dataset.design=name;localStorage.setItem('workinglife_design',name);document.querySelectorAll('.theme-choice').forEach(b=>{const active=b.dataset.design===name;b.classList.toggle('selected',active);b.setAttribute('aria-pressed',String(active))});if($('designStatus'))$('designStatus').textContent='Current style: '+designNames[name]}
+function applyTheme(mode){document.body.classList.toggle('dark',mode==='dark');if(themeToggle){themeToggle.textContent=mode==='dark'?'☀ Light mode':'☾ Dark mode';themeToggle.setAttribute('aria-label',mode==='dark'?'Switch to light mode':'Switch to dark mode')}if($('settingsTheme'))$('settingsTheme').value=mode}
+let savedTheme=localStorage.getItem('learninglife_theme')||'light';applyDesign(savedDesign);applyTheme(savedTheme);
+document.querySelectorAll('.theme-choice').forEach(b=>b.addEventListener('click',()=>applyDesign(b.dataset.design)));
 themeToggle.onclick=()=>{savedTheme=document.body.classList.contains('dark')?'light':'dark';localStorage.setItem('learninglife_theme',savedTheme);applyTheme(savedTheme)};
+
+// App identity is customizable; existing planner data keys remain unchanged.
+let appName=localStorage.getItem('workinglife_app_name')||'Working Life';
+function applyAppName(){ $('brandName').textContent=appName+'.'; document.title=appName+' — Personal Planner'; $('aboutAppName').textContent=appName; $('lockTitle').textContent=appName+' is locked'; $('appNameInput').value=appName }
+
 let tasks=load('tasks',[]), schedules=load('schedules',[]), transactions=load('transactions',[]), goals=load('goals',[]), debts=load('debts',[]), calendarEntries=load('calendarEntries',[]);
 let selectedCalendarDate='';
 let goalMilestones=load('goalMilestones',[]), journalEntries=load('journalEntries',[]);
@@ -212,6 +264,9 @@ let savingsGoal=load('savingsGoal',null), savingsEntries=load('savingsEntries',[
 const money=n=>'₱'+Number(n||0).toLocaleString('en-PH',{minimumFractionDigits:2,maximumFractionDigits:2});
 function showPage(p){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.navbtn').forEach(x=>x.classList.toggle('active',x.dataset.page===p));$(p).classList.add('active');if(p==='calendar')renderCalendar();if(p==='weekly')renderWeekly();if(p==='journal')renderJournal()}
 document.querySelectorAll('.navbtn').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+$('appNameForm').onsubmit=e=>{e.preventDefault();let next=$('appNameInput').value.trim();if(!next){$('appNameStatus').textContent='Please enter an app name.';return}appName=next;localStorage.setItem('workinglife_app_name',appName);applyAppName();$('appNameStatus').textContent='App name updated.'};
+$('settingsTheme').onchange=e=>{savedTheme=e.target.value;localStorage.setItem('learninglife_theme',savedTheme);applyTheme(savedTheme)};
+applyAppName();
 function renderTasks(){let list=$('taskList');list.innerHTML='';$('taskCount').textContent=tasks.length+' tasks';tasks.forEach((t,i)=>{let d=document.createElement('div');d.className='rowitem';d.innerHTML=`<input class="check" type="checkbox" ${t.done?'checked':''} aria-label="Complete task"><div class="grow"><strong class="${t.done?'done':''}"></strong></div><button class="btn ghost" aria-label="Delete task">×</button>`;d.querySelector('strong').textContent=t.text;d.querySelector('input').onchange=e=>{tasks[i].done=e.target.checked;save('tasks',tasks);renderAll()};d.querySelector('button').onclick=()=>{tasks.splice(i,1);save('tasks',tasks);renderAll()};list.append(d)});if(!tasks.length)list.innerHTML='<div class="empty">No tasks yet. Add your first task above.</div>'}
 $('taskForm').onsubmit=e=>{e.preventDefault();tasks.push({text:$('taskInput').value.trim(),done:false,repeat:$('taskRepeat').value});save('tasks',tasks);$('taskInput').value='';renderAll()};
 function renderSchedules(){let sorted=[...schedules].sort((a,b)=>a.time.localeCompare(b.time));$('scheduleCount').textContent=sorted.length+' items';let list=$('scheduleList');list.innerHTML='';sorted.forEach((s)=>{let i=schedules.indexOf(s),d=document.createElement('div');d.className='rowitem';let time=document.createElement('div');time.className='time';time.textContent=new Date('2000-01-01T'+s.time).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});let grow=document.createElement('div');grow.className='grow';let strong=document.createElement('strong');strong.textContent=s.text;grow.append(strong);let del=document.createElement('button');del.className='btn ghost';del.textContent='×';del.onclick=()=>{schedules.splice(i,1);save('schedules',schedules);renderAll()};d.append(time,grow,del);list.append(d)});if(!sorted.length)list.innerHTML='<div class="empty">No schedule added for today.</div>'}
@@ -234,7 +289,7 @@ function renderWeekly(){let start=new Date();start.setHours(0,0,0,0);let end=new
 $('notesText').value=load('notes','');$('notesText').oninput=()=>{save('notes',$('notesText').value);$('notesSaved').textContent='Saved automatically'};
 $('reflection').value=load('reflection','');$('reflection').oninput=()=>save('reflection',$('reflection').value);
 let calDate=new Date();function dateKey(y,m,d){return [y,String(m+1).padStart(2,'0'),String(d).padStart(2,'0')].join('-')}
-function renderCalendar(){let y=calDate.getFullYear(),m=calDate.getMonth();$('monthLabel').textContent=calDate.toLocaleDateString(undefined,{month:'long',year:'numeric'});let g=$('calendarGrid');g.innerHTML='';['S','M','T','W','T','F','S'].forEach(x=>{let el=document.createElement('b');el.style.color='var(--muted)';el.textContent=x;g.append(el)});let first=new Date(y,m,1).getDay(),days=new Date(y,m+1,0).getDate(),todayKey=today();for(let i=0;i<first;i++)g.append(document.createElement('span'));for(let d=1;d<=days;d++){let key=dateKey(y,m,d),b=document.createElement('button'),hasItems=calendarEntries.some(x=>x.date===key);b.textContent=d+(hasItems?' ·':'');b.style.cssText='border:0;border-radius:9px;padding:9px 0;background:'+(key===todayKey?'var(--calendar-today)':'transparent')+';color:'+(key===todayKey?'var(--calendar-today-ink)':'var(--ink)')+';font-weight:'+(hasItems?'750':'500');b.title=hasItems?'Has saved notes or schedules':'Select date';b.onclick=()=>openCalendarDate(key);g.append(b)}}
+function renderCalendar(){let y=calDate.getFullYear(),m=calDate.getMonth();$('monthLabel').textContent=calDate.toLocaleDateString(undefined,{month:'long',year:'numeric'});let g=$('calendarGrid');g.innerHTML='';['S','M','T','W','T','F','S'].forEach(x=>{let el=document.createElement('b');el.style.color='#85877f';el.textContent=x;g.append(el)});let first=new Date(y,m,1).getDay(),days=new Date(y,m+1,0).getDate(),todayKey=today();for(let i=0;i<first;i++)g.append(document.createElement('span'));for(let d=1;d<=days;d++){let key=dateKey(y,m,d),b=document.createElement('button'),hasItems=calendarEntries.some(x=>x.date===key);b.textContent=d+(hasItems?' ·':'');b.style.cssText='border:0;border-radius:9px;padding:9px 0;background:'+(key===todayKey?'#e9eee6':'transparent')+';color:#30332d;font-weight:'+(hasItems?'750':'500');b.title=hasItems?'Has saved notes or schedules':'Select date';b.onclick=()=>openCalendarDate(key);g.append(b)}}
 function openCalendarDate(key){selectedCalendarDate=key;$('modalTitle').textContent=new Date(key+'T12:00:00').toLocaleDateString(undefined,{dateStyle:'full'});$('calendarEditId').value='';$('calendarEntryType').value='note';$('calendarEntryTime').value='';$('calendarEntryTime').style.display='none';$('calendarEntryText').value='';$('calendarEntryText').placeholder='Write a note...';$('calendarSaveButton').textContent='Add';$('calendarCancelEdit').style.display='none';renderCalendarEntries();$('modal').classList.add('show')}
 function renderCalendarEntries(){let area=$('calendarEntries');area.innerHTML='';let entries=calendarEntries.filter(x=>x.date===selectedCalendarDate);if(!entries.length){area.innerHTML='<div class="empty">Nothing planned for this date yet.</div>';return}entries.forEach(item=>{let row=document.createElement('div');row.className='rowitem';let content=document.createElement('div');content.className='grow';let heading=document.createElement('strong');heading.textContent=item.type==='schedule'?'◷ Schedule':'▤ Note';let body=document.createElement('small');body.textContent=(item.time?new Date('2000-01-01T'+item.time).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})+' · ':'')+item.text;content.append(heading,body);let edit=document.createElement('button');edit.className='btn ghost';edit.textContent='Edit';edit.onclick=()=>{ $('calendarEditId').value=item.id;$('calendarEntryType').value=item.type;$('calendarEntryTime').value=item.time||'';$('calendarEntryTime').style.display=item.type==='schedule'?'block':'none';$('calendarEntryText').value=item.text;$('calendarEntryText').placeholder=item.type==='note'?'Write a note...':'What is scheduled?';$('calendarSaveButton').textContent='Save changes';$('calendarCancelEdit').style.display='inline-block'};let del=document.createElement('button');del.className='btn ghost';del.textContent='Delete';del.onclick=()=>{if(!confirm('Remove this item?'))return;calendarEntries=calendarEntries.filter(x=>x.id!==item.id);save('calendarEntries',calendarEntries);renderCalendarEntries();renderCalendar()};row.append(content,edit,del);area.append(row)})}
 $('calendarEntryType').onchange=()=>{let isSchedule=$('calendarEntryType').value==='schedule';$('calendarEntryTime').style.display=isSchedule?'block':'none';$('calendarEntryTime').required=isSchedule;$('calendarEntryText').placeholder=isSchedule?'What is scheduled?':'Write a note...'};
@@ -250,8 +305,8 @@ function renderSavings(){
  if(!savingsGoal){summary.textContent='No savings goal set yet.'}
  else{
   let title=document.createElement('strong');title.textContent=savingsGoal.name+' · '+money(total)+' of '+money(savingsGoal.target);
-  let track=document.createElement('div');track.style.cssText='height:10px;background:var(--line);border-radius:20px;overflow:hidden;margin-top:12px';
-  let bar=document.createElement('div');bar.style.cssText='height:100%;background:var(--accent);width:'+Math.min(100,total/savingsGoal.target*100)+'%;border-radius:20px';track.append(bar);
+  let track=document.createElement('div');track.style.cssText='height:10px;background:#edf0ea;border-radius:20px;overflow:hidden;margin-top:12px';
+  let bar=document.createElement('div');bar.style.cssText='height:100%;background:#64745f;width:'+Math.min(100,total/savingsGoal.target*100)+'%;border-radius:20px';track.append(bar);
   let pct=document.createElement('small');pct.className='sub';pct.textContent=Math.min(100,Math.round(total/savingsGoal.target*100))+'% saved';summary.append(title,track,pct)
  }
  let hist=$('savingsHistory');hist.innerHTML='';[...savingsEntries].reverse().forEach((x,idx)=>{let d=document.createElement('div');d.className='transaction';let l=document.createElement('span');l.textContent=x.note||'Savings deposit';let r=document.createElement('strong');r.className='positive';r.textContent='+'+money(x.amount);let del=document.createElement('button');del.className='btn ghost';del.textContent='Delete';del.onclick=()=>{let i=savingsEntries.length-1-idx;savingsEntries.splice(i,1);save('savingsEntries',savingsEntries);renderSavings()};d.append(l,r,del);hist.append(d)});if(!savingsEntries.length)hist.innerHTML='<div class="empty">No savings deposits yet.</div>'
@@ -280,16 +335,16 @@ $('downloadBackup').onclick=()=>{
  const data={app:'LearningLife',formatVersion:1,exportedAt:new Date().toISOString(),data:{}};
  BACKUP_KEYS.forEach(k=>{try{data.data[k]=JSON.parse(localStorage.getItem('myday_'+k)??(k==='savingsGoal'?'null':(['tasks','schedules','transactions','goals','goalMilestones','journalEntries','debts','calendarEntries','savingsEntries','habits','reminders'].includes(k)?'[]':'{}')))}catch{}});
  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
- a.href=url;a.download='learninglife-backup-'+today()+'.json';document.body.append(a);a.click();a.remove();URL.revokeObjectURL(url);$('backupStatus').textContent='Backup downloaded. Keep the file somewhere safe.';
+ a.href=url;a.download='workinglife-backup-'+today()+'.json';document.body.append(a);a.click();a.remove();URL.revokeObjectURL(url);$('backupStatus').textContent='Backup downloaded. Keep the file somewhere safe.';
 };
 $('restoreBackup').onclick=async()=>{
- const file=$('restoreFile').files[0];if(!file){$('backupStatus').textContent='Please choose a LearningLife backup file first.';return}
+ const file=$('restoreFile').files[0];if(!file){$('backupStatus').textContent='Please choose a planner backup file first.';return}
  try{
   const parsed=JSON.parse(await file.text());
-  if(!['LearningLife','MyDay'].includes(parsed.app)||parsed.formatVersion!==1||!parsed.data||typeof parsed.data!=='object')throw new Error('This does not look like a supported LearningLife backup.');
-  if(!confirm('Restore this backup? Your current LearningLife data on this browser will be replaced.'))return;
+  if(!['LearningLife','MyDay'].includes(parsed.app)||parsed.formatVersion!==1||!parsed.data||typeof parsed.data!=='object')throw new Error('This does not look like a supported planner backup.');
+  if(!confirm('Restore this backup? Your current planner data on this browser will be replaced.'))return;
   BACKUP_KEYS.forEach(k=>{if(Object.prototype.hasOwnProperty.call(parsed.data,k))localStorage.setItem('myday_'+k,JSON.stringify(parsed.data[k]));else localStorage.removeItem('myday_'+k)});
-  alert('Backup restored. LearningLife will now reload.');location.reload();
+  alert('Backup restored. The app will now reload.');location.reload();
  }catch(err){$('backupStatus').textContent=err.message||'Could not read this backup file.'}
 };
 
@@ -304,11 +359,6 @@ function renderAll(){renderTasks();renderSchedules();renderMoney();renderHome();
 let now=new Date();$('headerDate').textContent=now.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric',year:'numeric'});$('greeting').textContent=(now.getHours()<12?'Good morning.':now.getHours()<18?'Good afternoon.':'Good evening.');
 renderAll();
 if(load('appPin',null))$('lockScreen').classList.add('show');
-
-// Enable offline app-shell caching when hosted on HTTPS or localhost.
-if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(err => console.warn('LearningLife offline setup:', err)));
-}
 </script>
 </body>
 </html>
