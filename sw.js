@@ -1,11 +1,11 @@
-
-const CACHE_NAME='learninglife-shell-v30';
+const CACHE_NAME='learninglife-shell-v31';
 
 const APP_SHELL=[
 './',
 './index.html',
 './bible.js',
 './redesign.css',
+'./redesign-v30.css',
 './clock.js',
 './dashboard.js',
 './debt-installments.js',
@@ -20,6 +20,7 @@ const APP_SHELL=[
 './sw.js',
 './transfer.js',
 './wallet-sync.js',
+'./calendar-fix.js',
 './icon-192.png',
 './icon-512.png',
 './icon-maskable-512.png'
@@ -49,7 +50,7 @@ async function withAppScripts(response){
   'bible.js','debt.js','transfer.js','debt-installments.js',
   'debt-wallet.js','finance-tools.js','reset-money.js',
   'dashboard.js','clock.js','goals-refresh.js','wallet-sync.js',
-  'money-layout.js','learninglife-update.js'
+  'money-layout.js','learninglife-update.js','calendar-fix.js'
  ]){
   if(!updated.includes(`src="./${file}"`)){
    updated=updated.replace(
