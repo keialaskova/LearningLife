@@ -1,0 +1,92 @@
+/* Working Life v29 — six genuinely different layout systems */
+body[data-design="zen"] .app{max-width:1120px;padding:48px 34px 80px}
+body[data-design="zen"] header{border-bottom:1px solid var(--line);padding-bottom:22px}
+body[data-design="zen"] .layout{display:flex;flex-direction:column;gap:26px}
+body[data-design="zen"] nav{position:static;display:flex;flex-wrap:wrap;gap:5px;background:transparent;border:0;padding:0;box-shadow:none}
+body[data-design="zen"] .navlabel{display:none}
+body[data-design="zen"] .navbtn{width:auto;border-radius:999px;padding:10px 15px}
+body[data-design="zen"] main{max-width:900px;margin:0 auto;width:100%}
+body[data-design="zen"] .panel{padding:30px 34px;border:0;border-bottom:1px solid var(--line);background:transparent}
+body[data-design="zen"] .stats .stat{padding:20px 8px}
+body[data-design="zen"] .welcome h1{font-size:46px}
+
+body[data-design="luxury"] .app{max-width:1500px;padding:36px 42px 80px}
+body[data-design="luxury"] header{border-bottom:1px solid var(--accent);padding:0 0 24px}
+body[data-design="luxury"] .layout{grid-template-columns:205px minmax(0,1fr);gap:42px}
+body[data-design="luxury"] nav{position:sticky;top:22px;background:transparent;border:0;border-right:1px solid var(--line);border-radius:0;box-shadow:none;padding:14px 24px 14px 0}
+body[data-design="luxury"] .navbtn{font-family:system-ui,sans-serif;text-transform:uppercase;font-size:12px;letter-spacing:1px;border-radius:0;border-bottom:1px solid #ffffff12;padding:14px 8px}
+body[data-design="luxury"] .welcome{padding:26px 0;border-bottom:1px solid var(--line)}
+body[data-design="luxury"] .welcome h1{font-size:52px}
+body[data-design="luxury"] .stats{grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border:1px solid var(--line)}
+body[data-design="luxury"] .stats .stat{border-right:1px solid var(--line);border-radius:0}
+body[data-design="luxury"] .stats .stat:last-child{border:0}
+body[data-design="luxury"] .panel{padding:30px 32px}
+
+body[data-design="linear"] .app{max-width:1600px;padding:22px 28px 56px}
+body[data-design="linear"] header{margin-bottom:20px}
+body[data-design="linear"] .layout{grid-template-columns:215px minmax(0,1fr);gap:18px}
+body[data-design="linear"] nav{height:calc(100vh - 110px);overflow:auto;position:sticky;top:16px;border-radius:14px}
+body[data-design="linear"] .navlabel{font-size:10px;text-transform:uppercase;letter-spacing:1.6px}
+body[data-design="linear"] .navbtn{font-size:13px;padding:9px 11px}
+body[data-design="linear"] .welcome{padding:18px 22px;background:var(--panel);border:1px solid var(--line);border-radius:14px}
+body[data-design="linear"] .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+body[data-design="linear"] .panel{border:1px solid var(--line);border-radius:14px}
+body[data-design="linear"] .btn{font-weight:700}
+
+body[data-design="notion"] .app{max-width:1320px;padding:28px 34px 80px}
+body[data-design="notion"] header{border-bottom:1px solid var(--line);padding-bottom:16px}
+body[data-design="notion"] .layout{grid-template-columns:245px minmax(0,1fr);gap:46px}
+body[data-design="notion"] nav{position:sticky;top:18px;background:#f7f7f5;border:0;border-right:1px solid var(--line);border-radius:0;padding:16px 22px 16px 0;box-shadow:none}
+body[data-design="notion"] .navbtn{font-size:14px;padding:8px 10px}
+body[data-design="notion"] .welcome h1{font-size:38px}
+body[data-design="notion"] .panel{border:0;border-top:1px solid var(--line);border-radius:0;padding:24px 4px;box-shadow:none}
+body[data-design="notion"] .card{border:1px solid var(--line);border-radius:8px;box-shadow:none}
+
+body[data-design="glass"] .app{max-width:1440px;padding:34px 32px 76px}
+body[data-design="glass"]{background-attachment:fixed}
+body[data-design="glass"] header{padding:16px 22px;background:rgba(255,255,255,.42);border:1px solid rgba(255,255,255,.65);border-radius:20px;backdrop-filter:blur(20px)}
+body[data-design="glass"] .layout{grid-template-columns:235px minmax(0,1fr);gap:26px}
+body[data-design="glass"] nav{position:sticky;top:18px;background:rgba(255,255,255,.42);border:1px solid rgba(255,255,255,.72);box-shadow:0 18px 45px rgba(74,78,140,.12);backdrop-filter:blur(24px)}
+body[data-design="glass"] .panel,body[data-design="glass"] .card{background:rgba(255,255,255,.58);border:1px solid rgba(255,255,255,.8);box-shadow:0 18px 42px rgba(74,78,140,.13);backdrop-filter:blur(22px)}
+body[data-design="glass"] .navbtn{border-radius:13px}
+body[data-design="glass"] .welcome{padding:20px 24px;border-radius:22px;background:rgba(255,255,255,.38);border:1px solid rgba(255,255,255,.7)}
+
+body[data-design="cozy"] .app{max-width:1320px;padding:34px 30px 80px}
+body[data-design="cozy"] header{padding:14px 20px;background:var(--panel);border-radius:24px;box-shadow:var(--shadow)}
+body[data-design="cozy"] .layout{grid-template-columns:225px minmax(0,1fr);gap:22px}
+body[data-design="cozy"] nav{border:0;border-radius:28px;padding:18px;box-shadow:var(--shadow)}
+body[data-design="cozy"] .navbtn{border-radius:16px;padding:13px 14px}
+body[data-design="cozy"] .welcome{padding:24px 26px;background:var(--panel);border-radius:28px;box-shadow:var(--shadow)}
+body[data-design="cozy"] .welcome h1{font-size:40px}
+body[data-design="cozy"] .stats{gap:16px}
+body[data-design="cozy"] .stat{border-radius:22px;background:var(--panel);box-shadow:var(--shadow)}
+body[data-design="cozy"] .panel{border:0;border-radius:26px;padding:26px;box-shadow:var(--shadow)}
+
+/* Readability corrections across every theme */
+body[data-design] .navbtn{color:var(--ink)}
+body[data-design] .navbtn.active{color:var(--ink);font-weight:750}
+body[data-design] .sub,body[data-design] .empty,body[data-design] .today,
+body[data-design] .navlabel,body[data-design] .rowitem small,
+body[data-design] .transaction small,body[data-design] .stat small,
+body[data-design] .moneybox small{color:var(--muted)}
+body[data-design] #calendarGrid button{color:var(--ink)!important}
+body[data-design] #calendarGrid b{color:var(--muted)!important}
+body[data-design] .field{color:var(--ink);background:var(--panel);border-color:var(--line)}
+body[data-design] .btn.secondary,body[data-design] .pill{color:var(--ink);background:var(--accent2)}
+body.dark[data-design="glass"] header,body.dark[data-design="glass"] nav,
+body.dark[data-design="glass"] .panel,body.dark[data-design="glass"] .card,
+body.dark[data-design="glass"] .welcome{background:rgba(35,38,68,.88);border-color:rgba(160,164,220,.35)}
+
+@media(max-width:720px){
+ body[data-design] .app{padding:18px 14px 48px}
+ body[data-design] .layout{display:flex;flex-direction:column;gap:14px}
+ body[data-design] nav{position:static;height:auto;display:flex;flex-wrap:nowrap;overflow-x:auto;gap:4px;padding:8px}
+ body[data-design] .navlabel{display:none}
+ body[data-design] .navbtn{width:auto;white-space:nowrap;flex:0 0 auto;padding:10px 12px}
+ body[data-design="zen"] nav{flex-wrap:nowrap}
+ body[data-design="zen"] main{max-width:none}
+ body[data-design="luxury"] .stats{grid-template-columns:1fr}
+ body[data-design="luxury"] .stats .stat{border-right:0;border-bottom:1px solid var(--line)}
+ body[data-design="notion"] nav{padding:8px}
+ body[data-design="glass"] header{padding:12px}
+}
