@@ -300,7 +300,7 @@ function applyDesign(name){if(!designNames[name])name='zen';savedDesign=name;doc
 function applyTheme(mode){document.body.classList.toggle('dark',mode==='dark');if(themeToggle){themeToggle.textContent=mode==='dark'?'☀ Light mode':'☾ Dark mode';themeToggle.setAttribute('aria-label',mode==='dark'?'Switch to light mode':'Switch to dark mode')}if($('settingsTheme'))$('settingsTheme').value=mode}
 let savedTheme=localStorage.getItem('learninglife_theme')||'light';applyDesign(savedDesign);applyTheme(savedTheme);
 document.querySelectorAll('.theme-choice').forEach(b=>b.addEventListener('click',()=>applyDesign(b.dataset.design)));
-themeToggle.onclick=()=>{savedTheme=document.body.classList.contains('dark')?'light':'dark';localStorage.setItem('learninglife_theme',savedTheme);applyTheme(savedTheme)};
+// Removed obsolete header theme-toggle handler; Settings controls color mode.
 
 // App identity is customizable; existing planner data keys remain unchanged.
 let appName=localStorage.getItem('workinglife_app_name')||'Working Life';
