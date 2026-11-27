@@ -90,33 +90,50 @@ body[data-design="bubu"] #bubuVideoCard{display:none!important}
   function syncVideo(){
     const home=document.getElementById("home");
     const welcome=home?.querySelector(":scope > .welcome");
-    const oldCard=document.getElementById("bubuVideoCard");
+    const card=document.getElementById("bubuVideoCard");
     const video=document.getElementById("bubuCookingVideo");
-    if(!home||!welcome||!oldCard||!video)return;
-    // Stats were accidentally placed inside the former video card: move them back into Home.
-    const stats=oldCard.querySelector(":scope > .stats");
-    if(stats&&stats.parentElement!==home)home.insertBefore(stats,oldCard.nextSibling);
-    let frame=document.getElementById("bubuWelcomeVideo");
-    if(!frame){frame=document.createElement("div");frame.id="bubuWelcomeVideo";frame.setAttribute("aria-label","Bubu and Dudu cooking video");welcome.appendChild(frame);}
-    if(video.parentElement!==frame)frame.appendChild(video);
-    oldCard.style.setProperty("display","none","important");
-    const enabled=localStorage.getItem("learninglife_bubu_animation")!=="off";
-    video.muted=true;video.loop=true;video.autoplay=true;video.playsInline=true;
-    video.setAttribute("muted","");video.setAttribute("loop","");video.setAttribute("autoplay","");video.setAttribute("playsinline","");
-    if(active()&&enabled&&home.classList.contains("active")){
-      frame.style.display="flex";const p=video.play();if(p?.catch)p.catch(()=>{});
-    }else{video.pause();frame.style.display="none";}
+    if(!home||!welcome||!card||!video)return;
+
+    // Keep dashboard stats as a direct Home child in every theme.
+    // The original HTML nests them inside the video card.
+    const stats=card.querySelector(":scope > .stats");
+    if(stats&&stats.parentElement!==home)home.insertBefore(stats,card.nextSibling);
+
+    video.muted=true; video.loop=true; video.autoplay=true; video.playsInline=true;
+    video.setAttribute("muted","");
+    video.setAttribute("loop","");
+    video.setAttribute("autoplay","");
+    video.setAttribute("playsinline","");
+
+    if(active()){
+      let frame=document.getElementById("bubuWelcomeVideo");
+      if(!frame){
+        frame=document.createElement("div");
+        frame.id="bubuWelcomeVideo";
+        frame.setAttribute("aria-label","Bubu and Dudu cooking video");
+        welcome.appendChild(frame);
+      }
+      if(video.parentElement!==frame)frame.appendChild(video);
+      card.hidden=true;
+      card.style.setProperty("display","none","important");
+      const enabled=localStorage.getItem("learninglife_bubu_animation")!=="off";
+      const show=enabled&&home.classList.contains("active");
+      frame.style.display=show?"flex":"none";
+      if(show){const p=video.play();if(p?.catch)p.catch(()=>{});}
+      else video.pause();
+    }else{
+      // Restore the video to its original card, but keep that card hidden.
+      const frame=document.getElementById("bubuWelcomeVideo");
+      if(video.parentElement!==card)card.insertBefore(video,card.firstChild);
+      if(frame)frame.remove();
+      card.hidden=true;
+      card.style.setProperty("display","none","important");
+      video.pause();
+    }
   }
   function run(){
     if(!document.body)return;
-    if(active()){
-      syncVideo();
-      document.querySelectorAll("main>.section").forEach(s=>s.style.removeProperty("display"));
-    }else{
-      const v=document.getElementById("bubuCookingVideo");if(v)v.pause();
-      const f=document.getElementById("bubuWelcomeVideo");if(f)f.style.display="none";
-      document.querySelectorAll("main>.section").forEach(s=>s.style.removeProperty("display"));
-    }
+    syncVideo();
   }
   const style=document.createElement("style");style.id="bubu-v52-all-categories";style.textContent=css;
   (document.head||document.documentElement).appendChild(style);
