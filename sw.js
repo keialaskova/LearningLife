@@ -1,10 +1,10 @@
-const CACHE_NAME='learninglife-shell-v33';
+const CACHE_NAME='learninglife-shell-v34';
 const APP_SHELL=[
 './','./index.html','./bible.js','./redesign.css','./redesign-v30.css','./clock.js',
 './dashboard.js','./debt-installments.js','./debt-wallet.js','./debt.js','./finance-tools.js',
 './goals-refresh.js','./learninglife-update.js','./manifest.webmanifest','./money-layout.js',
 './reset-money.js','./sw.js','./transfer.js','./wallet-sync.js','./calendar-fix.js','./text-size.js',
-'./bubu-theme.js','./icon-192.png','./icon-512.png','./icon-maskable-512.png',
+'./bubu-theme.js','./assets/bubu-bear.png','./assets/bubu-dudu-beach.jpg','./assets/bubu-dudu-cooking.mp4','./icon-192.png','./icon-512.png','./icon-maskable-512.png',
 './cute_bear_stickers_54/01_sleep_rest_white.png',
 './cute_bear_stickers_54/02_sleep_rest_brown.png',
 './cute_bear_stickers_54/03_sleep_rest_both.png',
