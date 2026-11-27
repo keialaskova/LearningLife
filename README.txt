@@ -1,9 +1,14 @@
-Learning Life — Theme 7 direct index layout fix
+FINAL NAVIGATION OVERRIDE — Theme 7
 
-Replace the ROOT index.html in your GitHub repository with this file.
+Replace the ROOT index.html in the GitHub repository with this exact file.
+Do not copy only part of it.
 
-This version puts Theme 7's structural layout CSS directly into index.html after the existing stylesheet links. It does not depend on bubu-theme.js to change the navigation layout. The bubu-theme.js script is still loaded at the bottom for the animation/video behavior.
+This file includes the full index.html plus a final, higher-specificity CSS override targeting the actual HTML structure:
+.app > .layout > nav and .app > .layout > main
 
-Keep your current bubu-theme.js and sw.js, and keep all existing assets and other app files. The rules only apply when body[data-design="bubu"], so the other six themes are not targeted.
+Expected result while Bubu & Dudu Beach is selected:
+- Navigation becomes a full-width 5-column toolbar on wide screens.
+- Navigation becomes 4 columns on medium screens and 3 columns on phones.
+- Main content moves below the navigation and uses full width.
 
-After upload, reload the site. The Theme 7 navigation should become a horizontal toolbar instead of the left sidebar. If the browser still shows the old version, the service worker may need to be refreshed.
+Keep the current bubu-theme.js, sw.js, and all existing assets. Other themes are not targeted.

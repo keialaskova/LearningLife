@@ -471,6 +471,54 @@ body.dark[data-design="bubu"] .stat {
 }
 </style>
 
+
+<style id="bubu-theme-layout-override-v2">
+/* Higher-specificity override for the actual .app > .layout structure */
+html body[data-design="bubu"] .app > .layout {
+  display:flex !important;
+  flex-direction:column !important;
+  grid-template-columns:none !important;
+  align-items:stretch !important;
+  gap:16px !important;
+}
+html body[data-design="bubu"] .app > .layout > nav {
+  position:static !important;
+  display:grid !important;
+  width:100% !important;
+  height:auto !important;
+  grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+  grid-auto-flow:row !important;
+  align-items:stretch !important;
+  overflow:visible !important;
+}
+html body[data-design="bubu"] .app > .layout > nav .navlabel {
+  display:none !important;
+}
+html body[data-design="bubu"] .app > .layout > nav .navbtn {
+  width:100% !important;
+  min-width:0 !important;
+  justify-content:center !important;
+  text-align:center !important;
+  white-space:normal !important;
+}
+html body[data-design="bubu"] .app > .layout > main {
+  width:100% !important;
+  min-width:0 !important;
+  max-width:none !important;
+}
+@media(max-width:900px) {
+  html body[data-design="bubu"] .app > .layout > nav {
+    grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  }
+}
+@media(max-width:560px) {
+  html body[data-design="bubu"] .app > .layout > nav {
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:6px !important;
+  }
+}
+</style>
+
 </head>
 <body>
 <div class="app">
