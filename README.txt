@@ -1,15 +1,22 @@
-Learning Life — Bubu & Dudu cooking video welcome-banner update v42
+Learning Life — Bubu & Dudu Welcome Banner Video Fix v43
 
-Replace ONLY bubu-stickers.js in your GitHub repository root.
+Replace these files in the repository root:
+- index.html
+- bubu-stickers.js
+- sw.js
 
-What changes:
-- Moves the existing bubu-dudu-cooking.mp4 video card into the Home welcome banner on Theme 7.
-- Places the video on the right and keeps the greeting on the left.
-- Uses object-fit: contain so the characters are not cropped.
-- Uses a compact responsive video frame on phones.
-- Removes the separate video panel from the dashboard flow.
-- Restores the original video card location when switching away from Theme 7.
-- Respects the existing Animation On/Off setting.
-- Keeps feature-page sticker images and the sticker picker.
+Upload/replace the complete folder:
+- cute_bear_stickers_54/ (all individual PNG stickers)
 
-No need to re-upload index.html, sw.js, or the 54 PNG sticker files for this update. Keep all existing assets.
+What this fixes:
+- Moves the existing bubuVideoCard DOM element inside the Home welcome banner.
+- Places the cooking video on the right and greeting on the left.
+- Removes the static home-banner sticker so it does not compete with the video.
+- Hides the old standalone dashboard video card location.
+- Keeps the Settings sticker picker and feature-page stickers.
+- Keeps video muted, inline, looping, and best-effort autoplay.
+- Animation Off hides and pauses the video.
+- Bumps the service-worker cache to v43.
+
+This package includes the full index.html and service worker, not just a script patch.
+Keep all other existing app files and assets. Do not delete your existing assets folder.
