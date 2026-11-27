@@ -1,632 +1,194 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#f7f7f5">
-<title>Learning Life — Personal Planner</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#171a27">
+<title>Learning Life</title>
 <style>
-:root{--bg:#f7f7f5;--panel:#fff;--ink:#242522;--muted:#85877f;--line:#e9e9e4;--accent:#64745f;--accent2:#e9eee6;--danger:#b65d54;--shadow:0 8px 30px rgba(30,35,25,.045)}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,-apple-system,Segoe UI,sans-serif}
-button,input,textarea,select{font:inherit}button{cursor:pointer}
-.app{max-width:1100px;margin:auto;padding:28px 22px 60px}
-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
-.brand{font-size:20px;font-weight:750;letter-spacing:-.6px}.brand span{color:var(--accent)}
-.today{color:var(--muted);font-size:13px}
-.layout{display:grid;grid-template-columns:220px 1fr;gap:24px}
-nav{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:12px;height:max-content;position:sticky;top:18px}
-.navlabel{font-size:10px;color:var(--muted);letter-spacing:1.3px;font-weight:700;padding:12px 10px 7px}
-.navbtn{display:flex;align-items:center;gap:11px;width:100%;border:0;background:transparent;padding:11px 12px;border-radius:11px;text-align:left;color:#66695f;margin:2px 0}
-.navbtn.active,.navbtn:hover{background:var(--accent2);color:#344333}.ico{width:20px;text-align:center}
-main{min-width:0}.welcome{margin:4px 0 22px}.welcome h1{font-size:30px;letter-spacing:-1.1px;margin:0 0 4px}.welcome p{margin:0;color:var(--muted)}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
-.card,.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;box-shadow:var(--shadow)}
-.stat{padding:17px 18px}.stat small{color:var(--muted)}.stat strong{display:block;font-size:24px;margin-top:6px;letter-spacing:-.6px}
-.panel{padding:20px;margin-bottom:16px}.panelhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px}
-h2{font-size:17px;margin:0;letter-spacing:-.3px}.sub{color:var(--muted);font-size:12px;margin-top:3px}
-.btn{border:0;background:var(--accent);color:white;border-radius:10px;padding:9px 13px;font-size:13px;font-weight:650}
-.btn.secondary{background:var(--accent2);color:#40513d}.btn.ghost{background:transparent;color:var(--muted);padding:7px}
-.rowitem{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
-.rowitem:first-child{border-top:0}.rowitem .grow{flex:1;min-width:0}.rowitem strong{font-weight:600}.rowitem small{display:block;color:var(--muted);font-size:12px}
-.time{font-variant-numeric:tabular-nums;color:var(--accent);font-size:13px;min-width:76px}
-.check{width:18px;height:18px;accent-color:var(--accent)}
-.done{text-decoration:line-through;color:#a4a69f}
-.empty{padding:22px 10px;text-align:center;color:var(--muted);font-size:13px}
-.field{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:white;outline:none;color:var(--ink)}
-.field:focus{border-color:#9aa892}.formrow{display:flex;gap:9px;margin:12px 0}.formrow>*{min-width:0}
-.formrow .field{flex:1}
-.listtools{display:flex;gap:8px;flex-wrap:wrap}
-.pill{background:var(--accent2);color:#52634d;border-radius:30px;padding:5px 10px;font-size:12px}
-.moneygrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
-.moneybox{background:#fafbf9;border:1px solid var(--line);border-radius:12px;padding:13px}.moneybox small{color:var(--muted)}.moneybox b{display:block;font-size:19px;margin-top:5px}
-.positive{color:var(--accent)}.negative{color:var(--danger)}
-.section{display:none}.section.active{display:block}
-.note{min-height:110px;resize:vertical}
-.transaction{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-top:1px solid var(--line)}
-.transaction small{display:block;color:var(--muted)}
-.modalback{position:fixed;inset:0;background:#17191466;display:none;align-items:center;justify-content:center;padding:18px;z-index:5}
-.modalback.show{display:flex}.modal{width:min(440px,100%);background:white;border-radius:18px;padding:22px;box-shadow:0 20px 70px #0002}
-.modal h2{margin-bottom:14px}.modal .field{margin:6px 0 10px}.actions{display:flex;justify-content:flex-end;gap:8px;margin-top:10px}
-footer{text-align:center;color:var(--muted);font-size:11px;margin-top:22px}
-@media(max-width:720px){.app{padding:19px 14px 40px}.layout{grid-template-columns:1fr;gap:14px}nav{position:static;display:flex;overflow-x:auto;gap:4px;padding:8px}.navlabel{display:none}.navbtn{white-space:nowrap;width:auto;padding:9px 11px}.stats{gap:8px}.stat{padding:13px}.stat strong{font-size:18px}.welcome h1{font-size:26px}.panel{padding:16px}}
-@media(max-width:420px){.stats{grid-template-columns:1fr 1fr}.stats .stat:last-child{grid-column:span 2}.moneygrid{grid-template-columns:1fr 1fr}.moneybox:last-child{grid-column:span 2}}
+:root{--bg:#f5f6f8;--panel:#fff;--ink:#252938;--muted:#687083;--line:#e4e7ee;--accent:#6375bd;--accent2:#e9edfb;--danger:#b64c59;--shadow:0 8px 28px #1c25400d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,-apple-system,Segoe UI,sans-serif;transition:background .2s,color .2s}
+button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1280px;margin:auto;padding:24px}.top{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:22px}.brand{font-size:23px;font-weight:750;letter-spacing:-.5px}.brand span{color:var(--accent)}.top-actions{display:flex;gap:8px;align-items:center}.layout{display:grid;grid-template-columns:225px minmax(0,1fr);gap:20px}.side,.panel,.card,.welcome{background:var(--panel);border:1px solid var(--line);border-radius:17px;box-shadow:var(--shadow)}.side{padding:14px;height:max-content;position:sticky;top:16px}.navlabel{font-size:10px;font-weight:800;letter-spacing:1.3px;color:var(--muted);padding:12px 10px 6px}.nav{width:100%;display:flex;align-items:center;gap:10px;border:0;background:transparent;color:var(--muted);padding:10px;border-radius:10px;text-align:left;margin:2px 0}.nav.active,.nav:hover{background:var(--accent2);color:var(--ink)}.content{min-width:0}.welcome{padding:22px 24px;margin-bottom:16px}.welcome h1{margin:0 0 3px;font-size:28px;letter-spacing:-.7px}.welcome p{margin:0;color:var(--muted)}.panel{padding:20px;margin-bottom:16px}.panelhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}.panelhead h2{font-size:17px;margin:0}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px}.stat{padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}.stat small{display:block;color:var(--muted)}.stat strong{font-size:24px}.btn{border:1px solid var(--line);background:var(--accent);color:white;border-radius:10px;padding:9px 13px;font-weight:650}.btn.secondary{background:var(--panel);color:var(--ink)}.btn.ghost{background:transparent;color:var(--muted)}.btn.danger{background:var(--danger);border-color:var(--danger)}.field{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--ink);margin:5px 0 12px}.row{display:flex;gap:8px;align-items:center}.row>*{min-width:0}.row .field{margin:0}.muted{color:var(--muted)}.item{display:flex;gap:10px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line)}.item:last-child{border-bottom:0}.item-main{flex:1;min-width:0}.item-title{font-weight:650;overflow-wrap:anywhere}.item small{color:var(--muted)}.done .item-title{text-decoration:line-through;color:var(--muted)}.empty{padding:20px;text-align:center;color:var(--muted)}.hidden{display:none!important}
+#calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;text-align:center}#calendar b{font-size:12px;color:var(--muted);padding:6px 0}#calendar button{min-width:0;min-height:44px;border:1px solid transparent;border-radius:10px;background:transparent;color:var(--ink);font-weight:600}#calendar button:hover{background:var(--accent2)}#calendar button.today{background:var(--accent);color:#fff}#calendar button.marked:after{content:"";display:block;width:4px;height:4px;border-radius:50%;background:var(--accent);margin:2px auto 0}#calendar button.today:after{background:#fff}.tag{font-size:11px;border-radius:99px;background:var(--accent2);padding:3px 8px;color:var(--ink)}.check{width:18px;height:18px;margin-top:3px;accent-color:var(--accent)}.section{display:none}.section.active{display:block}.theme-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.theme{padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink);text-align:left}.theme.active{outline:2px solid var(--accent)}.swatches{display:flex;gap:4px;margin-bottom:8px}.swatches i{width:18px;height:18px;border-radius:50%;display:block}.footer{text-align:center;color:var(--muted);font-size:11px;padding:18px}
+.modal{position:fixed;inset:0;background:#10132199;display:none;align-items:center;justify-content:center;padding:16px;z-index:10}.modal.open{display:flex}.dialog{background:var(--panel);color:var(--ink);width:min(480px,100%);border-radius:16px;padding:22px;max-height:90vh;overflow:auto}.dialog h2{margin:0 0 12px}.actions{display:flex;justify-content:flex-end;gap:8px;margin-top:8px}
+body.dark{--bg:#171a27;--panel:#22263a;--ink:#f0f2fa;--muted:#b8bfd2;--line:#3a4059;--accent:#9aa9ef;--accent2:#343b5c;--shadow:0 8px 28px #0002}
+body[data-theme="zen"]{--bg:#f3eee4;--panel:#fffdf8;--ink:#292c25;--muted:#625f55;--line:#ded5c5;--accent:#65765d;--accent2:#e5eadf;font-family:Georgia,serif}
+body[data-theme="luxury"]{--bg:#211811;--panel:#302319;--ink:#f4eadb;--muted:#c8b39b;--line:#51402f;--accent:#c99c55;--accent2:#493626}
+body[data-theme="linear"]{--bg:#f7f8fa;--panel:#fff;--ink:#242833;--muted:#777f8e;--line:#e1e4ea;--accent:#5865d9;--accent2:#eceeff}
+body[data-theme="notion"]{--bg:#f7f7f5;--panel:#fff;--ink:#292929;--muted:#777;--line:#e8e8e5;--accent:#777;--accent2:#ededeb}
+body[data-theme="glass"]{--bg:#20243d;--panel:#353957;--ink:#f7f6ff;--muted:#deddf4;--line:#666b9b;--accent:#a9a1e9;--accent2:#49466c}
+body[data-theme="cozy"]{--bg:#fbf0e9;--panel:#fffaf7;--ink:#403044;--muted:#655568;--line:#ecd9df;--accent:#8b68a7;--accent2:#f0e2f2}
+body.dark[data-theme="zen"]{--bg:#20251e;--panel:#2d342a;--ink:#f2f0e8;--muted:#c7c4b8;--line:#4b5545;--accent:#a8bd98;--accent2:#414b3a}
+body.dark[data-theme="luxury"]{--bg:#17120f;--panel:#241b16;--ink:#fff5e9;--muted:#e0cdb8;--line:#604b39;--accent:#d5ad70;--accent2:#493626}
+body.dark[data-theme="linear"]{--bg:#171a27;--panel:#22263a;--ink:#f0f2fa;--muted:#c4c9d8;--line:#3a4059;--accent:#9aa9ef;--accent2:#343b5c}
+body.dark[data-theme="notion"]{--bg:#191919;--panel:#242424;--ink:#f4f4f4;--muted:#c6c6c6;--line:#454545;--accent:#b8b8b8;--accent2:#3b3b3b}
+body.dark[data-theme="glass"]{--bg:#20243d;--panel:#353957;--ink:#f7f6ff;--muted:#deddf4;--line:#666b9b;--accent:#c2baf5;--accent2:#49466c}
+body.dark[data-theme="cozy"]{--bg:#28212d;--panel:#382e40;--ink:#fff5ff;--muted:#e0cfe2;--line:#604e67;--accent:#c5a2df;--accent2:#51425b}
+@media(max-width:800px){.app{padding:14px}.layout{grid-template-columns:1fr}.side{position:static;overflow:auto;display:flex;gap:4px;white-space:nowrap}.navlabel{display:none}.nav{width:auto;flex:0 0 auto}.grid{grid-template-columns:1fr}.theme-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){.stats{grid-template-columns:1fr 1fr}.welcome h1{font-size:24px}.panel{padding:15px}}
 
-/* Night mode */
-.headeractions{display:flex;align-items:center;gap:14px}
-.theme-toggle{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:10px;padding:8px 11px;font-size:12px;font-weight:650;white-space:nowrap}
-body.dark{--bg:#171a17;--panel:#222722;--ink:#edf0e9;--muted:#a1aa9d;--line:#353d35;--accent:#9aaf91;--accent2:#303b30;--danger:#e28b80;--shadow:0 8px 30px rgba(0,0,0,.18)}
-body.dark .navbtn{color:#c0c8bc}
-body.dark .navbtn.active,body.dark .navbtn:hover{background:var(--accent2);color:#e5eee0}
-body.dark .field{background:#1b211c;color:var(--ink);border-color:var(--line)}
-body.dark .moneybox{background:#1d241e;border-color:var(--line)}
-body.dark .modal{background:var(--panel);color:var(--ink)}
-body.dark .btn.secondary,body.dark .pill{background:var(--accent2);color:#dce8d6}
-body.dark .done{color:#788176}
-
-@media(max-width:720px){.headeractions{gap:8px;flex-wrap:wrap;justify-content:flex-end}.today{font-size:11px}}
-
-/* Six selectable visual styles. Layout and planner data stay unchanged. */
-.theme-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:16px}
-.theme-choice{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:13px;padding:13px;text-align:left;display:flex;flex-direction:column;gap:6px;min-width:0}
-.theme-choice strong{font-size:13px}.theme-choice small{font-size:11px;color:var(--muted)}.theme-choice.selected{outline:2px solid var(--accent);border-color:var(--accent);background:var(--accent2)}
-.swatches{display:flex;gap:5px;margin-bottom:4px}.swatches i{width:17px;height:17px;border-radius:50%;display:block;border:1px solid #0001}
-.theme-choice[data-design="zen"] .swatches i:nth-child(1){background:#f4eee3}.theme-choice[data-design="zen"] .swatches i:nth-child(2){background:#d8c6ad}.theme-choice[data-design="zen"] .swatches i:nth-child(3){background:#87947b}.theme-choice[data-design="zen"] .swatches i:nth-child(4){background:#3d4439}
-.theme-choice[data-design="luxury"] .swatches i:nth-child(1){background:#211811}.theme-choice[data-design="luxury"] .swatches i:nth-child(2){background:#755337}.theme-choice[data-design="luxury"] .swatches i:nth-child(3){background:#e9dfd0}.theme-choice[data-design="luxury"] .swatches i:nth-child(4){background:#c99c55}
-.theme-choice[data-design="linear"] .swatches i:nth-child(1){background:#171a2b}.theme-choice[data-design="linear"] .swatches i:nth-child(2){background:#39366e}.theme-choice[data-design="linear"] .swatches i:nth-child(3){background:#9278ed}.theme-choice[data-design="linear"] .swatches i:nth-child(4){background:#c7b9ff}
-.theme-choice[data-design="notion"] .swatches i:nth-child(1){background:#fff}.theme-choice[data-design="notion"] .swatches i:nth-child(2){background:#e8e8e6}.theme-choice[data-design="notion"] .swatches i:nth-child(3){background:#aaa}.theme-choice[data-design="notion"] .swatches i:nth-child(4){background:#444}
-.theme-choice[data-design="glass"] .swatches i:nth-child(1){background:#b8c8ed}.theme-choice[data-design="glass"] .swatches i:nth-child(2){background:#a9a1e9}.theme-choice[data-design="glass"] .swatches i:nth-child(3){background:#edc3df}.theme-choice[data-design="glass"] .swatches i:nth-child(4){background:#f7f4ff}
-.theme-choice[data-design="cozy"] .swatches i:nth-child(1){background:#f8e9df}.theme-choice[data-design="cozy"] .swatches i:nth-child(2){background:#e9c5dc}.theme-choice[data-design="cozy"] .swatches i:nth-child(3){background:#c5b2e0}.theme-choice[data-design="cozy"] .swatches i:nth-child(4){background:#8d79ae}
-.mode-row{display:flex;align-items:center;justify-content:space-between;gap:14px;border-top:1px solid var(--line);margin-top:18px;padding-top:16px}.mode-row .sub{margin:2px 0 0}
-body[data-design="zen"]{--bg:#f4eee3;--panel:#fffaf2;--ink:#302d27;--muted:#81796d;--line:#e6dac9;--accent:#71816a;--accent2:#e9e4d8;--shadow:0 8px 28px rgba(77,62,43,.06)}
-body[data-design="luxury"]{--bg:#211811;--panel:#302319;--ink:#f4eadb;--muted:#b8a58f;--line:#51402f;--accent:#c99c55;--accent2:#493626;--shadow:0 10px 28px rgba(0,0,0,.2)}
-body[data-design="linear"]{--bg:#171a2b;--panel:#22263d;--ink:#f0efff;--muted:#aaaac5;--line:#373b5a;--accent:#9a80ff;--accent2:#343052;--shadow:0 8px 28px rgba(0,0,0,.18)}
-body[data-design="notion"]{--bg:#f7f7f5;--panel:#fff;--ink:#242424;--muted:#777;--line:#e8e8e5;--accent:#444;--accent2:#ededeb;--shadow:0 5px 20px rgba(0,0,0,.035)}
-body[data-design="glass"]{--bg:#e9eafb;--panel:rgba(255,255,255,.78);--ink:#292b45;--muted:#777b9c;--line:rgba(255,255,255,.85);--accent:#7775c8;--accent2:rgba(164,163,225,.22);--shadow:0 10px 30px rgba(82,83,150,.12)}
-body[data-design="cozy"]{--bg:#fbf0eb;--panel:#fff9f6;--ink:#403347;--muted:#927f91;--line:#f0dedf;--accent:#9678b5;--accent2:#eee3f4;--shadow:0 8px 26px rgba(116,83,112,.07)}
-body.dark[data-design="zen"]{--bg:#24251f;--panel:#303129;--ink:#f0eadf;--muted:#b8ae9e;--line:#4a493e;--accent:#a8b69b;--accent2:#3d4439}
-body.dark[data-design="notion"]{--bg:#191919;--panel:#242424;--ink:#f2f2f2;--muted:#aaa;--line:#3c3c3c;--accent:#ddd;--accent2:#383838}
-body.dark[data-design="glass"]{--bg:#202239;--panel:rgba(47,49,82,.88);--ink:#f3f2ff;--muted:#b8b8d8;--line:#55577d;--accent:#b2a8ff;--accent2:#39385f}
-body.dark[data-design="cozy"]{--bg:#28212d;--panel:#382e40;--ink:#f8eef8;--muted:#c2aec4;--line:#59485e;--accent:#d1a9df;--accent2:#4a3a54}
-body.dark[data-design="luxury"] .field,body.dark[data-design="linear"] .field{background:#211b23;color:var(--ink);border-color:var(--line)}
-body[data-design="glass"] .panel,body[data-design="glass"] .card,body[data-design="glass"] nav{backdrop-filter:blur(14px)}
-body:not(.dark)[data-design="luxury"] .field{background:#f7efe4}body:not(.dark)[data-design="linear"] .field{background:#2a2e49;color:#f0efff;border-color:#414568}
-@media(max-width:720px){.theme-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.mode-row{align-items:flex-start;flex-direction:column}.mode-row .field{max-width:none!important;width:100%}}
-
-
-/* Working Life v27: stronger contrast and six distinct visual treatments */
-.navbtn{color:var(--ink)}
-.navbtn.active,.navbtn:hover{background:var(--accent2);color:var(--ink)}
-body.dark .navbtn,body.dark .navbtn.active,body.dark .navbtn:hover{color:var(--ink)}
-.sub,.today,.navlabel,.rowitem small,.transaction small,.stat small,.moneybox small{color:var(--muted)}
-.btn.secondary,.pill{background:var(--accent2);color:var(--ink)}
-.field{color:var(--ink);border-color:var(--line)}
-.empty{color:var(--muted)}
-/* Zen: spacious, natural and soft */
-body[data-design="zen"] nav{border-radius:24px;padding:16px}
-body[data-design="zen"] .card,body[data-design="zen"] .panel{border-radius:22px}
-body[data-design="zen"] .welcome h1{font-family:Georgia,serif;font-weight:500;letter-spacing:-.5px}
-/* Luxury: editorial typography and refined edges */
-body[data-design="luxury"] .welcome h1,body[data-design="luxury"] h2{font-family:Georgia,"Times New Roman",serif;letter-spacing:.1px}
-body[data-design="luxury"] .panel,body[data-design="luxury"] .card{border-radius:7px;border-top:2px solid var(--accent)}
-body[data-design="luxury"] nav{border-radius:7px}
-/* Linear: compact, crisp and modern */
-body[data-design="linear"] .layout{grid-template-columns:190px 1fr;gap:18px}
-body[data-design="linear"] nav{border-radius:12px;padding:8px}
-body[data-design="linear"] .navbtn{border-radius:7px;padding:9px 10px}
-body[data-design="linear"] .panel,body[data-design="linear"] .card{border-radius:11px}
-body[data-design="linear"] .panel{padding:17px}
-/* Notion: minimal, flat workspace */
-body[data-design="notion"] nav{border-radius:8px;background:transparent;border-color:transparent}
-body[data-design="notion"] .navbtn{border-radius:6px;padding:8px 10px}
-body[data-design="notion"] .panel,body[data-design="notion"] .card{border-radius:8px;box-shadow:none}
-body[data-design="notion"] .panel{border-left:3px solid var(--line)}
-/* Glass: translucent layers and soft depth */
-body[data-design="glass"]{background-image:radial-gradient(circle at 15% 10%,rgba(255,255,255,.8),transparent 34%),linear-gradient(135deg,#e9eafb,#dfe6f7 55%,#f5e7f2)}
-body[data-design="glass"] .panel,body[data-design="glass"] .card,body[data-design="glass"] nav{backdrop-filter:blur(16px);border-radius:22px;box-shadow:0 12px 32px rgba(82,83,150,.14)}
-body[data-design="glass"] .btn{box-shadow:0 4px 12px rgba(104,101,189,.18)}
-/* Cozy: rounded, warm and friendly */
-body[data-design="cozy"] .panel,body[data-design="cozy"] .card,body[data-design="cozy"] nav{border-radius:24px}
-body[data-design="cozy"] .btn,body[data-design="cozy"] .pill{border-radius:999px}
-body[data-design="cozy"] .welcome h1{font-weight:750;letter-spacing:-.7px}
-/* Improve contrast in every theme */
-body[data-design="zen"]{--muted:#6f685d}
-body[data-design="luxury"]{--muted:#d0bda7;--ink:#fff4e6;--line:#65503b}
-body[data-design="linear"]{--muted:#c1c0df;--ink:#f4f2ff;--line:#45496b}
-body[data-design="notion"]{--muted:#666;--line:#deded9}
-body[data-design="glass"]{--muted:#5f6385;--ink:#292b45}
-body[data-design="cozy"]{--muted:#756477;--line:#e8d5d9}
-body.dark[data-design="zen"],body.dark[data-design="luxury"],body.dark[data-design="linear"],body.dark[data-design="notion"],body.dark[data-design="glass"],body.dark[data-design="cozy"]{--muted:#d0c7bb}
-body:not(.dark)[data-design="luxury"] .field{background:#f7efe4;color:#302319}
-body:not(.dark)[data-design="linear"] .field{background:#2a2e49;color:#f0efff;border-color:#555a80}
-#changeProfileName{display:none!important}
-@media(max-width:720px){.layout{grid-template-columns:1fr}}
-
-
-/* Working Life v28 — real visual treatments + accessible reading sizes */
-body{font-size:16px;line-height:1.65}
-.app{max-width:1360px;padding:34px 30px 72px}
-header{margin-bottom:34px}.brand{font-size:24px}.today{font-size:14px}
-.layout{grid-template-columns:250px minmax(0,1fr);gap:30px}
-nav{padding:15px;border-radius:20px}
-.navlabel{font-size:12px;padding:14px 12px 8px}
-.navbtn{font-size:15px;padding:13px 14px;gap:13px;color:var(--ink)}
-.ico{font-size:18px}
-.welcome{margin:8px 0 28px}.welcome h1{font-size:36px;line-height:1.2}.welcome p{font-size:16px}
-h2{font-size:20px}.sub{font-size:14px;line-height:1.5}
-.stat{padding:22px}.stat small,.moneybox small{font-size:14px}.stat strong{font-size:28px}
-.panel{padding:25px;margin-bottom:20px}.card,.panel{border-radius:18px}
-.btn{font-size:15px;padding:11px 16px}.btn.secondary,.pill{font-size:14px}
-.rowitem{padding:15px 0}.rowitem strong{font-size:16px}.rowitem small,.transaction small{font-size:14px}
-.field{font-size:16px;padding:13px 14px;min-height:48px}.empty{font-size:15px}
-.moneybox{padding:17px}.moneybox b{font-size:22px}
-.theme-choice{padding:16px}.theme-choice strong{font-size:15px}.theme-choice small{font-size:13px}
-#calendarGrid button{font-size:15px!important;min-height:42px}
-/* Japanese Zen — airy, natural, editorial calm */
-body[data-design="zen"]{font-family:Georgia,"Noto Serif",serif;--bg:#f3eee4;--panel:#fffdf8;--ink:#292c25;--muted:#625f55;--line:#ded5c5;--accent:#65765d;--accent2:#e5eadf}
-body[data-design="zen"] .app{max-width:1240px;padding-top:46px}
-body[data-design="zen"] .layout{grid-template-columns:230px minmax(0,1fr);gap:38px}
-body[data-design="zen"] nav{background:transparent;border:0;border-right:1px solid var(--line);border-radius:0;box-shadow:none;padding:10px 22px 10px 0}
-body[data-design="zen"] .panel{box-shadow:none;border-radius:4px;padding:30px}
-body[data-design="zen"] .stats{gap:22px}body[data-design="zen"] .stat{border:0;border-bottom:2px solid var(--accent);border-radius:0;background:transparent}
-body[data-design="zen"] .welcome h1{font-weight:400;font-size:42px}
-/* Luxury Editorial — dark, magazine-like hierarchy and gold details */
-body[data-design="luxury"]{font-family:Georgia,"Times New Roman",serif;--bg:#17120f;--panel:#241b16;--ink:#fff5e9;--muted:#d2bda8;--line:#604b39;--accent:#d4a85e;--accent2:#493426}
-body[data-design="luxury"] .app{max-width:1440px}
-body[data-design="luxury"] header{border-bottom:1px solid var(--line);padding-bottom:22px}
-body[data-design="luxury"] .brand{font-family:Georgia,serif;font-size:29px;letter-spacing:1px}
-body[data-design="luxury"] .welcome h1{font-size:44px;font-weight:400}
-body[data-design="luxury"] .panel,body[data-design="luxury"] .card{border-radius:3px;box-shadow:0 14px 36px #0004}
-body[data-design="luxury"] .panel{border-top:2px solid var(--accent);padding:28px}
-body[data-design="luxury"] nav{border-radius:3px;background:#201711}
-body[data-design="luxury"] .navbtn{font-family:system-ui,sans-serif;letter-spacing:.2px}
-body[data-design="luxury"] .field{background:#fff9f0;color:#261b13;border-color:#8a6a49}
-body[data-design="luxury"] .sub,body[data-design="luxury"] .today{color:#e1cdb8}
-/* Linear Inspired — dense product workspace, crisp rail and structured cards */
-body[data-design="linear"]{font-family:Inter,system-ui,sans-serif;--bg:#101321;--panel:#191e31;--ink:#f5f5ff;--muted:#c3c6df;--line:#343b59;--accent:#a99aff;--accent2:#2b2b4c}
-body[data-design="linear"] .app{max-width:1500px;padding:24px 26px 56px}
-body[data-design="linear"] .layout{grid-template-columns:205px minmax(0,1fr);gap:22px}
-body[data-design="linear"] nav{border-radius:12px;background:#171b2c;padding:10px}
-body[data-design="linear"] .navbtn{border-radius:8px;padding:10px 12px}
-body[data-design="linear"] .welcome{padding:10px 0 18px;border-bottom:1px solid var(--line)}
-body[data-design="linear"] .welcome h1{font-size:30px}
-body[data-design="linear"] .stats{gap:12px}
-body[data-design="linear"] .card,body[data-design="linear"] .panel{border-radius:12px;box-shadow:0 5px 18px #0002}
-body[data-design="linear"] .panel{padding:20px}
-body[data-design="linear"] .field{background:#222943;color:#fff;border-color:#4a5275}
-body[data-design="linear"] .btn{border-radius:8px}
-/* Notion Inspired — paper-like page, restrained sidebar and flat blocks */
-body[data-design="notion"]{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;--bg:#fff;--panel:#fff;--ink:#252525;--muted:#555;--line:#e4e4e1;--accent:#555;--accent2:#f0f0ed;--shadow:none}
-body[data-design="notion"] .app{max-width:1180px;padding-top:38px}
-body[data-design="notion"] .layout{grid-template-columns:220px minmax(0,900px);gap:42px}
-body[data-design="notion"] nav{background:#fafaf8;border:0;border-right:1px solid #e5e5e1;border-radius:0;box-shadow:none;padding:10px 18px 10px 0}
-body[data-design="notion"] .navbtn{padding:9px 12px;border-radius:6px}
-body[data-design="notion"] .welcome h1{font-size:38px;font-weight:650}
-body[data-design="notion"] .panel,body[data-design="notion"] .card{border:0;border-radius:0;box-shadow:none;background:transparent}
-body[data-design="notion"] .panel{border-top:1px solid var(--line);padding:22px 4px}
-body[data-design="notion"] .stat{background:#f7f7f5;border-radius:8px;padding:18px}
-body[data-design="notion"] .field{background:#fff;color:#222;border-color:#d8d8d4}
-/* Glassmorphism — layered translucent surfaces and soft floating depth */
-body[data-design="glass"]{font-family:Inter,system-ui,sans-serif;--bg:#dfe6f6;--panel:#ffffffb8;--ink:#242746;--muted:#555d83;--line:#ffffffd9;--accent:#6665bd;--accent2:#d7d9f5;--shadow:0 18px 45px #555b9830;background:radial-gradient(circle at 10% 5%,#fff 0,transparent 34%),linear-gradient(130deg,#dce8fa,#e9dcf4 55%,#d8e9ee)}
-body[data-design="glass"] .app{max-width:1450px}
-body[data-design="glass"] nav,body[data-design="glass"] .panel,body[data-design="glass"] .card{background:#ffffffa8;border:1px solid #ffffffd9;backdrop-filter:blur(22px);box-shadow:0 16px 40px #58619a24;border-radius:24px}
-body[data-design="glass"] nav{padding:16px}
-body[data-design="glass"] .panel{padding:26px}
-body[data-design="glass"] .welcome h1{font-size:38px;color:#252746}
-body[data-design="glass"] .field{background:#ffffffd9;color:#252746;border-color:#c7cbed}
-body[data-design="glass"] .navbtn{color:#303454}
-/* Cozy Pastel — warm scrapbook feel, generous rounded cards */
-body[data-design="cozy"]{font-family:"Trebuchet MS",system-ui,sans-serif;--bg:#fbf0e9;--panel:#fffaf7;--ink:#403044;--muted:#655568;--line:#ecd9df;--accent:#8b68a7;--accent2:#f0e2f2;--shadow:0 10px 28px #9e78951c}
-body[data-design="cozy"] .app{max-width:1320px;padding-top:30px}
-body[data-design="cozy"] .brand{font-size:27px}
-body[data-design="cozy"] .welcome h1{font-size:39px}
-body[data-design="cozy"] nav{border-radius:28px;background:#fff8f5;padding:16px}
-body[data-design="cozy"] .panel,body[data-design="cozy"] .card{border-radius:26px;border:1px solid #f0dfe6;box-shadow:0 10px 26px #a17c9418}
-body[data-design="cozy"] .panel{padding:25px}
-body[data-design="cozy"] .stat{background:#fff8f5}
-body[data-design="cozy"] .btn{border-radius:999px}
-body[data-design="cozy"] .field{background:#fff;color:#403044;border-color:#e4cfdc;border-radius:14px}
-/* Dark mode readability and smaller-screen layout */
-body.dark{--muted:#d0d3ce}
-body.dark[data-design="luxury"]{--bg:#17120f;--panel:#241b16;--ink:#fff5e9;--muted:#e0cdb8;--line:#604b39}
-body.dark[data-design="linear"]{--muted:#d2d4eb}
-body.dark[data-design="notion"]{--bg:#191919;--panel:#242424;--ink:#f4f4f4;--muted:#c6c6c6;--line:#454545}
-body.dark[data-design="glass"]{--bg:#20243d;--panel:#353957d9;--ink:#f7f6ff;--muted:#deddf4;--line:#666b9b;background:linear-gradient(135deg,#20243d,#34304c)}
-body.dark[data-design="cozy"]{--bg:#28212d;--panel:#382e40;--ink:#fff5ff;--muted:#e0cfe2;--line:#604e67}
-@media(max-width:900px){.app{padding:22px 18px 48px}.layout{grid-template-columns:1fr;gap:16px}nav{position:static;display:flex;overflow-x:auto;gap:5px;white-space:nowrap}.navlabel{display:none}.navbtn{width:auto;flex:0 0 auto}.welcome h1{font-size:30px}body[data-design="zen"] .layout,body[data-design="notion"] .layout,body[data-design="linear"] .layout{grid-template-columns:1fr}}
-@media(max-width:520px){body{font-size:15px}.app{padding:16px 12px 36px}.panel{padding:17px}.welcome h1{font-size:28px}.stats{grid-template-columns:1fr 1fr}.stats .stat:last-child{grid-column:span 2}.formrow{flex-wrap:wrap}.formrow>*{flex:1 1 100%}.theme-grid{grid-template-columns:1fr 1fr}}
-
-
-/* Theme 7 media belongs only to Bubu & Dudu; the original six themes stay unchanged. */
-.bubu-video-card{display:none}
-body[data-design="bubu"] .bubu-video-card{display:block}
-
-/* Bubu & Dudu Beach — Theme 7 only */
-body[data-design="bubu"]{--bg:#fff4ef;--panel:#fffdfb;--ink:#594653;--muted:#927d8c;--line:#f3dce2;--accent:#e88f9d;--accent2:#ffe5e8;--shadow:0 12px 32px rgba(194,132,154,.13);font-family:"Trebuchet MS",system-ui,sans-serif;background:linear-gradient(145deg,#fff4ef,#fcebf1 48%,#eaf8ff)}
-body[data-design="bubu"] .app{max-width:1420px;padding:28px 26px 64px}
-body[data-design="bubu"] header,body[data-design="bubu"] nav{background:#fffdfb;border:1px solid #f5dce4;border-radius:24px;box-shadow:var(--shadow)}
-body[data-design="bubu"] header{padding:14px 20px}
-body[data-design="bubu"] .brand{font-size:27px;color:#d87991}
-body[data-design="bubu"] .brand:after{content:" 🐻"}
-body[data-design="bubu"] .layout{grid-template-columns:235px minmax(0,1fr);gap:22px}
-body[data-design="bubu"] nav{padding:14px}
-body[data-design="bubu"] .navlabel{color:#c18b9d}
-body[data-design="bubu"] .navbtn{color:#806879;border-radius:15px;padding:12px}
-body[data-design="bubu"] .navbtn.active,body[data-design="bubu"] .navbtn:hover{background:#ffe5e8;color:#b85f7b}
-body[data-design="bubu"] .welcome{padding:22px 24px;margin:4px 0 18px;border-radius:26px;background:linear-gradient(115deg,#ffe4e8,#fff2e9 55%,#e7f6ff);border:1px solid #f6dce5}
-body[data-design="bubu"] .welcome h1{font-size:36px;color:#b96883}
-body[data-design="bubu"] .panel,body[data-design="bubu"] .card{border:1px solid #f3dce2;border-radius:23px;box-shadow:var(--shadow);background:#fffdfbf2}
-body[data-design="bubu"] .panel{padding:23px}
-body[data-design="bubu"] h2{color:#a9637c}
-body[data-design="bubu"] .btn{background:#e88f9d;border-radius:14px}
-body[data-design="bubu"] .btn.secondary,body[data-design="bubu"] .pill{background:#e8f5fc;color:#648ba1}
-body[data-design="bubu"] .field{background:#fffafb;color:#594653;border:1px solid #f0d8e1;border-radius:14px}
-body[data-design="bubu"] .moneybox{background:#fff4f5;border:1px solid #f4dfe5;border-radius:17px}
-body[data-design="bubu"] .time{color:#d47f98}
-body[data-design="bubu"] .bubu-video-card{overflow:hidden;padding:12px}
-body[data-design="bubu"] .bubu-video-card video{display:block;width:100%;max-height:270px;object-fit:cover;border-radius:17px;background:#eaf7ff}
-body[data-design="bubu"] .bubu-video-caption{padding:8px 5px 2px;color:#b96883;font-weight:700}
-body.dark[data-design="bubu"]{--bg:#29232d;--panel:#382f3b;--ink:#fff0f5;--muted:#e0c4d0;--line:#5b4657;--accent:#f0a2b1;--accent2:#4c3b50;background:linear-gradient(145deg,#29232d,#3b3446 55%,#283d4b)}
-body.dark[data-design="bubu"] header,body.dark[data-design="bubu"] nav,body.dark[data-design="bubu"] .panel,body.dark[data-design="bubu"] .card{background:#382f3b;border-color:#5b4657}
-body.dark[data-design="bubu"] .welcome{background:linear-gradient(115deg,#533d50,#55434a 55%,#344c59)}
-body.dark[data-design="bubu"] .welcome h1,body.dark[data-design="bubu"] h2{color:#ffd1df}
-body.dark[data-design="bubu"] .field{background:#302936;color:#fff0f5;border-color:#665064}
-body.dark[data-design="bubu"] .moneybox{background:#342b39;border-color:#5b4657}
-@media(max-width:900px){body[data-design="bubu"] .layout{grid-template-columns:1fr}body[data-design="bubu"] nav{position:static;display:flex;overflow-x:auto;white-space:nowrap}body[data-design="bubu"] .navbtn{flex:0 0 auto}}
-@media(max-width:520px){body[data-design="bubu"] .app{padding:12px 10px 34px}body[data-design="bubu"] .welcome{padding:18px}body[data-design="bubu"] .welcome h1{font-size:29px}body[data-design="bubu"] .panel{padding:16px}}
-
-</style>
-<link rel="stylesheet" href="redesign.css">
-<link rel="stylesheet" href="redesign-v30.css">
-<link rel="stylesheet" href="layout-recovery.css?v=57">
-
-<style id="bubu-home-display-fix-v45">
-/* Theme 7: greeting + cooking video form one compact welcome banner */
-body[data-design="bubu"] #home .welcome{
-  position:relative!important;
-  display:flex!important;
-  flex-direction:column!important;
-  justify-content:center!important;
-  min-height:156px!important;
-  box-sizing:border-box!important;
-  padding:22px 280px 22px 26px!important;
-  overflow:hidden!important;
+/* Learning Life responsive rebuild layer */
+.section[hidden],.section:not(.active){display:none!important}
+.mobile-nav{display:none}
+.more-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.more-card{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:16px;padding:18px 10px;display:flex;flex-direction:column;gap:8px;align-items:center;font-size:22px}
+.more-card b{font-size:14px}
+.welcome-overlay{position:fixed;inset:0;z-index:30;display:none;align-items:center;justify-content:center;padding:22px;background:linear-gradient(180deg,#a9ddff 0%,#dff4ff 42%,#fbe4c9 43%,#f9e4d5 100%)}
+.welcome-overlay:not(.hidden){display:flex}
+.welcome-dialog{width:min(460px,100%);background:#fff5df;border:3px solid #d9bba3;border-radius:34px;padding:28px 24px;text-align:center;box-shadow:0 14px 40px #76513b26}
+.welcome-dialog h1{color:#603b2b;font-size:32px;margin:8px 0}
+.welcome-dialog p{color:#603b2b;font-size:19px}
+.welcome-dialog .field{background:#fffaf3;border:2px solid #e5cabb;border-radius:16px;padding:15px}
+.welcome-dialog .btn{background:#df7d7d;border:0;border-radius:999px;padding:13px 28px;min-width:65%;font-size:17px}
+.welcome-bears{font-size:58px;margin-top:-8px}
+body[data-theme="bubu"]{--bg:#f9e8d9;--panel:#fffaf4;--ink:#4a2c22;--muted:#8b6d5d;--line:#ead2c4;--accent:#e98282;--accent2:#ffe3e5;--shadow:0 8px 24px #8c5d4420;font-family:"Trebuchet MS",system-ui,sans-serif}
+body[data-theme="bubu"] .app{max-width:1100px}
+body[data-theme="bubu"] .top{background:linear-gradient(180deg,#a8dcff 0%,#d9f1ff 62%,#f7dcbf 63%,#f9e8d9 100%);border:2px solid #e7c8b5;border-radius:22px;padding:18px 22px;min-height:100px;position:relative;overflow:hidden}
+body[data-theme="bubu"] .top:after{content:"";position:absolute;right:16px;bottom:-7px;width:112px;height:88px;background:url('assets/stickers/54_daily_log_both.png') center/contain no-repeat;opacity:.98}
+body[data-theme="bubu"] .brand{color:#633b2c;font-size:26px;position:relative;z-index:1}
+body[data-theme="bubu"] .welcome{background:linear-gradient(180deg,#a9dcff 0%,#d8f0ff 42%,#f8dfc6 43%,#fff5eb 100%);border:2px solid #e7c8b5;min-height:145px;position:relative;overflow:hidden;padding:28px;border-radius:24px}
+body[data-theme="bubu"] .welcome:after{content:"";position:absolute;right:18px;bottom:3px;width:clamp(105px,22vw,190px);height:clamp(90px,17vw,145px);background:url('assets/stickers/54_daily_log_both.png') center/contain no-repeat}
+body[data-theme="bubu"] .welcome h1{color:#633b2c}
+body[data-theme="bubu"] .panel,body[data-theme="bubu"] .stat,body[data-theme="bubu"] .side{border:2px solid #ead2c4;border-radius:22px}
+body[data-theme="bubu"] .btn{background:#e98282;border-color:#d96f70;border-radius:14px}
+body[data-theme="bubu"] .btn.secondary{background:#fff5ed;color:#633b2c;border-color:#e8cabc}
+body[data-theme="bubu"] .nav.active{background:#f8dfe2;color:#633b2c}
+body[data-theme="bubu"] .item{border-bottom-color:#f0ddd1}
+body[data-theme="bubu"] .stat{background:#fff8ef}
+body[data-theme="bubu"] .more-card{background:#fff8ef;border:2px solid #ead2c4}
+@media(max-width:800px){
+ .app{padding:10px 10px 92px}
+ .top{margin-bottom:10px}
+ .layout{display:block}
+ .side{display:none!important}
+ .content{width:100%}
+ .mobile-nav{position:fixed;z-index:20;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:8px max(8px,env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));background:#fff5ebf2;border-top:1px solid #e8cabc;backdrop-filter:blur(12px)}
+ .mobile-tab{border:0;background:transparent;color:#603b2b;border-radius:15px;padding:7px 2px 5px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12px;font-weight:700}
+ .mobile-tab span{font-size:23px;line-height:1.1}
+ .mobile-tab.active{background:#e98282;color:white}
+ .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .grid{grid-template-columns:1fr}
+ .panel{padding:15px}
+ .welcome{padding:20px;min-height:125px}
+ .more-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
-body[data-design="bubu"] #home .welcome:before,
-body[data-design="bubu"] #home .welcome:after{display:none!important;content:none!important}
-body[data-design="bubu"] #home .welcome h1,
-body[data-design="bubu"] #home .welcome p{max-width:100%!important;position:relative!important;z-index:1!important}
-body[data-design="bubu"] #home .welcome #bubuVideoCard{
-  display:block!important;position:absolute!important;right:12px!important;top:12px!important;
-  bottom:12px!important;width:240px!important;height:auto!important;min-height:0!important;
-  box-sizing:border-box!important;margin:0!important;padding:4px!important;
-  border:1px solid #f0dce1!important;border-radius:15px!important;
-  background:#fffafb!important;overflow:hidden!important;box-shadow:none!important;
-}
-body[data-design="bubu"] #home .welcome #bubuCookingVideo{
-  display:block!important;width:100%!important;height:100%!important;max-height:none!important;
-  object-fit:contain!important;object-position:center!important;background:#fff1ef!important;
-  border-radius:10px!important;
-}
-body[data-design="bubu"] #home .welcome .bubu-video-caption{display:none!important}
-body[data-design="bubu"] #home>.stats{
-  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  gap:12px!important;margin:12px 0 16px!important;
-}
-body[data-design="bubu"] #home>.stats .stat{min-width:0!important}
-body[data-design="bubu"] #home>.stats .stat:nth-child(3){display:none!important}
-body[data-design="bubu"] #home>.panel#bubuVideoCard{display:none!important}
-@media(max-width:700px){
- body[data-design="bubu"] #home .welcome{min-height:132px!important;padding:15px 132px 15px 17px!important}
- body[data-design="bubu"] #home .welcome h1{font-size:clamp(18px,4.5vw,25px)!important}
- body[data-design="bubu"] #home .welcome p{font-size:11px!important}
- body[data-design="bubu"] #home .welcome #bubuVideoCard{
-   right:8px!important;top:8px!important;bottom:8px!important;width:116px!important;padding:3px!important
- }
- body[data-design="bubu"] #home>.stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
-}
-@media(max-width:380px){
- body[data-design="bubu"] #home .welcome{padding-right:108px!important;min-height:120px!important}
- body[data-design="bubu"] #home .welcome #bubuVideoCard{width:96px!important}
-}
+@media(min-width:801px){.mobile-nav{display:none!important}}
+
 </style>
 </head>
-<body>
+<body data-theme="bubu">
 <div class="app">
-<header><div class="brand" id="brandName">Learning Life.</div><div class="headeractions"><div class="today" id="headerDate"></div></div></header>
+<header class="top"><div class="brand">Learning Life<span> ♡</span></div><div class="top-actions"><span id="clock" class="muted"></span><button class="btn secondary" id="quickTheme" title="Toggle light and dark">◐</button></div></header>
 <div class="layout">
-<nav>
+<aside class="side">
 <div class="navlabel">WORKSPACE</div>
-<button class="navbtn active" data-page="home"><span class="ico">⌂</span>Dashboard</button>
-<button class="navbtn" data-page="tasks"><span class="ico">☑</span>Daily Tasks</button>
-<button class="navbtn" data-page="schedule"><span class="ico">◷</span>Schedule</button>
-<button class="navbtn" data-page="money"><span class="ico">₱</span>Money Tracker</button>
+<button class="nav active" data-page="dashboard">⌂ Dashboard</button><button class="nav" data-page="tasks">☑ Daily Tasks</button><button class="nav" data-page="schedule">◷ Schedule</button><button class="nav" data-page="calendarPage">▦ Calendar</button><button class="nav" data-page="money">₱ Money Tracker</button>
 <div class="navlabel">PERSONAL</div>
-<button class="navbtn" data-page="calendar"><span class="ico">▦</span>Calendar</button>
-<button class="navbtn" data-page="notes"><span class="ico">▤</span>Notes</button>
-<button class="navbtn" data-page="bible"><span class="ico">✧</span>Bible</button>
-<button class="navbtn" data-page="goals"><span class="ico">◎</span>Goals &amp; Milestones</button>
-<button class="navbtn" data-page="savings"><span class="ico">▣</span>Savings</button>
-<button class="navbtn" data-page="habits"><span class="ico">✓</span>Habit Tracker</button>
-<button class="navbtn" data-page="reminders"><span class="ico">♧</span>Reminders</button>
-<button class="navbtn" data-page="reports"><span class="ico">▥</span>Monthly Reports</button>
-<button class="navbtn" data-page="weekly"><span class="ico">▦</span>Weekly Overview</button>
-<button class="navbtn" data-page="journal"><span class="ico">✎</span>Daily Journal</button>
-<button class="navbtn" data-page="settings"><span class="ico">⚙</span>Settings</button>
+<button class="nav" data-page="notes">▤ Notes</button><button class="nav" data-page="bible">✧ Bible</button><button class="nav" data-page="goals">◇ Goals & Milestones</button><button class="nav" data-page="savings">▣ Savings</button><button class="nav" data-page="habits">✓ Habit Tracker</button><button class="nav" data-page="reminders">♧ Reminders</button><button class="nav" data-page="reports">▥ Monthly Reports</button><button class="nav" data-page="weekly">▦ Weekly Overview</button><button class="nav" data-page="journal">✎ Daily Journal</button>
+<div class="navlabel">APP</div><button class="nav" data-page="settings">⚙ Settings</button><button class="nav" data-page="about">ⓘ About</button>
+</aside>
+<nav class="mobile-nav" aria-label="Primary navigation">
+<button class="mobile-tab active" data-page="dashboard"><span>⌂</span>Home</button>
+<button class="mobile-tab" data-page="calendarPage"><span>▦</span>Calendar</button>
+<button class="mobile-tab" data-page="money"><span>₱</span>Money</button>
+<button class="mobile-tab" data-page="more"><span>▦</span>More</button>
 </nav>
-<main>
-<section class="section active" id="home">
-<div class="welcome"><h1 id="greeting">Good day.</h1><p>A little progress each day adds up.</p></div>
-<div class="panel bubu-video-card" id="bubuVideoCard"><video id="bubuCookingVideo" muted loop playsinline autoplay preload="metadata"><source src="assets/bubu-dudu-cooking.mp4" type="video/mp4"></video><div class="bubu-video-caption">A little cozy moment with Bubu &amp; Dudu 🐻</div>
+<main class="content">
+<section id="dashboard" class="section active"><div class="welcome"><h1 id="greeting">Today</h1><p id="todayLabel"></p></div><div class="stats"><div class="stat"><small>Today's tasks</small><strong id="taskCount">0</strong></div><div class="stat"><small>Completed</small><strong id="doneCount">0</strong></div><div class="stat"><small>Upcoming</small><strong id="upcomingCount">0</strong></div></div><div class="grid"><div class="panel"><div class="panelhead"><h2>Today's tasks</h2><button class="btn secondary" data-go="tasks">View all</button></div><div id="todayTasks"></div></div><div class="panel"><div class="panelhead"><h2>Today's schedule</h2><button class="btn secondary" data-go="schedule">View all</button></div><div id="todaySchedule"></div></div></div></section>
+<section id="tasks" class="section"><div class="welcome"><h1>Daily Tasks</h1><p>Keep today's priorities clear and manageable.</p></div><div class="panel"><form id="taskForm"><label>Task</label><input class="field" id="taskText" placeholder="What needs to be done?" required><div class="row"><input class="field" id="taskDate" type="date" required><select class="field" id="taskPriority"><option>Normal</option><option>Important</option><option>High</option></select><button class="btn">Add task</button></div></form><div id="taskList"></div></div></section>
+<section id="schedule" class="section"><div class="welcome"><h1>Schedule</h1><p>Plan your time with a simple daily schedule.</p></div><div class="panel"><form id="scheduleForm"><input class="field" id="scheduleTitle" placeholder="Schedule title" required><div class="row"><input class="field" id="scheduleDate" type="date" required><input class="field" id="scheduleTime" type="time" required></div><button class="btn">Add schedule</button></form><div id="scheduleList"></div></div></section>
+<section id="calendarPage" class="section"><div class="welcome"><h1>Calendar</h1><p>A simple view of your dates and plans.</p></div><div class="panel"><div class="panelhead"><button class="btn secondary" id="prevMonth">←</button><h2 id="monthLabel"></h2><button class="btn secondary" id="nextMonth">→</button></div><div id="calendar"></div><p class="muted">Select a date to view its saved tasks and schedule.</p></div><div class="panel"><h2 id="selectedDateTitle">Selected date</h2><div id="selectedItems"></div></div></section>
+<section id="money" class="section"><div class="welcome"><h1>Money Tracker</h1><p>Record income and expenses.</p></div><div class="panel"><form id="moneyForm"><input class="field" id="moneyTitle" placeholder="Description" required><div class="row"><select class="field" id="moneyType"><option value="income">Income</option><option value="expense">Expense</option></select><input class="field" id="moneyAmount" type="number" min="0" step=".01" placeholder="Amount (₱)" required></div><input class="field" id="moneyDate" type="date" required><button class="btn">Save transaction</button></form><div class="stats"><div class="stat"><small>Income</small><strong id="incomeTotal">₱0</strong></div><div class="stat"><small>Expenses</small><strong id="expenseTotal">₱0</strong></div><div class="stat"><small>Balance</small><strong id="balanceTotal">₱0</strong></div></div><div id="moneyList"></div></div></section>
+<section id="notes" class="section"><div class="welcome"><h1>Notes</h1><p>Keep your thoughts in one place.</p></div><div class="panel"><form id="noteForm"><input class="field" id="noteTitle" placeholder="Note title" required><textarea class="field" id="noteBody" rows="4" placeholder="Write your note..."></textarea><button class="btn">Save note</button></form><div id="noteList"></div></div></section>
+<section id="bible" class="section"><div class="welcome"><h1>Bible</h1><p>Keep meaningful verses and reflections together.</p></div><div class="panel"><form id="verseForm"><input class="field" id="verseRef" placeholder="Verse reference (e.g. Psalm 23:1)" required><textarea class="field" id="verseText" rows="3" placeholder="Verse text or personal reflection"></textarea><button class="btn">Save verse</button></form><div id="verseList"></div></div></section>
+<section id="goals" class="section"><div class="welcome"><h1>Goals & Milestones</h1><p>Break bigger goals into achievable steps.</p></div><div class="panel"><form id="goalForm"><input class="field" id="goalText" placeholder="Your goal" required><input class="field" id="goalDate" type="date"><button class="btn">Add goal</button></form><div id="goalList"></div></div></section>
+<section id="savings" class="section"><div class="welcome"><h1>Savings</h1><p>Track your savings progress.</p></div><div class="panel"><form id="savingForm"><input class="field" id="savingGoal" placeholder="Savings goal name" required><div class="row"><input class="field" id="savingTarget" type="number" min="0" placeholder="Target ₱"><input class="field" id="savingAmount" type="number" min="0" placeholder="Amount saved ₱"></div><button class="btn">Save goal</button></form><div id="savingList"></div></div></section>
+<section id="habits" class="section"><div class="welcome"><h1>Habit Tracker</h1><p>Build consistency one day at a time.</p></div><div class="panel"><form id="habitForm"><input class="field" id="habitText" placeholder="Habit name" required><button class="btn">Add habit</button></form><div id="habitList"></div></div></section>
+<section id="reminders" class="section"><div class="welcome"><h1>Reminders</h1><p>Keep important follow-ups visible.</p></div><div class="panel"><form id="reminderForm"><input class="field" id="reminderText" placeholder="Reminder" required><input class="field" id="reminderDate" type="date"><button class="btn">Add reminder</button></form><div id="reminderList"></div></div></section>
+<section id="reports" class="section"><div class="welcome"><h1>Monthly Reports</h1><p>A quick summary of your recorded activity.</p></div><div class="panel"><h2>This month</h2><div id="monthlyReport"></div></div></section>
+<section id="weekly" class="section"><div class="welcome"><h1>Weekly Overview</h1><p>Review tasks across the current week.</p></div><div class="panel"><div id="weeklyReport"></div></div></section>
+<section id="journal" class="section"><div class="welcome"><h1>Daily Journal</h1><p>A private space for daily reflections on this device.</p></div><div class="panel"><label for="journalDate">Date</label><input class="field" id="journalDate" type="date"><textarea class="field" id="journalText" rows="10" placeholder="Write about your day..."></textarea><button class="btn" id="saveJournal">Save journal</button></div></section>
+<section id="settings" class="section"><div class="welcome"><h1>Settings</h1><p>Personalize your Working Life experience.</p></div><div class="panel"><h2>Appearance</h2><p class="muted">Choose a design style.</p><div class="theme-list" id="themeList"></div><p><button class="btn secondary" id="modeToggle">Toggle light / dark mode</button></p><label>App name</label><input class="field" id="appNameInput" maxlength="32"><button class="btn" id="saveAppName">Save app name</button></div><div class="panel"><h2>Backup & Restore</h2><p class="muted">Export a backup file or restore one on this device.</p><button class="btn secondary" id="exportBackup">Export backup</button><label class="muted" for="importBackup">Restore backup (.json)</label><input class="field" id="importBackup" type="file" accept="application/json"></div></section>
+<section id="more" class="section"><div class="welcome"><h1>More ♡</h1><p>Your personal spaces, all in one place.</p></div><div class="more-grid">
+<button class="more-card" data-go="tasks">☑<b>Tasks</b></button><button class="more-card" data-go="schedule">◷<b>Schedule</b></button>
+<button class="more-card" data-go="notes">▤<b>Notes</b></button><button class="more-card" data-go="bible">✧<b>Bible</b></button>
+<button class="more-card" data-go="goals">◇<b>Goals</b></button><button class="more-card" data-go="savings">▣<b>Savings</b></button>
+<button class="more-card" data-go="habits">✓<b>Habits</b></button><button class="more-card" data-go="reminders">♧<b>Reminders</b></button>
+<button class="more-card" data-go="reports">▥<b>Monthly Reports</b></button><button class="more-card" data-go="weekly">▦<b>Weekly Overview</b></button>
+<button class="more-card" data-go="journal">✎<b>Daily Journal</b></button><button class="more-card" data-go="settings">⚙<b>Settings</b></button>
+</div></section>
+<section id="about" class="section"><div class="welcome"><h1>About</h1><p>Learning Life — your daily life companion.</p></div><div class="panel"><p>Designed to keep daily plans, personal notes, goals, and simple money records organized in one place.</p><p class="muted">Version 2.0 · Your entries are stored locally in this browser. Export backups regularly, especially before changing devices or clearing browser data.</p><p class="muted">© 2026 Learning Life. All rights reserved.</p></div></section>
+</main></div><div class="footer">Your information is saved in this browser on this device.</div></div>
+<div class="welcome-overlay" id="welcomeOverlay" aria-modal="true" role="dialog">
+ <div class="welcome-dialog">
+  <div class="welcome-bears" aria-hidden="true">🐻‍❄️ ♡ 🐻</div>
+  <h1>Hi there! ♡</h1><p>What should I call you?</p>
+  <input class="field" id="welcomeName" maxlength="32" placeholder="Enter your name" autocomplete="given-name">
+  <button class="btn" id="welcomeContinue">Continue ♡</button>
+ </div>
 </div>
-<div class="stats">
-<div class="card stat"><small>Tasks completed</small><strong id="taskStat">0 / 0</strong></div>
-<div class="card stat"><small>Today's schedules</small><strong id="scheduleStat">0</strong></div>
-<div class="card stat"><small>Available balance</small><strong id="balanceStat">₱0.00</strong></div>
-</div>
- <div class="panel"><div class="panelhead"><div><h2>Daily Tasks</h2><div class="sub">What you want to accomplish today</div></div><button class="btn secondary" onclick="showPage('tasks')">View all</button></div><div id="homeTasks"></div></div>
-<div class="panel"><div class="panelhead"><div><h2>Today's Schedule</h2><div class="sub">Time · Schedule</div></div><button class="btn secondary" onclick="showPage('schedule')">View all</button></div><div id="homeSchedule"></div></div>
-</section>
-<section class="section" id="tasks">
-<div class="welcome"><h1>Daily Tasks</h1><p>Keep track of what needs to get done today.</p></div>
-<div class="panel"><div class="panelhead"><h2>Today's task list</h2><span class="pill" id="taskCount">0 tasks</span></div>
-<form class="formrow" id="taskForm"><input class="field" id="taskInput" placeholder="Add a task..." required><select class="field" id="taskRepeat" style="max-width:125px"><option value="once">One-time</option><option value="daily">Daily</option><option value="weekly">Weekly</option><option value="monthly">Monthly</option></select><button class="btn">Add</button></form><div id="taskList"></div></div>
-</section>
-<section class="section" id="schedule">
-<div class="welcome"><h1>Today's Schedule</h1><p>Your day, arranged by time.</p></div>
-<div class="panel"><div class="panelhead"><h2>Schedule list</h2><span class="pill" id="scheduleCount">0 items</span></div>
-<form class="formrow" id="scheduleForm"><input class="field" id="scheduleTime" type="time" required style="max-width:135px"><input class="field" id="scheduleInput" placeholder="Schedule..." required><button class="btn">Add</button></form><div id="scheduleList"></div></div>
-</section>
-<section class="section" id="money">
-<div class="welcome"><h1>Money Tracker</h1><p>Keep an eye on your income and expenses.</p></div>
-<div class="panel"><h2>Money overview</h2><div class="moneygrid"><div class="moneybox"><small>Income</small><b class="positive" id="incomeTotal">₱0.00</b></div><div class="moneybox"><small>Expenses</small><b class="negative" id="expenseTotal">₱0.00</b></div><div class="moneybox"><small>Balance</small><b id="moneyBalance">₱0.00</b></div></div>
-<form id="moneyForm"><div class="formrow"><select class="field" id="moneyType"><option value="income">Income</option><option value="expense">Expense</option></select><input class="field" id="moneyAmount" type="number" min="0.01" step="0.01" placeholder="Amount (₱)" required></div><div class="formrow"><select class="field" id="moneyWallet" required><option value="Cash">Cash</option><option value="GCash">GCash</option><option value="MariBank">MariBank</option><option value="Other Bank">Other Bank</option></select><input class="field" id="moneyCategory" placeholder="Category (e.g. Food, Salary)" required></div><div class="formrow"><input class="field" id="moneyDate" type="date" required></div><button class="btn">Add transaction</button></form></div>
-<div class="panel"><div class="panelhead"><div><h2>Wallet balances</h2><div class="sub">Your balance in each cash or online account</div></div></div><div id="walletBalances" class="moneygrid"></div></div>
-<div class="panel"><div class="panelhead"><div><h2>Debt Tracker</h2><div class="sub">Track your Shopee credit card balance and payments</div></div><span class="pill">Shopee Credit</span></div>
-<div class="moneygrid"><div class="moneybox"><small>Total borrowed</small><b id="debtBorrowed">₱0.00</b></div><div class="moneybox"><small>Total paid</small><b id="debtPaid">₱0.00</b></div><div class="moneybox"><small>Outstanding debt</small><b class="negative" id="debtOutstanding">₱0.00</b></div></div>
-<form id="debtForm"><div class="formrow"><select class="field" id="debtAction"><option value="borrow">Add credit used</option><option value="payment">Record payment</option></select><input class="field" id="debtAmount" type="number" min="0.01" step="0.01" placeholder="Amount (₱)" required></div><div class="formrow"><input class="field" id="debtNote" placeholder="Note (e.g. purchase or payment)" required><input class="field" id="debtDate" type="date" required></div><button class="btn">Save debt record</button></form>
-<div class="sub" style="margin-top:10px">Enter purchases charged to Shopee Credit as credit used, and enter repayments as payments. This tracker does not connect to Shopee.</div>
-<div id="debtHistory" style="margin-top:12px"></div></div>
-<div class="panel"><div class="panelhead"><h2>Transaction history</h2></div><div id="transactions"></div></div>
-</section>
-<section class="section" id="calendar">
-<div class="welcome"><h1>Calendar</h1><p>A simple view of your dates and plans.</p></div>
-<div class="panel"><div class="panelhead"><button class="btn secondary" id="prevMonth">←</button><h2 id="monthLabel"></h2><button class="btn secondary" id="nextMonth">→</button></div><div id="calendarGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:5px;text-align:center"></div><div class="sub" style="margin-top:14px">Select any date to add, view, edit, or remove notes and schedules for that day. Dates with saved items are marked.</div></div>
-</section>
-<section class="section" id="notes">
-<div class="welcome"><h1>Notes</h1><p>Keep your thoughts in one place.</p></div>
-<div class="panel"><h2>My notes</h2><textarea class="field note" id="notesText" placeholder="Write your notes here..."></textarea><div class="sub" id="notesSaved">Saved on this device</div></div>
-</section>
-<section class="section" id="bible">
-<div class="welcome"><h1>Bible</h1><p>A quiet space for reflection.</p></div>
-<div class="panel"><h2>Verse of the day</h2><p style="font-size:18px;line-height:1.7">“Trust in the Lord with all your heart and lean not on your own understanding.”</p><span class="pill">Proverbs 3:5 · NIV</span><p class="sub" style="margin-top:16px">Reflection</p><textarea class="field note" id="reflection" placeholder="Write what this verse means to you..."></textarea></div>
-</section>
-<section class="section" id="goals">
-<div class="welcome"><h1>Goals</h1><p>Small steps toward what matters.</p></div>
-<div class="panel"><h2>My goals</h2><form class="formrow" id="goalForm"><input class="field" id="goalInput" placeholder="Add a goal..." required><button class="btn">Add</button></form><div id="goalList"></div></div>
-<div class="panel"><h2>Goal milestones</h2><p class="sub">Break a goal into smaller steps and check them off as you go.</p><form id="milestoneForm"><div class="formrow"><select class="field" id="milestoneGoal" required><option value="">Choose a goal</option></select><input class="field" id="milestoneInput" placeholder="Add a small step..." required></div><button class="btn">Add milestone</button></form><div id="milestoneList"></div></div>
-</section>
-
-<section class="section" id="savings">
-<div class="welcome"><h1>Savings Tracker</h1><p>Set a target and record your savings progress.</p></div>
-<div class="panel"><h2>Savings goal</h2><form id="savingsGoalForm" class="formrow"><input class="field" id="savingsName" placeholder="Goal name (e.g. Emergency fund)" required><input class="field" id="savingsTarget" type="number" min="1" step=".01" placeholder="Target (₱)" required><button class="btn">Set goal</button></form><div id="savingsSummary" class="empty">No savings goal set yet.</div></div>
-<div class="panel"><h2>Record savings</h2><form id="savingsAddForm" class="formrow"><input class="field" id="savingsAmount" type="number" min=".01" step=".01" placeholder="Amount saved (₱)" required><input class="field" id="savingsNote" placeholder="Note (optional)"><button class="btn">Add</button></form><div id="savingsHistory"></div></div>
-</section>
-<section class="section" id="habits">
-<div class="welcome"><h1>Habit Tracker</h1><p>Check off the habits you complete today.</p></div>
-<div class="panel"><h2>Today's habits</h2><form id="habitForm" class="formrow"><input class="field" id="habitInput" placeholder="Add a habit..." required><button class="btn">Add habit</button></form><div id="habitList"></div></div>
-</section>
-<section class="section" id="reminders">
-<div class="welcome"><h1>Reminders</h1><p>Keep important tasks and dates in view.</p></div>
-<div class="panel"><h2>Add a reminder</h2><form id="reminderForm"><div class="formrow"><input class="field" id="reminderText" placeholder="What should you remember?" required></div><div class="formrow"><input class="field" id="reminderDate" type="date" required><input class="field" id="reminderTime" type="time"></div><button class="btn">Save reminder</button></form><div id="reminderList" style="margin-top:14px"></div><div class="sub">Reminders appear in this app. Browser notifications are not enabled in this version.</div></div>
-</section>
-<section class="section" id="reports">
-<div class="welcome"><h1>Monthly Reports</h1><p>A monthly view of your money activity.</p></div>
-<div class="panel"><div class="panelhead"><h2>Choose month</h2><input class="field" id="reportMonth" type="month" style="max-width:180px"></div><div class="moneygrid"><div class="moneybox"><small>Income</small><b class="positive" id="reportIncome">₱0.00</b></div><div class="moneybox"><small>Expenses</small><b class="negative" id="reportExpense">₱0.00</b></div><div class="moneybox"><small>Net</small><b id="reportNet">₱0.00</b></div></div><div class="sub" id="reportCount">No transactions in this month.</div></div>
-</section>
-<section class="section" id="weekly">
-<div class="welcome"><h1>Weekly Overview</h1><p>A simple look at your plans for the next seven days.</p></div>
-<div class="panel"><div class="panelhead"><h2>This week</h2><span class="pill" id="weeklyRange"></span></div><div id="weeklyList"></div></div>
-<div class="panel"><h2>Today's progress</h2><div class="moneygrid"><div class="moneybox"><small>Tasks completed</small><b id="weeklyTasks">0 / 0</b></div><div class="moneybox"><small>Habits checked</small><b id="weeklyHabits">0 / 0</b></div><div class="moneybox"><small>Calendar items</small><b id="weeklyEvents">0</b></div></div></div>
-</section>
-<section class="section" id="journal">
-<div class="welcome"><h1>Daily Journal</h1><p>Write about your day, thoughts, experiences, and lessons learned.</p></div>
-<div class="panel"><h2>Today's entry</h2><form id="journalForm"><div class="formrow"><input class="field" id="journalDate" type="date" required></div><textarea class="field note" id="journalText" placeholder="How was your day? What did you learn or appreciate?" required></textarea><div class="actions"><button class="btn">Save journal entry</button></div></form></div>
-<div class="panel"><h2>Past entries</h2><div id="journalList"></div></div>
-</section>
-<section class="section" id="settings">
-<div class="welcome"><h1>Settings</h1><p>Personalize the name and appearance of your planner.</p></div>
-<div class="panel">
-<h2>General</h2><p class="sub">Set the name of your personal planner.</p>
-<h3>App name</h3><p class="sub">Change the name shown at the top of the app and in the browser tab.</p>
-<form id="appNameForm" class="formrow"><input class="field" id="appNameInput" maxlength="32" placeholder="Enter app name" required><button class="btn">Save name</button></form>
-<div class="sub" id="appNameStatus" role="status">Your app name is saved on this device.</div>
-</div>
-<div class="panel appearance-panel">
-<h2>Appearance</h2><p class="sub">Choose one of seven styles. Your choice is saved automatically on this device.</p>
-<div class="theme-grid" id="designChoices">
-<button type="button" class="theme-choice" data-design="zen"><span class="swatches"><i></i><i></i><i></i><i></i></span><strong>Japanese Zen</strong><small>Calm · warm · balanced</small></button>
-<button type="button" class="theme-choice" data-design="luxury"><span class="swatches"><i></i><i></i><i></i><i></i></span><strong>Luxury Editorial</strong><small>Rich · elegant · refined</small></button>
-<button type="button" class="theme-choice" data-design="linear"><span class="swatches"><i></i><i></i><i></i><i></i></span><strong>Linear Inspired</strong><small>Focused · sleek · modern</small></button>
-<button type="button" class="theme-choice" data-design="notion"><span class="swatches"><i></i><i></i><i></i><i></i></span><strong>Notion Inspired</strong><small>Simple · clear · organized</small></button>
-<button type="button" class="theme-choice" data-design="glass"><span class="swatches"><i></i><i></i><i></i><i></i></span><strong>Glassmorphism</strong><small>Soft · translucent · fresh</small></button>
-<button type="button" class="theme-choice" data-design="cozy"><span class="swatches"><i></i><i></i><i></i><i></i></span><strong>Cozy Pastel</strong><small>Gentle · friendly · warm</small></button>
- <button type="button" class="theme-choice" data-design="bubu"><span class="swatches"><i style="background:#fff0e9"></i><i style="background:#ffe0dc"></i><i style="background:#dff5ff"></i><i style="background:#ee8f91"></i></span><strong>Bubu &amp; Dudu Beach</strong><small>Beach · pastel · kawaii</small></button>
-</div>
-<div class="mode-row"><div><strong>Animation</strong><p class="sub">Show or hide the Bubu &amp; Dudu home video when Theme 7 is active.</p></div><select class="field" id="bubuAnimation" style="max-width:160px"><option value="on">On</option><option value="off">Off</option></select></div>
- <div class="mode-row"><div><strong>Color mode</strong><p class="sub">Switch between light and dark appearance.</p></div><select class="field" id="settingsTheme" style="max-width:160px"><option value="light">Light mode</option><option value="dark">Dark mode</option></select></div>
-<p class="sub" id="designStatus" role="status">Current style: Japanese Zen</p>
-</div>
-<div class="panel" id="privacySettings">
-<h2>Privacy &amp; Security</h2><p class="sub">Add a PIN prompt when opening this planner on this browser. This is a basic privacy screen, not strong encryption.</p>
-<form id="pinForm"><div class="formrow"><input class="field" id="pinInput" inputmode="numeric" pattern="[0-9]{4,8}" minlength="4" maxlength="8" placeholder="Create 4–8 digit PIN" required></div><button class="btn">Save PIN</button></form>
-<button class="btn secondary" id="removePin" style="margin-top:10px">Remove PIN</button><div class="sub" id="pinStatus" style="margin-top:10px"></div>
-</div>
-<div class="panel" id="dataSettings">
-<h2>Data Management</h2><p class="sub">Keep a copy of your planner information or restore it on this browser. Your App Lock PIN is not included in backups.</p>
-<div class="actions"><button class="btn" id="downloadBackup">Download backup</button></div>
-<div style="margin-top:14px"><h3>Restore data</h3><input class="field" id="restoreFile" type="file" accept=".json,application/json"><button class="btn secondary" id="restoreBackup" style="margin-top:10px">Restore backup</button><p class="sub" id="backupStatus" role="status" style="margin-top:10px">Restoring replaces the planner data currently stored in this browser.</p></div>
-</div>
-<div class="panel" id="aboutSettings">
-<h2>About</h2><p class="sub">Your personal planner for daily tasks, schedules, notes, goals, and everyday organization.</p>
-<p class="sub">Your planner information is stored locally in this browser on this device. Use Backup &amp; Restore before changing devices or clearing browser data.</p>
-<p class="sub">© 2026 <span id="aboutAppName">Learning Life</span>. Personal planner.</p>
-</div>
-</section>
-</main>
-</div>
-<footer id="appFooter">Your information is saved in this browser on this device.</footer>
-</div>
-<div class="modalback" id="modal"><div class="modal" style="max-height:90vh;overflow:auto"><div class="panelhead"><h2 id="modalTitle">Selected date</h2><button class="btn ghost" onclick="closeModal()">✕</button></div><div id="calendarEntries"></div><form id="calendarEntryForm"><input type="hidden" id="calendarEditId"><label class="sub" for="calendarEntryType">Add a</label><select class="field" id="calendarEntryType" style="margin:6px 0 10px"><option value="note">Note</option><option value="schedule">Schedule</option></select><input class="field" id="calendarEntryTime" type="time" style="display:none;margin-bottom:10px"><textarea class="field" id="calendarEntryText" rows="3" placeholder="Write a note..." required></textarea><div class="actions"><button type="button" class="btn secondary" id="calendarCancelEdit" style="display:none">Cancel edit</button><button class="btn" id="calendarSaveButton">Add</button></div></form></div></div>
-<div class="modalback" id="lockScreen" style="z-index:10"><div class="modal"><h2 id="lockTitle">Learning Life is locked</h2><p>Enter your PIN to continue.</p><input class="field" id="unlockPin" type="password" inputmode="numeric" maxlength="8" placeholder="PIN"><div class="actions"><button class="btn" id="unlockButton">Unlock</button></div><p class="sub" id="unlockError"></p></div></div>
+<div class="modal" id="modal"><div class="dialog"><h2 id="modalTitle">Details</h2><div id="modalBody"></div><div class="actions"><button class="btn secondary" id="modalClose">Close</button></div></div></div>
 <script>
-const $=id=>document.getElementById(id);
-const today=()=>new Date().toISOString().slice(0,10);
-const load=(k,d)=>{try{return JSON.parse(localStorage.getItem('myday_'+k))??d}catch{return d}};
-const save=(k,v)=>localStorage.setItem('myday_'+k,JSON.stringify(v));
-// Appearance preferences are stored separately; planner records are untouched.
-const themeToggle=$('themeToggle');
-const designNames={zen:'Japanese Zen',luxury:'Luxury Editorial',linear:'Linear Inspired',notion:'Notion Inspired',glass:'Glassmorphism',cozy:'Cozy Pastel',bubu:'Bubu & Dudu Beach'};
-let savedDesign=localStorage.getItem('workinglife_design')||'zen';
-function applyDesign(name){if(!designNames[name])name='zen';savedDesign=name;document.body.dataset.design=name;localStorage.setItem('workinglife_design',name);document.querySelectorAll('.theme-choice').forEach(b=>{const active=b.dataset.design===name;b.classList.toggle('selected',active);b.setAttribute('aria-pressed',String(active))});if($('designStatus'))$('designStatus').textContent='Current style: '+designNames[name];syncBubuMedia()}
-function applyTheme(mode){document.body.classList.toggle('dark',mode==='dark');if(themeToggle){themeToggle.textContent=mode==='dark'?'☀ Light mode':'☾ Dark mode';themeToggle.setAttribute('aria-label',mode==='dark'?'Switch to light mode':'Switch to dark mode')}if($('settingsTheme'))$('settingsTheme').value=mode}
-function syncBubuMedia(){const card=$('bubuVideoCard'),video=$('bubuCookingVideo'),toggle=$('bubuAnimation');const enabled=localStorage.getItem('learninglife_bubu_animation')!=='off';if(toggle)toggle.value=enabled?'on':'off';if(card)card.style.display=(savedDesign==='bubu'&&enabled)?'block':'none';if(video){if(savedDesign==='bubu'&&enabled){video.play().catch(()=>{});}else{video.pause();}}}
-let savedTheme=localStorage.getItem('learninglife_theme')||'light';applyDesign(savedDesign);applyTheme(savedTheme);
-if($('bubuAnimation'))$('bubuAnimation').onchange=e=>{localStorage.setItem('learninglife_bubu_animation',e.target.value);syncBubuMedia()};
-document.querySelectorAll('.theme-choice').forEach(b=>b.addEventListener('click',()=>applyDesign(b.dataset.design)));
-// Removed obsolete header theme-toggle handler; Settings controls color mode.
-
-// App identity is customizable; existing planner data keys remain unchanged.
-let appName=localStorage.getItem('workinglife_app_name')||'Learning Life';
-if(appName==='Working Life'){appName='Learning Life';localStorage.setItem('workinglife_app_name',appName);}
-function applyAppName(){ $('brandName').textContent=appName+'.'; document.title=appName+' — Personal Planner'; $('aboutAppName').textContent=appName; $('lockTitle').textContent=appName+' is locked'; $('appNameInput').value=appName }
-
-let tasks=load('tasks',[]), schedules=load('schedules',[]), transactions=load('transactions',[]), goals=load('goals',[]), debts=load('debts',[]), calendarEntries=load('calendarEntries',[]);
-let selectedCalendarDate='';
-let goalMilestones=load('goalMilestones',[]), journalEntries=load('journalEntries',[]);
-let savingsGoal=load('savingsGoal',null), savingsEntries=load('savingsEntries',[]), habits=load('habits',[]), habitChecks=load('habitChecks',{}), reminders=load('reminders',[]);
-const money=n=>'₱'+Number(n||0).toLocaleString('en-PH',{minimumFractionDigits:2,maximumFractionDigits:2});
-function showPage(p){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.navbtn').forEach(x=>x.classList.toggle('active',x.dataset.page===p));$(p).classList.add('active');if(p==='calendar')renderCalendar();if(p==='weekly')renderWeekly();if(p==='journal')renderJournal()}
-document.querySelectorAll('.navbtn').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
-$('appNameForm').onsubmit=e=>{e.preventDefault();let next=$('appNameInput').value.trim();if(!next){$('appNameStatus').textContent='Please enter an app name.';return}appName=next;localStorage.setItem('workinglife_app_name',appName);applyAppName();$('appNameStatus').textContent='App name updated.'};
-$('settingsTheme').onchange=e=>{savedTheme=e.target.value;localStorage.setItem('learninglife_theme',savedTheme);applyTheme(savedTheme)};
-applyAppName();
-function renderTasks(){let list=$('taskList');list.innerHTML='';$('taskCount').textContent=tasks.length+' tasks';tasks.forEach((t,i)=>{let d=document.createElement('div');d.className='rowitem';d.innerHTML=`<input class="check" type="checkbox" ${t.done?'checked':''} aria-label="Complete task"><div class="grow"><strong class="${t.done?'done':''}"></strong></div><button class="btn ghost" aria-label="Delete task">×</button>`;d.querySelector('strong').textContent=t.text;d.querySelector('input').onchange=e=>{tasks[i].done=e.target.checked;save('tasks',tasks);renderAll()};d.querySelector('button').onclick=()=>{tasks.splice(i,1);save('tasks',tasks);renderAll()};list.append(d)});if(!tasks.length)list.innerHTML='<div class="empty">No tasks yet. Add your first task above.</div>'}
-$('taskForm').onsubmit=e=>{e.preventDefault();tasks.push({text:$('taskInput').value.trim(),done:false,repeat:$('taskRepeat').value});save('tasks',tasks);$('taskInput').value='';renderAll()};
-function renderSchedules(){let sorted=[...schedules].sort((a,b)=>a.time.localeCompare(b.time));$('scheduleCount').textContent=sorted.length+' items';let list=$('scheduleList');list.innerHTML='';sorted.forEach((s)=>{let i=schedules.indexOf(s),d=document.createElement('div');d.className='rowitem';let time=document.createElement('div');time.className='time';time.textContent=new Date('2000-01-01T'+s.time).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});let grow=document.createElement('div');grow.className='grow';let strong=document.createElement('strong');strong.textContent=s.text;grow.append(strong);let del=document.createElement('button');del.className='btn ghost';del.textContent='×';del.onclick=()=>{schedules.splice(i,1);save('schedules',schedules);renderAll()};d.append(time,grow,del);list.append(d)});if(!sorted.length)list.innerHTML='<div class="empty">No schedule added for today.</div>'}
-$('scheduleForm').onsubmit=e=>{e.preventDefault();schedules.push({time:$('scheduleTime').value,text:$('scheduleInput').value.trim()});save('schedules',schedules);$('scheduleInput').value='';renderAll()};
-function renderMoney(){let inc=transactions.filter(x=>x.type==='income').reduce((a,x)=>a+x.amount,0),exp=transactions.filter(x=>x.type==='expense').reduce((a,x)=>a+x.amount,0),bal=inc-exp;$('incomeTotal').textContent=money(inc);$('expenseTotal').textContent=money(exp);$('moneyBalance').textContent=money(bal);$('balanceStat').textContent=money(bal);
-let wallets=['Cash','GCash','MariBank','Other Bank'];let walletArea=$('walletBalances');walletArea.innerHTML='';wallets.forEach(w=>{let total=transactions.filter(x=>(x.wallet||'Cash')===w).reduce((a,x)=>a+(x.type==='income'?x.amount:-x.amount),0);let box=document.createElement('div');box.className='moneybox';let label=document.createElement('small');label.textContent=w;let amount=document.createElement('b');amount.textContent=money(total);amount.className=total<0?'negative':'positive';box.append(label,amount);walletArea.append(box)});
-let list=$('transactions');list.innerHTML='';[...transactions].reverse().forEach(t=>{let d=document.createElement('div');d.className='transaction';let left=document.createElement('div');left.textContent=t.category;let sm=document.createElement('small');sm.textContent=t.date+' · '+(t.type==='income'?'Income':'Expense')+' · '+(t.wallet||'Cash');left.append(sm);let right=document.createElement('strong');right.className=t.type==='income'?'positive':'negative';right.textContent=(t.type==='income'?'+':'−')+money(t.amount);d.append(left,right);list.append(d)});if(!transactions.length)list.innerHTML='<div class="empty">No transactions yet.</div>';
-let borrowed=debts.filter(x=>x.action==='borrow').reduce((a,x)=>a+x.amount,0),paid=debts.filter(x=>x.action==='payment').reduce((a,x)=>a+x.amount,0);$('debtBorrowed').textContent=money(borrowed);$('debtPaid').textContent=money(paid);$('debtOutstanding').textContent=money(borrowed-paid);let dh=$('debtHistory');dh.innerHTML='';[...debts].map((x,i)=>({...x,_index:i})).reverse().forEach(x=>{let d=document.createElement('div');d.className='transaction';let l=document.createElement('div');l.style.flex='1';l.textContent=x.note;let sm=document.createElement('small');sm.textContent=x.date+' · '+(x.action==='borrow'?'Debt added':'Payment recorded');l.append(sm);let r=document.createElement('strong');r.className=x.action==='payment'?'positive':'negative';r.textContent=(x.action==='payment'?'-':'+')+money(x.amount);let del=document.createElement('button');del.className='btn ghost';del.textContent='Delete';del.setAttribute('aria-label','Delete debt record');del.onclick=()=>{if(!confirm('Delete this debt record? The outstanding balance will be recalculated.'))return;debts.splice(x._index,1);save('debts',debts);renderAll()};d.append(l,r,del);dh.append(d)});if(!debts.length)dh.innerHTML='<div class="empty">No Shopee Credit records yet. Use “Add credit used” above to add a debt.</div>'}
-$('moneyDate').value=today();$('debtDate').value=today();$('moneyForm').onsubmit=e=>{e.preventDefault();transactions.push({type:$('moneyType').value,amount:Number($('moneyAmount').value),wallet:$('moneyWallet').value,category:$('moneyCategory').value.trim(),date:$('moneyDate').value});save('transactions',transactions);$('moneyAmount').value='';$('moneyCategory').value='';renderAll()};
-$('debtForm').onsubmit=e=>{e.preventDefault();let action=$('debtAction').value,amount=Number($('debtAmount').value),borrowed=debts.filter(x=>x.action==='borrow').reduce((a,x)=>a+x.amount,0),paid=debts.filter(x=>x.action==='payment').reduce((a,x)=>a+x.amount,0),outstanding=borrowed-paid;if(action==='payment'&&amount>outstanding){alert('Payment cannot be greater than the outstanding debt.');return}debts.push({action,amount,note:$('debtNote').value.trim(),date:$('debtDate').value});save('debts',debts);$('debtAmount').value='';$('debtNote').value='';renderAll()};
-function renderHome(){let done=tasks.filter(t=>t.done).length;$('taskStat').textContent=done+' / '+tasks.length;$('scheduleStat').textContent=schedules.length;let ht=$('homeTasks');ht.innerHTML='';tasks.slice(0,5).forEach(t=>{let d=document.createElement('div');d.className='rowitem';let s=document.createElement('strong');s.className=t.done?'done':'';s.textContent=t.text;d.append(s);ht.append(d)});if(!tasks.length)ht.innerHTML='<div class="empty">Your daily tasks will appear here.</div>';let hs=$('homeSchedule');hs.innerHTML='';[...schedules].sort((a,b)=>a.time.localeCompare(b.time)).slice(0,5).forEach(s=>{let d=document.createElement('div');d.className='rowitem';let tm=document.createElement('div');tm.className='time';tm.textContent=new Date('2000-01-01T'+s.time).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});let tx=document.createElement('strong');tx.textContent=s.text;d.append(tm,tx);hs.append(d)});if(!schedules.length)hs.innerHTML='<div class="empty">Your schedule will appear here.</div>'}
-function renderGoals(){let l=$('goalList');l.innerHTML='';goals.forEach((g,i)=>{let d=document.createElement('div');d.className='rowitem';let s=document.createElement('strong');s.textContent=g;let del=document.createElement('button');del.className='btn ghost';del.textContent='×';del.onclick=()=>{goals.splice(i,1);save('goals',goals);renderGoals()};d.append(s,del);l.append(d)});if(!goals.length)l.innerHTML='<div class="empty">Add a goal you want to work toward.</div>'}
-$('goalForm').onsubmit=e=>{e.preventDefault();goals.push($('goalInput').value.trim());save('goals',goals);$('goalInput').value='';renderGoals()};
-function renderMilestones(){let sel=$('milestoneGoal'),current=sel.value;sel.innerHTML='<option value="">Choose a goal</option>';goals.forEach((g,i)=>{let o=document.createElement('option');o.value=String(i);o.textContent=g;sel.append(o)});if(current!==''&&goals[Number(current)])sel.value=current;let list=$('milestoneList');list.innerHTML='';goalMilestones.forEach((m,i)=>{let row=document.createElement('div');row.className='rowitem';let cb=document.createElement('input');cb.type='checkbox';cb.className='check';cb.checked=!!m.done;cb.onchange=()=>{m.done=cb.checked;save('goalMilestones',goalMilestones);renderMilestones()};let wrap=document.createElement('div');wrap.className='grow';let strong=document.createElement('strong');strong.textContent=(goals[m.goalIndex]||'Goal')+' · '+m.text;strong.className=m.done?'done':'';wrap.append(strong);let del=document.createElement('button');del.className='btn ghost';del.textContent='Delete';del.onclick=()=>{goalMilestones.splice(i,1);save('goalMilestones',goalMilestones);renderMilestones()};row.append(cb,wrap,del);list.append(row)});if(!goalMilestones.length)list.innerHTML='<div class="empty">Your smaller goal steps will appear here.</div>'}
-$('milestoneForm').onsubmit=e=>{e.preventDefault();goalMilestones.push({goalIndex:Number($('milestoneGoal').value),text:$('milestoneInput').value.trim(),done:false});save('goalMilestones',goalMilestones);$('milestoneInput').value='';renderMilestones()};
-function renderJournal(){let date=$('journalDate').value||today();let entry=journalEntries.find(x=>x.date===date);$('journalText').value=entry?entry.text:'';let list=$('journalList');list.innerHTML='';[...journalEntries].sort((a,b)=>b.date.localeCompare(a.date)).forEach(x=>{let row=document.createElement('div');row.className='rowitem';let wrap=document.createElement('div');wrap.className='grow';let title=document.createElement('strong');title.textContent=x.date;let body=document.createElement('small');body.textContent=x.text.length>130?x.text.slice(0,130)+'…':x.text;wrap.append(title,body);let edit=document.createElement('button');edit.className='btn ghost';edit.textContent='Open';edit.onclick=()=>{$('journalDate').value=x.date;$('journalText').value=x.text};let del=document.createElement('button');del.className='btn ghost';del.textContent='Delete';del.onclick=()=>{if(confirm('Delete this journal entry?')){journalEntries=journalEntries.filter(y=>y.date!==x.date);save('journalEntries',journalEntries);renderJournal()}};row.append(wrap,edit,del);list.append(row)});if(!journalEntries.length)list.innerHTML='<div class="empty">No journal entries yet.</div>'}
-$('journalDate').value=today();$('journalDate').onchange=renderJournal;$('journalForm').onsubmit=e=>{e.preventDefault();let date=$('journalDate').value,text=$('journalText').value.trim(),existing=journalEntries.find(x=>x.date===date);if(existing)existing.text=text;else journalEntries.push({date,text});save('journalEntries',journalEntries);renderJournal();alert('Journal entry saved.')};
-function renderWeekly(){let start=new Date();start.setHours(0,0,0,0);let end=new Date(start);end.setDate(end.getDate()+6);$('weeklyRange').textContent=start.toLocaleDateString(undefined,{month:'short',day:'numeric'})+' – '+end.toLocaleDateString(undefined,{month:'short',day:'numeric'});let list=$('weeklyList');list.innerHTML='';for(let i=0;i<7;i++){let d=new Date(start);d.setDate(start.getDate()+i);let key=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');let entries=calendarEntries.filter(x=>x.date===key);let row=document.createElement('div');row.className='rowitem';let day=document.createElement('div');day.className='time';day.textContent=d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});let content=document.createElement('div');content.className='grow';let strong=document.createElement('strong');strong.textContent=entries.length?entries.map(x=>(x.time?x.time+' · ':'')+x.text).join(' | '):'No calendar plans';content.append(strong);row.append(day,content);list.append(row)}$('weeklyTasks').textContent=tasks.filter(x=>x.done).length+' / '+tasks.length;let checked=Object.values(habitChecks[today()]||{}).filter(Boolean).length;$('weeklyHabits').textContent=checked+' / '+habits.length;$('weeklyEvents').textContent=calendarEntries.filter(x=>x.date>=today()&&x.date<=end.toISOString().slice(0,10)).length}
-
-$('notesText').value=load('notes','');$('notesText').oninput=()=>{save('notes',$('notesText').value);$('notesSaved').textContent='Saved automatically'};
-$('reflection').value=load('reflection','');$('reflection').oninput=()=>save('reflection',$('reflection').value);
-let calDate=new Date();function dateKey(y,m,d){return [y,String(m+1).padStart(2,'0'),String(d).padStart(2,'0')].join('-')}
-function renderCalendar(){
-let y=calDate.getFullYear(),m=calDate.getMonth();
-$('monthLabel').textContent=calDate.toLocaleDateString(undefined,{month:'long',year:'numeric'});
-let g=$('calendarGrid');
-g.innerHTML='';
-let dark=document.body.classList.contains('dark');
-let styles=getComputedStyle(document.body);
-let ink=styles.getPropertyValue('--ink').trim()||(dark?'#f4f4f4':'#30332d');
-let muted=styles.getPropertyValue('--muted').trim()||(dark?'#c6c6c6':'#777');
-['S','M','T','W','T','F','S'].forEach(x=>{
-let el=document.createElement('b');
-el.style.color=muted;
-el.textContent=x;
-g.append(el);
-});
-let first=new Date(y,m,1).getDay();
-let days=new Date(y,m+1,0).getDate();
-let todayKey=today();
-for(let i=0;i<first;i++)g.append(document.createElement('span'));
-for(let d=1;d<=days;d++){
-let key=dateKey(y,m,d);
-let b=document.createElement('button');
-let hasItems=calendarEntries.some(x=>x.date===key);
-let isToday=key===todayKey;
-b.textContent=d+(hasItems?' ·':'');
-b.style.cssText='border:0;border-radius:9px;padding:9px 0;background:'+(isToday?(dark?'var(--accent2)':'#e9eee6'):'transparent')+';color:'+ink+';-webkit-text-fill-color:'+ink+';font-weight:'+(hasItems?'750':'500');
-b.title=hasItems?'Has saved notes or schedules':'Select date';
-b.onclick=()=>openCalendarDate(key);
-g.append(b);
+const $=id=>document.getElementById(id),today=()=>new Date().toISOString().slice(0,10),fmt=d=>new Date(d+'T12:00:00').toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'}),money=n=>'₱'+Number(n||0).toLocaleString('en-PH',{minimumFractionDigits:2,maximumFractionDigits:2});
+const keys=['tasks','schedules','transactions','notes','verses','goals','savings','habits','reminders','journals'];
+let data={};keys.forEach(k=>data[k]=JSON.parse(localStorage.getItem('wl2_'+k)||'[]'));
+let settings=JSON.parse(localStorage.getItem('wl2_settings')||'{}');let selectedDate=today(),calDate=new Date();
+function save(){keys.forEach(k=>localStorage.setItem('wl2_'+k,JSON.stringify(data[k])));localStorage.setItem('wl2_settings',JSON.stringify(settings));renderAll()}
+function id(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function addItem(list,obj){data[list].push({id:id(),...obj});save()}
+function removeItem(list,key){data[list]=data[list].filter(x=>x.id!==key);save()}
+function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function showPage(p){
+ if(p==='more'){p='more'}
+ document.querySelectorAll('.section').forEach(x=>{x.classList.toggle('active',x.id===p);x.hidden=x.id!==p});
+ document.querySelectorAll('.nav,.mobile-tab').forEach(x=>x.classList.toggle('active',x.dataset.page===p));
+ if(p==='calendarPage')renderCalendar();if(p==='journal')loadJournal();renderAll();
+ window.scrollTo({top:0,behavior:'instant'});
 }
+document.querySelectorAll('.nav,.mobile-tab').forEach(b=>b.onclick=()=>showPage(b.dataset.page));document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>showPage(b.dataset.go));
+function listHTML(items,list,render){if(!items.length)return '<div class="empty">Nothing here yet.</div>';return items.map(x=>render(x)+`<button class="btn ghost" aria-label="Delete" onclick="removeItem('${list}','${x.id}')">✕</button>`).join('')}
+function taskHTML(x){return `<div class="item ${x.done?'done':''}"><input class="check" type="checkbox" ${x.done?'checked':''} onchange="toggleTask('${x.id}',this.checked)"><div class="item-main"><div class="item-title">${escapeHtml(x.text)}</div><small>${fmt(x.date)} · ${escapeHtml(x.priority)}</small></div></div>`}
+function toggleTask(key,v){let x=data.tasks.find(t=>t.id===key);if(x)x.done=v;save()}
+function renderAll(){let t=today(),tasks=data.tasks.filter(x=>x.date===t),sched=data.schedules.filter(x=>x.date===t).sort((a,b)=>a.time.localeCompare(b.time));$('todayLabel').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'});$('greeting').textContent='Good day, '+(settings.userName||'there')+'! ♡';$('taskCount').textContent=tasks.length;$('doneCount').textContent=tasks.filter(x=>x.done).length;$('upcomingCount').textContent=data.schedules.filter(x=>x.date>=t).length;$('todayTasks').innerHTML=tasks.length?tasks.map(taskHTML).join(''):'<div class="empty">No tasks planned for today.</div>';$('todaySchedule').innerHTML=sched.length?sched.map(x=>`<div class="item"><div class="item-main"><b>${escapeHtml(x.time)} · ${escapeHtml(x.title)}</b></div></div>`).join(''):'<div class="empty">No schedule for today.</div>';
+$('taskList').innerHTML=listHTML(data.tasks.slice().sort((a,b)=>a.date.localeCompare(b.date)),'tasks',taskHTML);
+$('scheduleList').innerHTML=listHTML(data.schedules.slice().sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)),'schedules',x=>`<div class="item"><div class="item-main"><b>${escapeHtml(x.title)}</b><small>${fmt(x.date)} · ${escapeHtml(x.time)}</small></div></div>`);
+$('moneyList').innerHTML=listHTML(data.transactions.slice().reverse(),'transactions',x=>`<div class="item"><div class="item-main"><b>${escapeHtml(x.title)}</b><small>${fmt(x.date)} · ${x.type}</small></div><b>${x.type==='income'?'+':'−'}${money(x.amount)}</b></div>`);
+let inc=data.transactions.filter(x=>x.type==='income').reduce((s,x)=>s+Number(x.amount),0),exp=data.transactions.filter(x=>x.type==='expense').reduce((s,x)=>s+Number(x.amount),0);$('incomeTotal').textContent=money(inc);$('expenseTotal').textContent=money(exp);$('balanceTotal').textContent=money(inc-exp);
+$('noteList').innerHTML=listHTML(data.notes.slice().reverse(),'notes',x=>`<div class="item"><div class="item-main"><b>${escapeHtml(x.title)}</b><div>${escapeHtml(x.body)}</div></div></div>`);
+$('verseList').innerHTML=listHTML(data.verses.slice().reverse(),'verses',x=>`<div class="item"><div class="item-main"><b>${escapeHtml(x.ref)}</b><div>${escapeHtml(x.text)}</div></div></div>`);
+$('goalList').innerHTML=listHTML(data.goals,'goals',x=>`<div class="item"><div class="item-main"><b>${escapeHtml(x.text)}</b><small>${x.date?fmt(x.date):'No target date'}</small></div></div>`);
+$('savingList').innerHTML=listHTML(data.savings,'savings',x=>`<div class="item"><div class="item-main"><b>${escapeHtml(x.name)}</b><small>${money(x.amount)} saved of ${money(x.target)}</small><progress max="${Math.max(1,x.target)}" value="${Math.min(x.amount,x.target)}"></progress></div></div>`);
+$('habitList').innerHTML=listHTML(data.habits,'habits',x=>`<div class="item"><div class="item-main"><b>${escapeHtml(x.text)}</b><small>Added ${fmt(x.date)}</small></div></div>`);
+$('reminderList').innerHTML=listHTML(data.reminders,'reminders',x=>`<div class="item"><div class="item-main"><b>${escapeHtml(x.text)}</b><small>${x.date?fmt(x.date):'No date set'}</small></div></div>`);
+let month=t.slice(0,7),mTx=data.transactions.filter(x=>x.date.startsWith(month)),mi=mTx.filter(x=>x.type==='income').reduce((s,x)=>s+Number(x.amount),0),me=mTx.filter(x=>x.type==='expense').reduce((s,x)=>s+Number(x.amount),0);$('monthlyReport').innerHTML=`<p>Transactions: <b>${mTx.length}</b></p><p>Income: <b>${money(mi)}</b></p><p>Expenses: <b>${money(me)}</b></p><p>Net: <b>${money(mi-me)}</b></p>`;
+let start=new Date();start.setDate(start.getDate()-((start.getDay()+6)%7));let week=[...Array(7)].map((_,i)=>{let d=new Date(start);d.setDate(start.getDate()+i);return d.toISOString().slice(0,10)});$('weeklyReport').innerHTML=week.map(d=>`<div class="item"><div class="item-main"><b>${fmt(d)}</b><small>${data.tasks.filter(x=>x.date===d&&x.done).length} / ${data.tasks.filter(x=>x.date===d).length} tasks completed</small></div></div>`).join('');
+renderCalendarSelection();document.title=(settings.appName||'Learning Life')+' 2.0';
 }
-// Savings tracker
-function renderSavings(){
- const total=savingsEntries.reduce((a,x)=>a+x.amount,0);
- const summary=$('savingsSummary');summary.innerHTML='';
- if(!savingsGoal){summary.textContent='No savings goal set yet.'}
- else{
-  let title=document.createElement('strong');title.textContent=savingsGoal.name+' · '+money(total)+' of '+money(savingsGoal.target);
-  let track=document.createElement('div');track.style.cssText='height:10px;background:#edf0ea;border-radius:20px;overflow:hidden;margin-top:12px';
-  let bar=document.createElement('div');bar.style.cssText='height:100%;background:#64745f;width:'+Math.min(100,total/savingsGoal.target*100)+'%;border-radius:20px';track.append(bar);
-  let pct=document.createElement('small');pct.className='sub';pct.textContent=Math.min(100,Math.round(total/savingsGoal.target*100))+'% saved';summary.append(title,track,pct)
- }
- let hist=$('savingsHistory');hist.innerHTML='';[...savingsEntries].reverse().forEach((x,idx)=>{let d=document.createElement('div');d.className='transaction';let l=document.createElement('span');l.textContent=x.note||'Savings deposit';let r=document.createElement('strong');r.className='positive';r.textContent='+'+money(x.amount);let del=document.createElement('button');del.className='btn ghost';del.textContent='Delete';del.onclick=()=>{let i=savingsEntries.length-1-idx;savingsEntries.splice(i,1);save('savingsEntries',savingsEntries);renderSavings()};d.append(l,r,del);hist.append(d)});if(!savingsEntries.length)hist.innerHTML='<div class="empty">No savings deposits yet.</div>'
-}
-$('savingsGoalForm').onsubmit=e=>{e.preventDefault();savingsGoal={name:$('savingsName').value.trim(),target:Number($('savingsTarget').value)};save('savingsGoal',savingsGoal);renderSavings();$('savingsName').value='';$('savingsTarget').value=''};
-$('savingsAddForm').onsubmit=e=>{e.preventDefault();savingsEntries.push({amount:Number($('savingsAmount').value),note:$('savingsNote').value.trim(),date:today()});save('savingsEntries',savingsEntries);$('savingsAmount').value='';$('savingsNote').value='';renderSavings()};
-
-// Habits: completion checks are stored by date
-function renderHabits(){let list=$('habitList');list.innerHTML='';habits.forEach((h,i)=>{let d=document.createElement('div');d.className='rowitem';let cb=document.createElement('input');cb.type='checkbox';cb.className='check';cb.checked=!!(habitChecks[today()]&&habitChecks[today()][i]);cb.onchange=()=>{habitChecks[today()]??={};habitChecks[today()][i]=cb.checked;save('habitChecks',habitChecks)};let label=document.createElement('strong');label.textContent=h;let del=document.createElement('button');del.className='btn ghost';del.textContent='×';del.onclick=()=>{habits.splice(i,1);save('habits',habits);renderHabits()};d.append(cb,label,del);list.append(d)});if(!habits.length)list.innerHTML='<div class="empty">Add habits you want to build.</div>'}
-$('habitForm').onsubmit=e=>{e.preventDefault();habits.push($('habitInput').value.trim());save('habits',habits);$('habitInput').value='';renderHabits()};
-
-// Reminders are shown in-app; no push notification permission is requested
-$('reminderDate').value=today();
-function renderReminders(){let list=$('reminderList');list.innerHTML='';[...reminders].map((r,i)=>({...r,_i:i})).sort((a,b)=>(a.date+(a.time||'')).localeCompare(b.date+(b.time||''))).forEach(r=>{let d=document.createElement('div');d.className='rowitem';let l=document.createElement('div');l.className='grow';let s=document.createElement('strong');s.textContent=r.text;let sm=document.createElement('small');sm.textContent=r.date+(r.time?' · '+r.time:'');l.append(s,sm);let del=document.createElement('button');del.className='btn ghost';del.textContent='Delete';del.onclick=()=>{reminders.splice(r._i,1);save('reminders',reminders);renderReminders()};d.append(l,del);list.append(d)});if(!reminders.length)list.innerHTML='<div class="empty">No reminders yet.</div>'}
-$('reminderForm').onsubmit=e=>{e.preventDefault();reminders.push({text:$('reminderText').value.trim(),date:$('reminderDate').value,time:$('reminderTime').value});save('reminders',reminders);$('reminderText').value='';$('reminderTime').value='';renderReminders()};
-
-// Monthly report from recorded transactions
-$('reportMonth').value=new Date().toISOString().slice(0,7);
-function renderReport(){let m=$('reportMonth').value;let ts=transactions.filter(t=>(t.date||'').slice(0,7)===m);let inc=ts.filter(t=>t.type==='income').reduce((a,t)=>a+t.amount,0),exp=ts.filter(t=>t.type==='expense').reduce((a,t)=>a+t.amount,0);$('reportIncome').textContent=money(inc);$('reportExpense').textContent=money(exp);$('reportNet').textContent=money(inc-exp);$('reportCount').textContent=ts.length+' transaction(s) recorded for '+m}
-$('reportMonth').onchange=renderReport;
-
-
-// Manual backup and restore. The App Lock PIN is deliberately excluded.
-const BACKUP_KEYS=['tasks','schedules','transactions','goals','goalMilestones','journalEntries','debts','calendarEntries','savingsGoal','savingsEntries','habits','habitChecks','reminders','notes','reflection'];
-$('downloadBackup').onclick=()=>{
- const data={app:'LearningLife',formatVersion:1,exportedAt:new Date().toISOString(),data:{}};
- BACKUP_KEYS.forEach(k=>{try{data.data[k]=JSON.parse(localStorage.getItem('myday_'+k)??(k==='savingsGoal'?'null':(['tasks','schedules','transactions','goals','goalMilestones','journalEntries','debts','calendarEntries','savingsEntries','habits','reminders'].includes(k)?'[]':'{}')))}catch{}});
- const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
- a.href=url;a.download='workinglife-backup-'+today()+'.json';document.body.append(a);a.click();a.remove();URL.revokeObjectURL(url);$('backupStatus').textContent='Backup downloaded. Keep the file somewhere safe.';
-};
-$('restoreBackup').onclick=async()=>{
- const file=$('restoreFile').files[0];if(!file){$('backupStatus').textContent='Please choose a planner backup file first.';return}
- try{
-  const parsed=JSON.parse(await file.text());
-  if(!['LearningLife','MyDay'].includes(parsed.app)||parsed.formatVersion!==1||!parsed.data||typeof parsed.data!=='object')throw new Error('This does not look like a supported planner backup.');
-  if(!confirm('Restore this backup? Your current planner data on this browser will be replaced.'))return;
-  BACKUP_KEYS.forEach(k=>{if(Object.prototype.hasOwnProperty.call(parsed.data,k))localStorage.setItem('myday_'+k,JSON.stringify(parsed.data[k]));else localStorage.removeItem('myday_'+k)});
-  alert('Backup restored. The app will now reload.');location.reload();
- }catch(err){$('backupStatus').textContent=err.message||'Could not read this backup file.'}
-};
-
-// Basic browser-local PIN prompt. This is not encryption or account-grade security.
-function refreshPinStatus(){$('pinStatus').textContent=load('appPin',null)?'A PIN is currently set on this browser.':'No PIN is currently set.'}
-$('pinForm').onsubmit=e=>{e.preventDefault();let pin=$('pinInput').value;if(!/^\d{4,8}$/.test(pin)){alert('Use 4 to 8 digits.');return}save('appPin',pin);$('pinInput').value='';refreshPinStatus();alert('PIN saved for this browser.')};
-$('removePin').onclick=()=>{if(!load('appPin',null)){refreshPinStatus();return}if(confirm('Remove your app PIN?')){localStorage.removeItem('myday_appPin');refreshPinStatus()}};
-$('unlockButton').onclick=()=>{if($('unlockPin').value===load('appPin',null)){$('lockScreen').classList.remove('show');$('unlockPin').value='';$('unlockError').textContent=''}else{$('unlockError').textContent='That PIN is not correct.'}};
-$('unlockPin').addEventListener('keydown',e=>{if(e.key==='Enter')$('unlockButton').click()});
-
-function renderAll(){renderTasks();renderSchedules();renderMoney();renderHome();renderGoals();renderMilestones();renderJournal();renderWeekly();renderSavings();renderHabits();renderReminders();renderReport();refreshPinStatus()}
-let now=new Date();$('headerDate').textContent=now.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric',year:'numeric'});$('greeting').textContent=(now.getHours()<12?'Good morning.':now.getHours()<18?'Good afternoon.':'Good evening.');
-renderAll();
-if(load('appPin',null))$('lockScreen').classList.add('show');
-</script>
-<script src="./bubu-theme.js"></script>
-<script src="./bubu-stickers.js"></script>
-<script src="./bubu-mobile-nav.js"></script>
-</body>
-</html>
+function renderCalendar(){let y=calDate.getFullYear(),m=calDate.getMonth();$('monthLabel').textContent=calDate.toLocaleDateString(undefined,{month:'long',year:'numeric'});let g=$('calendar');g.innerHTML='';['S','M','T','W','T','F','S'].forEach(x=>{let b=document.createElement('b');b.textContent=x;g.append(b)});let first=new Date(y,m,1).getDay(),days=new Date(y,m+1,0).getDate();for(let i=0;i<first;i++)g.append(document.createElement('span'));for(let d=1;d<=days;d++){let key=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`,b=document.createElement('button');b.textContent=d;b.className=(key===today()?'today ':'')+((data.tasks.some(x=>x.date===key)||data.schedules.some(x=>x.date===key))?'marked':'');b.onclick=()=>{selectedDate=key;renderCalendarSelection()};g.append(b)}}
+function renderCalendarSelection(){$('selectedDateTitle').textContent=fmt(selectedDate);let a=[...data.tasks.filter(x=>x.date===selectedDate).map(x=>({label:'Task',text:x.text})),...data.schedules.filter(x=>x.date===selectedDate).map(x=>({label:'Schedule',text:x.time+' · '+x.title}))];$('selectedItems').innerHTML=a.length?a.map(x=>`<div class="item"><span class="tag">${x.label}</span><div>${escapeHtml(x.text)}</div></div>`).join(''):'<div class="empty">No saved items for this date.</div>'}
+$('prevMonth').onclick=()=>{calDate.setMonth(calDate.getMonth()-1);renderCalendar()};$('nextMonth').onclick=()=>{calDate.setMonth(calDate.getMonth()+1);renderCalendar()};
+function bindForm(id,fn){$(id).onsubmit=e=>{e.preventDefault();fn();e.target.reset();save()}}
+bindForm('taskForm',()=>addItem('tasks',{text:$('taskText').value,date:$('taskDate').value,priority:$('taskPriority').value,done:false}));
+bindForm('scheduleForm',()=>addItem('schedules',{title:$('scheduleTitle').value,date:$('scheduleDate').value,time:$('scheduleTime').value}));
+bindForm('moneyForm',()=>addItem('transactions',{title:$('moneyTitle').value,type:$('moneyType').value,amount:Number($('moneyAmount').value),date:$('moneyDate').value}));
+bindForm('noteForm',()=>addItem('notes',{title:$('noteTitle').value,body:$('noteBody').value}));
+bindForm('verseForm',()=>addItem('verses',{ref:$('verseRef').value,text:$('verseText').value}));
+bindForm('goalForm',()=>addItem('goals',{text:$('goalText').value,date:$('goalDate').value}));
+bindForm('savingForm',()=>addItem('savings',{name:$('savingGoal').value,target:Number($('savingTarget').value),amount:Number($('savingAmount').value)}));
+bindForm('habitForm',()=>addItem('habits',{text:$('habitText').value,date:today()}));
+bindForm('reminderForm',()=>addItem('reminders',{text:$('reminderText').value,date:$('reminderDate').value}));
+function loadJournal(){let d=$('journalDate').value||today();$('journalDate').value=d;$('journalText').value=data.journals.find(x=>x.date===d)?.text||''}
+$('journalDate').onchange=loadJournal;$('saveJournal').onclick=()=>{let d=$('journalDate').value,old=data.journals.find(x=>x.date===d);if(old)old.text=$('journalText').value;else data.journals.push({id:id(),date:d,text:$('journalText').value});save();alert('Journal saved.')};
+function renderThemes(){let themes=[['bubu','Bubu & Dudu Beach','#b8e5ff','#e98787'],['zen','Japanese Zen','#f3eee4','#65765d'],['luxury','Luxury Editorial','#211811','#c99c55'],['linear','Linear Inspired','#f7f8fa','#5865d9'],['notion','Notion Inspired','#f7f7f5','#777'],['glass','Glassmorphism','#20243d','#a9a1e9'],['cozy','Cozy Pastel','#fbf0e9','#8b68a7']];$('themeList').innerHTML=themes.map(([id,name,bg,accent])=>`<button class="theme ${settings.theme===id?'active':''}" data-theme-choice="${id}"><span class="swatches"><i style="background:${bg}"></i><i style="background:${accent}"></i></span><b>${name}</b></button>`).join('');document.querySelectorAll('[data-theme-choice]').forEach(b=>b.onclick=()=>{settings.theme=b.dataset.themeChoice;document.body.dataset.theme=settings.theme;renderThemes();saveSettings()})}
+function saveSettings(){localStorage.setItem('wl2_settings',JSON.stringify(settings))}
+function setMode(){document.body.classList.toggle('dark',!!settings.dark);saveSettings()}
+$('quickTheme').onclick=()=>{settings.dark=!settings.dark;setMode()};$('modeToggle').onclick=()=>{settings.dark=!settings.dark;setMode()};
+$('saveAppName').onclick=()=>{settings.appName=$('appNameInput').value.trim()||'Learning Life';saveSettings();renderAll();alert('App name saved.')};
+$('exportBackup').onclick=()=>{let blob=new Blob([JSON.stringify({version:2,data,settings},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='learning-life-backup.json';a.click();URL.revokeObjectURL(a.href)};
+$('importBackup').onchange=async e=>{let f=e.target.files[0];if(!f)return;try{let b=JSON.parse(await f.text());if(!b.data)throw Error();keys.forEach(k=>data[k]=Array.isArray(b.data[k])?b.data[k]:[]);settings=b.settings||{};save();applySettings();alert('Backup restored.')}catch(err){alert('That backup file could not be read.')}};
+function applySettings(){if(!settings.theme)settings.theme='bubu';if(!settings.appName)settings.appName='Learning Life';document.body.dataset.theme=settings.theme||'bubu';document.body.classList.toggle('dark',!!settings.dark);$('appNameInput').value=settings.appName||'Learning Life';renderThemes()}
+function tick(){ $('clock').textContent=new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});$('todayLabel').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'})}
+$('welcomeContinue').onclick=()=>{let n=$('welcomeName').value.trim();if(!n){$('welcomeName').focus();return}settings.userName=n;saveSettings();$('welcomeOverlay').classList.add('hidden');renderAll()};
+if(!settings.userName){$('welcomeOverlay').classList.remove('hidden')}else{$('welcomeOverlay').classList.add('hidden')}
+tick();setInterval(tick,30000);$('taskDate').value=today();$('scheduleDate').value=today();$('moneyDate').value=today();$('journalDate').value=today();applySettings();renderAll();
+</script></body></html>
