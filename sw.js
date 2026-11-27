@@ -1,4 +1,4 @@
-const CACHE_NAME='learninglife-shell-v36';
+const CACHE_NAME='learninglife-shell-v37';
 const APP_SHELL=[
 './','./index.html','./bible.js','./redesign.css','./redesign-v30.css','./clock.js',
 './dashboard.js','./debt-installments.js','./debt-wallet.js','./debt.js','./finance-tools.js',
@@ -25,52 +25,23 @@ const APP_SHELL=[
 './cute_bear_stickers_54/49_goal_plan_white.png','./cute_bear_stickers_54/50_goal_plan_brown.png','./cute_bear_stickers_54/51_goal_plan_both.png',
 './cute_bear_stickers_54/52_daily_log_white.png','./cute_bear_stickers_54/53_daily_log_brown.png','./cute_bear_stickers_54/54_daily_log_both.png'
 ];
-
-self.addEventListener('install',event=>{
- event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(APP_SHELL)));
- self.skipWaiting();
-});
-self.addEventListener('activate',event=>{
- event.waitUntil(caches.keys().then(keys=>Promise.all(
-  keys.filter(key=>key.startsWith('learninglife-shell-')&&key!==CACHE_NAME).map(key=>caches.delete(key))
- )));
- self.clients.claim();
-});
-async function withAppScripts(response){
- const html=await response.clone().text();
- let updated=html;
+self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(APP_SHELL)));self.skipWaiting()});
+self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('learninglife-shell-')&&k!==CACHE_NAME).map(k=>caches.delete(k)))));self.clients.claim()});
+async function injectScripts(response){
+ const html=await response.clone().text();let updated=html;
  for(const file of ['bible.js','debt.js','transfer.js','debt-installments.js','debt-wallet.js','finance-tools.js','reset-money.js','dashboard.js','clock.js','goals-refresh.js','wallet-sync.js','money-layout.js','learninglife-update.js','calendar-fix.js','text-size.js','bubu-theme.js']){
-  if(!updated.includes(`src="./${file}"`)) updated=updated.replace(/<\/body\s*>/i,`<script src="./${file}"></script>\n</body>`);
+  if(!updated.includes(`src="./${file}"`)&&!updated.includes(`src="${file}"`))updated=updated.replace(/<\/body\s*>/i,`<script src="./${file}"></script>\n</body>`);
  }
  if(updated===html)return response;
- const headers=new Headers(response.headers);
- headers.delete('content-length');headers.delete('content-encoding');
- headers.set('content-type','text/html; charset=utf-8');
- return new Response(updated,{status:response.status,statusText:response.statusText,headers});
+ const h=new Headers(response.headers);h.delete('content-length');h.delete('content-encoding');h.set('content-type','text/html; charset=utf-8');
+ return new Response(updated,{status:response.status,statusText:response.statusText,headers:h});
 }
-self.addEventListener('fetch',event=>{
- if(event.request.method!=='GET')return;
- const url=new URL(event.request.url);
- const isHtml=url.origin===self.location.origin&&(
-  event.request.mode==='navigate'||url.pathname.endsWith('/index.html')||url.pathname.endsWith('/')
- );
- event.respondWith((async()=>{
-  if(isHtml){
-   try{
-    const fresh=await fetch(event.request,{cache:'no-store'});
-    if(fresh.ok)caches.open(CACHE_NAME).then(cache=>cache.put('./index.html',fresh.clone()));
-    return withAppScripts(fresh);
-   }catch(error){
-    const cached=await caches.match('./index.html');
-    if(cached)return withAppScripts(cached);
-    throw error;
-   }
-  }
-  let response=await caches.match(event.request);
-  if(!response){
-   response=await fetch(event.request);
-   if(response.ok&&url.origin===self.location.origin)caches.open(CACHE_NAME).then(cache=>cache.put(event.request,response.clone()));
-  }
-  return response;
+self.addEventListener('fetch',e=>{
+ if(e.request.method!=='GET')return;
+ const u=new URL(e.request.url);const page=u.origin===self.location.origin&&(e.request.mode==='navigate'||u.pathname.endsWith('/index.html')||u.pathname.endsWith('/'));
+ e.respondWith((async()=>{
+  if(page){try{const fresh=await fetch(e.request,{cache:'no-store'});if(fresh.ok)caches.open(CACHE_NAME).then(c=>c.put('./index.html',fresh.clone()));return injectScripts(fresh)}
+   catch(err){const cached=await caches.match('./index.html');if(cached)return injectScripts(cached);throw err}}
+  let r=await caches.match(e.request);if(!r){r=await fetch(e.request);if(r.ok&&u.origin===self.location.origin)caches.open(CACHE_NAME).then(c=>c.put(e.request,r.clone()))}return r;
  })());
 });
