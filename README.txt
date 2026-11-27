@@ -1,46 +1,30 @@
-Learning Life — Theme 7 isolation repair (v53)
-================================================
+LEARNING LIFE — THEME 7 ISOLATION REPAIR v54
 
-This is a targeted repair bundle for the files you uploaded. It is NOT a full
-copy of the Learning Life project.
-
-Replace these four files in the repository root:
-- bubu-theme.js
+Included replacement files:
+- index.html
 - bubu-stickers.js
+- bubu-theme.js
 - bubu-layout-fix.js
 - sw.js
 
-Keep index.html, both redesign CSS files, dashboard.js, the assets folder,
-and cute_bear_stickers_54/ unchanged.
+WHAT THIS REPAIR ADDRESSES
+1. Removes two obsolete embedded Theme 7 layout overrides that forced the navigation into five columns.
+2. Forces Theme 7 Settings panels to stack as full-width panels, with a readable 3-column theme picker on larger screens and 2 columns on mobile.
+3. Keeps the original six themes outside the Theme 7 CSS selectors.
+4. Prevents the Bubu & Dudu video card from being moved while another theme is active.
+5. Moves the dashboard stats out of the video card only while Theme 7 is active, then restores them to their original location when leaving Theme 7.
+6. Removes the old layout-fix behavior that cleared display styles from every page section.
+7. Restores original page headings when leaving Theme 7.
+8. Bumps the service-worker cache to v54.
 
-What this repair changes:
-1. The sticker script no longer moves the Bubu video card into the Home
-   welcome banner. That card contains the dashboard statistics in your HTML.
-2. The layout script extracts the statistics once, keeps them in Home for
-   every theme, and moves the video into the Bubu welcome banner only while
-   Theme 7 is active.
-3. When leaving Theme 7, the video is returned to its original card and
-   paused; the Bubu welcome-video frame is removed.
-4. Bubu sticker decorations and the sticker picker are hidden/removed from
-   the other six themes.
-5. Theme 7's heading icons are restored to their original text when leaving
-   Theme 7.
-6. The service-worker cache is incremented from v52 to v53 so the browser
-   fetches the updated scripts.
+INSTALLATION
+1. Make a backup of your current GitHub repository first.
+2. Upload these five files to the repository root, replacing the files with the same names.
+3. Do NOT delete or replace your existing assets folder, cute_bear_stickers_54 folder, manifest, or other app feature scripts.
+4. Commit the changes to the main branch.
+5. After GitHub Pages updates, open the site and do a hard refresh. If the old version remains, close the app tab and reopen it after the service worker updates.
 
-No planner records, localStorage data keys, or backup data are changed.
-
-Install:
-- Extract this ZIP.
-- Upload the four replacement files to the same root folder in your
-  keialaskova/LearningLife GitHub repository, overwriting the old versions.
-- Commit the changes.
-- After GitHub Pages finishes publishing, reload the app. If an old version
-  remains, close the app tab and reopen the site once so the updated service
-  worker can take control.
-
-Validation:
-- All four JavaScript files passed Node.js syntax checks.
-- The bundle has not been deployed to your GitHub repository or tested in
-  your live browser. Please do not treat it as live until you upload it and
-  check the six original themes and Theme 7.
+IMPORTANT
+- The repair bundle does not contain your data. Planner data is stored in the browser and is not modified by these source-file changes.
+- Existing six theme CSS files and sticker image assets are not replaced.
+- JavaScript syntax checks passed. This bundle has not been deployed to your GitHub repository or verified in a live browser, so please test the dashboard and Settings in all seven themes after publishing.

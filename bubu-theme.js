@@ -210,6 +210,7 @@ body.dark[data-design="bubu"] .field,body.dark[data-design="bubu"] input,body.da
       const h = welcome.querySelector("h1");
       if (h && !h.dataset.bubuDecorated) {
         const icon = pageIcons[id] || "🐻";
+        h.dataset.bubuOriginalHeading = h.textContent;
         h.dataset.bubuDecorated = "1";
         h.insertAdjacentText("afterbegin", icon + "  ");
       }
@@ -237,10 +238,19 @@ body.dark[data-design="bubu"] .field,body.dark[data-design="bubu"] input,body.da
       if (p && p.catch) p.catch(() => {});
     } else video.pause();
   }
+  function restoreDecorations() {
+    document.querySelectorAll("main .section .welcome h1[data-bubu-original-heading]").forEach(h => {
+      h.textContent = h.dataset.bubuOriginalHeading;
+      delete h.dataset.bubuOriginalHeading;
+      delete h.dataset.bubuDecorated;
+    });
+  }
   function sync() {
     if (active()) {
       applyStyle();
       decorate();
+    } else {
+      restoreDecorations();
     }
     syncVideo();
   }

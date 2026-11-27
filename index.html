@@ -278,248 +278,6 @@ body.dark[data-design="bubu"] .moneybox{background:#342b39;border-color:#5b4657}
 <link rel="stylesheet" href="redesign.css">
 <link rel="stylesheet" href="redesign-v30.css">
 
-<style id="bubu-theme-direct-layout-fix">
-/* Theme 7: direct structural layout rules, loaded from index.html itself */
-body[data-design="bubu"] {
-  --bg:#fff7f2 !important;
-  --panel:#fffdfb !important;
-  --ink:#57434a !important;
-  --muted:#987e86 !important;
-  --line:#f3dfe3 !important;
-  --accent:#dc8da0 !important;
-  --accent2:#ffe9ed !important;
-  background:linear-gradient(180deg,#e5f6fb 0,#fff7f2 340px,#fffaf7 100%) !important;
-  color:#57434a !important;
-  font-family:"Trebuchet MS",system-ui,sans-serif !important;
-}
-body[data-design="bubu"] .app {
-  width:min(1440px,100%) !important;
-  max-width:1440px !important;
-  margin:0 auto !important;
-  padding:20px clamp(12px,3vw,36px) 60px !important;
-}
-body[data-design="bubu"] header {
-  display:flex !important;
-  justify-content:space-between !important;
-  align-items:center !important;
-  padding:13px 20px !important;
-  margin:0 0 16px !important;
-  border:1px solid #f0dce1 !important;
-  border-radius:22px !important;
-  background:#fffdfb !important;
-  box-shadow:0 8px 24px rgba(184,132,148,.10) !important;
-}
-body[data-design="bubu"] .brand {
-  color:#bd718a !important;
-  font-size:24px !important;
-  font-weight:900 !important;
-}
-body[data-design="bubu"] .layout {
-  display:flex !important;
-  flex-direction:column !important;
-  align-items:stretch !important;
-  gap:16px !important;
-}
-body[data-design="bubu"] nav {
-  position:static !important;
-  inset:auto !important;
-  width:100% !important;
-  height:auto !important;
-  display:grid !important;
-  grid-template-columns:repeat(5,minmax(0,1fr)) !important;
-  gap:7px !important;
-  padding:12px !important;
-  overflow:visible !important;
-  border:1px solid #f0dce1 !important;
-  border-radius:22px !important;
-  background:#fffdfb !important;
-  box-shadow:0 8px 24px rgba(184,132,148,.10) !important;
-}
-body[data-design="bubu"] .navlabel { display:none !important; }
-body[data-design="bubu"] .navbtn {
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  gap:7px !important;
-  width:100% !important;
-  min-width:0 !important;
-  min-height:42px !important;
-  margin:0 !important;
-  padding:9px 8px !important;
-  border:1px solid transparent !important;
-  border-radius:14px !important;
-  background:#fff7f6 !important;
-  color:#806a74 !important;
-  text-align:center !important;
-  white-space:normal !important;
-  font-size:12px !important;
-  font-weight:800 !important;
-}
-body[data-design="bubu"] .navbtn .ico { width:auto !important; }
-body[data-design="bubu"] .navbtn.active {
-  background:#ffe6eb !important;
-  border-color:#f2cbd5 !important;
-  color:#ad637c !important;
-}
-body[data-design="bubu"] main {
-  display:block !important;
-  width:100% !important;
-  max-width:none !important;
-  min-width:0 !important;
-}
-body[data-design="bubu"] .welcome {
-  min-height:145px !important;
-  display:flex !important;
-  flex-direction:column !important;
-  justify-content:center !important;
-  position:relative !important;
-  overflow:hidden !important;
-  padding:24px 30px !important;
-  margin:0 0 18px !important;
-  border:1px solid #f1d8df !important;
-  border-radius:26px !important;
-  background:linear-gradient(110deg,#ffe7e8 0%,#fff1e8 52%,#e5f5fa 100%) !important;
-  box-shadow:0 10px 26px rgba(184,132,148,.10) !important;
-}
-body[data-design="bubu"] .welcome h1 {
-  max-width:75% !important;
-  color:#a95f7a !important;
-  font-size:clamp(26px,3vw,38px) !important;
-  font-weight:900 !important;
-}
-body[data-design="bubu"] .welcome p {
-  max-width:75% !important;
-  color:#927781 !important;
-}
-body[data-design="bubu"] .panel,
-body[data-design="bubu"] .card,
-body[data-design="bubu"] .stat {
-  background:#fffdfb !important;
-  color:#57434a !important;
-  border:1px solid #f1dfe3 !important;
-  border-radius:21px !important;
-  box-shadow:0 9px 25px rgba(184,132,148,.09) !important;
-}
-body[data-design="bubu"] .panel { padding:20px !important; margin:0 0 16px !important; }
-body[data-design="bubu"] h2,
-body[data-design="bubu"] h3 { color:#a9637c !important; }
-body[data-design="bubu"] .stats {
-  display:grid !important;
-  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
-  gap:12px !important;
-  margin:0 0 17px !important;
-}
-body[data-design="bubu"] .stat { padding:17px !important; }
-body[data-design="bubu"] .stat strong { color:#ad6a82 !important; }
-body[data-design="bubu"] .btn {
-  background:#df91a3 !important;
-  color:#fff !important;
-  border:1px solid #df91a3 !important;
-  border-radius:13px !important;
-}
-body[data-design="bubu"] .btn.secondary,
-body[data-design="bubu"] .pill {
-  background:#eaf6fa !important;
-  color:#668b9b !important;
-  border-color:#d9edf3 !important;
-}
-body[data-design="bubu"] input,
-body[data-design="bubu"] textarea,
-body[data-design="bubu"] select,
-body[data-design="bubu"] .field {
-  background:#fffafb !important;
-  color:#57434a !important;
-  border:1px solid #ecd9df !important;
-  border-radius:13px !important;
-}
-body[data-design="bubu"] .bubu-video-card video {
-  display:block !important;
-  width:100% !important;
-  height:auto !important;
-  max-height:300px !important;
-  object-fit:contain !important;
-  object-position:center !important;
-  background:#fff2f0 !important;
-  border-radius:16px !important;
-}
-body.dark[data-design="bubu"] {
-  background:linear-gradient(180deg,#e5f6fb 0,#fff7f2 340px,#fffaf7 100%) !important;
-  color:#57434a !important;
-}
-body.dark[data-design="bubu"] header,
-body.dark[data-design="bubu"] nav,
-body.dark[data-design="bubu"] .panel,
-body.dark[data-design="bubu"] .card,
-body.dark[data-design="bubu"] .stat {
-  background:#fffdfb !important;
-  color:#57434a !important;
-  border-color:#f1dfe3 !important;
-}
-@media (max-width:900px) {
-  body[data-design="bubu"] nav { grid-template-columns:repeat(4,minmax(0,1fr)) !important; }
-  body[data-design="bubu"] .stats { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
-}
-@media (max-width:560px) {
-  body[data-design="bubu"] .app { padding:9px 9px 36px !important; }
-  body[data-design="bubu"] header { padding:11px 13px !important; }
-  body[data-design="bubu"] nav { grid-template-columns:repeat(3,minmax(0,1fr)) !important; gap:6px !important; padding:9px !important; }
-  body[data-design="bubu"] .navbtn { min-height:42px !important; padding:7px 4px !important; font-size:11px !important; }
-  body[data-design="bubu"] .welcome { min-height:120px !important; padding:18px !important; }
-  body[data-design="bubu"] .welcome h1 { font-size:25px !important; }
-  body[data-design="bubu"] .panel { padding:14px !important; }
-  body[data-design="bubu"] .stats { gap:8px !important; }
-}
-</style>
-
-
-<style id="bubu-theme-layout-override-v2">
-/* Higher-specificity override for the actual .app > .layout structure */
-html body[data-design="bubu"] .app > .layout {
-  display:flex !important;
-  flex-direction:column !important;
-  grid-template-columns:none !important;
-  align-items:stretch !important;
-  gap:16px !important;
-}
-html body[data-design="bubu"] .app > .layout > nav {
-  position:static !important;
-  display:grid !important;
-  width:100% !important;
-  height:auto !important;
-  grid-template-columns:repeat(5,minmax(0,1fr)) !important;
-  grid-auto-flow:row !important;
-  align-items:stretch !important;
-  overflow:visible !important;
-}
-html body[data-design="bubu"] .app > .layout > nav .navlabel {
-  display:none !important;
-}
-html body[data-design="bubu"] .app > .layout > nav .navbtn {
-  width:100% !important;
-  min-width:0 !important;
-  justify-content:center !important;
-  text-align:center !important;
-  white-space:normal !important;
-}
-html body[data-design="bubu"] .app > .layout > main {
-  width:100% !important;
-  min-width:0 !important;
-  max-width:none !important;
-}
-@media(max-width:900px) {
-  html body[data-design="bubu"] .app > .layout > nav {
-    grid-template-columns:repeat(4,minmax(0,1fr)) !important;
-  }
-}
-@media(max-width:560px) {
-  html body[data-design="bubu"] .app > .layout > nav {
-    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
-    gap:6px !important;
-  }
-}
-</style>
-
-
 <style id="bubu-home-display-fix-v45">
 /* Theme 7: greeting + cooking video form one compact welcome banner */
 body[data-design="bubu"] #home .welcome{
@@ -568,6 +326,57 @@ body[data-design="bubu"] #home>.panel#bubuVideoCard{display:none!important}
 @media(max-width:380px){
  body[data-design="bubu"] #home .welcome{padding-right:108px!important;min-height:120px!important}
  body[data-design="bubu"] #home .welcome #bubuVideoCard{width:96px!important}
+}
+</style>
+
+
+<style id="bubu-theme7-final-layout">
+/* Theme 7 only: one readable content column; original six themes are untouched. */
+html body[data-design="bubu"] .app > .layout {
+  display:flex !important; flex-direction:column !important;
+  align-items:stretch !important; gap:16px !important;
+}
+html body[data-design="bubu"] .app > .layout > nav {
+  display:flex !important; flex-direction:row !important; flex-wrap:wrap !important;
+  align-items:center !important; justify-content:flex-start !important;
+  width:100% !important; height:auto !important; position:static !important;
+  overflow:visible !important; gap:7px !important;
+}
+html body[data-design="bubu"] .app > .layout > nav .navbtn {
+  flex:1 1 130px !important; width:auto !important; min-width:110px !important;
+}
+html body[data-design="bubu"] .app > .layout > main {
+  display:block !important; width:100% !important; min-width:0 !important; max-width:none !important;
+}
+html body[data-design="bubu"] main > .section.active {
+  display:block !important; width:100% !important; min-width:0 !important; max-width:none !important;
+}
+html body[data-design="bubu"] #settings.section.active {
+  display:block !important; width:100% !important;
+}
+html body[data-design="bubu"] #settings > .welcome,
+html body[data-design="bubu"] #settings > .panel {
+  display:block !important; width:100% !important; max-width:none !important;
+  min-width:0 !important; margin:0 0 16px !important; box-sizing:border-box !important;
+}
+html body[data-design="bubu"] #settings .theme-grid {
+  display:grid !important; grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  gap:10px !important; width:100% !important;
+}
+html body[data-design="bubu"] #settings .theme-choice {
+  min-width:0 !important; width:100% !important; overflow-wrap:anywhere !important;
+}
+html body[data-design="bubu"] #settings .mode-row {
+  display:flex !important; align-items:center !important; justify-content:space-between !important;
+  gap:12px !important; flex-wrap:wrap !important;
+}
+@media(max-width:720px) {
+  html body[data-design="bubu"] .app { padding:16px 12px 42px !important; }
+  html body[data-design="bubu"] .app > .layout > nav .navbtn { flex:1 1 105px !important; }
+  html body[data-design="bubu"] #settings .theme-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
+}
+@media(max-width:380px) {
+  html body[data-design="bubu"] #settings .theme-grid { grid-template-columns:1fr 1fr !important; }
 }
 </style>
 

@@ -119,18 +119,79 @@
   const style = document.createElement("style"); style.id = "bubu-real-stickers-css"; style.textContent = css;
   document.head.appendChild(style);
 
-  // The video card contains the dashboard statistics in the source HTML.
-  // It is managed only by bubu-layout-fix.js. Never move it from this script.
-  function placeVideoInWelcome() {
-    if (!active()) return;
+  // Keep references to the original Home structure. The stats originally live
+  // inside #bubuVideoCard, so they must be moved back when leaving Theme 7.
+  let homeRefs = null;
+  function captureHomeStructure() {
+    if (homeRefs) return;
+    const home = document.getElementById("home");
+    const welcome = home && home.querySelector(":scope > .welcome");
+    const card = document.getElementById("bubuVideoCard");
+    const stats = card && card.querySelector(":scope > .stats");
+    if (!home || !welcome || !card) return;
+    homeRefs = { home, welcome, card, stats };
   }
-  function setPageStickers() {
+  function restoreHomeStructure() {
+    captureHomeStructure();
+    if (!homeRefs) return;
+    const { home, welcome, card, stats } = homeRefs;
+    if (stats && stats.parentElement !== card) card.appendChild(stats);
+    if (card.parentElement !== home) home.insertBefore(card, welcome.nextSibling);
+    card.hidden = true;
+    card.style.setProperty("display", "none", "important");
+    const video = document.getElementById("bubuCookingVideo");
+    if (video) video.pause();
+    const frame = document.getElementById("bubuWelcomeVideo");
+    if (frame) frame.remove();
+  }
+  function placeVideoInWelcome() {
+    captureHomeStructure();
+    if (!homeRefs) return;
+    const { home, welcome, card, stats } = homeRefs;
+    const video = document.getElementById("bubuCookingVideo");
+    if (!video) return;
+
     if (!active()) {
-      document.querySelectorAll(".bubu-page-sticker").forEach(n => n.remove());
-      const panel = document.getElementById("bubuStickerSettings"); if (panel) panel.hidden = true;
+      restoreHomeStructure();
       return;
     }
-    const panel = document.getElementById("bubuStickerSettings"); if (panel) panel.hidden = false;
+
+    // Keep dashboard stats as a normal Home sibling, not inside the video card.
+    if (stats && stats.parentElement !== home) home.insertBefore(stats, welcome.nextSibling);
+    if (card.parentElement !== welcome) welcome.appendChild(card);
+
+    welcome.querySelectorAll(".bubu-page-sticker").forEach(el => el.remove());
+    document.querySelectorAll("#home .bubu-home-sticker").forEach(el => el.remove());
+
+    const enabled = localStorage.getItem("learninglife_bubu_animation") !== "off";
+    card.hidden = !enabled;
+    card.style.setProperty("display", enabled ? "block" : "none", "important");
+    video.muted = true;
+    video.loop = true;
+    video.autoplay = true;
+    video.playsInline = true;
+    video.setAttribute("muted", "");
+    video.setAttribute("loop", "");
+    video.setAttribute("autoplay", "");
+    video.setAttribute("playsinline", "");
+    video.removeAttribute("controls");
+    if (enabled && home.classList.contains("active")) {
+      const playPromise = video.play();
+      if (playPromise && typeof playPromise.catch === "function") playPromise.catch(() => {});
+    } else {
+      video.pause();
+    }
+  }
+  function setPageStickers() {
+    placeVideoInWelcome();
+    if (!active()) {
+      document.querySelectorAll(".bubu-page-sticker").forEach(n => n.remove());
+      const panel = document.getElementById("bubuStickerSettings");
+      if (panel) { panel.hidden = true; panel.style.display = "none"; }
+      return;
+    }
+    const panel = document.getElementById("bubuStickerSettings");
+    if (panel) { panel.hidden = false; panel.style.display = "block"; }
     document.querySelectorAll("main .section").forEach(section => {
       const page = section.id;
       const welcome = section.querySelector(".welcome");
@@ -158,6 +219,7 @@
     if (!settings || document.getElementById("bubuStickerSettings")) return;
     const panel = document.createElement("div");
     panel.id = "bubuStickerSettings"; panel.className = "panel bubu-sticker-panel";
+    panel.hidden = true; panel.style.display = "none";
     panel.innerHTML = `<h2>🐻 Bubu & Dudu Stickers</h2>
       <p class="sub">Choose which character appears for each feature. Your choices are saved on this device. These stickers appear only in Theme 7.</p>
       <div class="bubu-picker-grid"></div>`;
@@ -187,16 +249,23 @@
     renderPicker();
     setPageStickers();
   }
-  const afterThemeChange = () => window.setTimeout(refresh, 0);
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", refresh, { once: true });
-  } else {
-    refresh();
-  }
-  document.addEventListener("click", e => {
-    if (e.target.closest(".theme-choice,.navbtn,[data-tab],[data-category]")) afterThemeChange();
+  captureHomeStructure();
+  renderPicker();
+  if (active()) setPageStickers();
+  else restoreHomeStructure();
+  requestAnimationFrame(() => { if (active()) setPageStickers(); else restoreHomeStructure(); });
+  document.addEventListener("DOMContentLoaded", placeVideoInWelcome, { once: true });
+  document.querySelectorAll(".theme-choice").forEach(button => button.addEventListener("click", () => setTimeout(refresh, 0)));
+  document.querySelectorAll(".navbtn").forEach(button => button.addEventListener("click", () => {
+    setTimeout(() => { refresh(); placeVideoInWelcome(); }, 0);
+  }));
+  document.addEventListener("change", e => {
+    if (e.target && e.target.id === "bubuAnimation") setTimeout(placeVideoInWelcome, 0);
   });
-  const observer = new MutationObserver(refresh);
+  const observer = new MutationObserver(() => {
+    if (active()) setPageStickers();
+    else { restoreHomeStructure(); setPageStickers(); }
+  });
   observer.observe(document.body, {attributes:true,attributeFilter:["data-design"]});
   document.addEventListener("visibilitychange", () => { if (!document.hidden) refresh(); });
 })();
