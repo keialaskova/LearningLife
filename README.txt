@@ -1,19 +1,15 @@
-Learning Life — Theme 7 complete file update
+Learning Life — Theme 7 Visual Fix
 
-Upload/replace these three files in the ROOT of your GitHub repository:
-- index.html
-- bubu-theme.js
-- sw.js
+Replace these two files in the ROOT of your GitHub repository:
+1. bubu-theme.js
+2. sw.js
 
-The updated service worker cache is v35. It keeps the existing app shell and 54 sticker asset paths, and includes the Bubu & Dudu theme assets.
+Keep the latest index.html from the previous Theme 7 update. It already contains:
+- Theme 7 selector and saved theme key
+- Home video element
+- Animation On/Off setting
+- Theme 7 design registry
 
-Required existing asset paths:
-- assets/bubu-bear.png
-- assets/bubu-dudu-beach.jpg
-- assets/bubu-dudu-cooking.mp4
-- cute_bear_stickers_54/ (54 sticker files)
+This update replaces the incomplete theme helper with a full-page responsive redesign for Theme 7 only. It changes the app frame, navigation, dashboard hero, stats, cards, forms, buttons, calendar, dialogs, and mobile layout. Theme 7 deliberately uses its own light beach palette even if the app's global dark-mode toggle is on. The other six themes are not targeted.
 
-Do not delete your existing assets or other app JavaScript/CSS files.
-After uploading, open the app and refresh/reload it. If the old version remains, close the installed PWA and reopen it after the service worker updates.
-
-Note: this package contains the three updated app files, not the image/video/sticker asset files themselves.
+Service worker cache is bumped to v36. Existing sticker and Bubu asset paths are retained. Do not delete existing app files or asset folders.
