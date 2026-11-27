@@ -78,47 +78,80 @@
   }`;
 
   css += `
-  /* Theme 7 video remains a dedicated Home card; it never wraps dashboard stats. */
-  body[data-design="bubu"] #home > #bubuVideoCard {
-    display:block!important; position:relative!important; grid-area:video!important;
-    width:100%!important; min-width:0!important; height:auto!important;
-    margin:0 0 16px!important; padding:12px!important; overflow:hidden!important;
-    border:1px solid #f0dce1!important; border-radius:18px!important;
-    background:#fffafb!important; box-shadow:none!important;
+  /* The actual cooking video is embedded in the Home greeting banner. */
+  body[data-design="bubu"] #home{display:flex!important;flex-direction:column!important;gap:0!important}
+  body[data-design="bubu"] #home>.welcome{
+    position:relative!important;display:flex!important;flex-direction:column!important;
+    justify-content:center!important;min-height:170px!important;
+    padding:25px 285px 24px 28px!important;overflow:hidden!important;
   }
-  body[data-design="bubu"] #home > #bubuVideoCard #bubuCookingVideo {
-    display:block!important; width:100%!important; height:auto!important;
-    max-height:420px!important; aspect-ratio:4/5!important; object-fit:contain!important;
-    object-position:center!important; background:#fff1ef!important; border-radius:12px!important;
+  body[data-design="bubu"] #home>.welcome h1,
+  body[data-design="bubu"] #home>.welcome p{max-width:100%!important;position:relative!important;z-index:2!important}
+  body[data-design="bubu"] #home>.welcome #bubuVideoCard{
+    display:block!important;position:absolute!important;right:12px!important;top:12px!important;
+    bottom:12px!important;width:245px!important;height:auto!important;min-height:0!important;
+    margin:0!important;padding:4px!important;overflow:hidden!important;
+    border:1px solid #f0dce1!important;border-radius:16px!important;
+    background:#fffafb!important;box-shadow:none!important;
   }
-  body[data-design="bubu"] #home > #bubuVideoCard .bubu-video-caption {
-    display:block!important; padding:9px 4px 2px!important;
-    color:#b36e85!important; font-weight:800!important; text-align:center!important;
+  body[data-design="bubu"] #home>.welcome #bubuCookingVideo{
+    display:block!important;width:100%!important;height:100%!important;max-height:none!important;
+    aspect-ratio:16/9!important;object-fit:contain!important;object-position:center!important;
+    background:#fff1ef!important;border-radius:11px!important;
   }
-  @media(max-width:900px) {
-    body[data-design="bubu"] #home > #bubuVideoCard #bubuCookingVideo {
-      aspect-ratio:16/9!important; max-height:260px!important;
+  body[data-design="bubu"] #home>.welcome .bubu-video-caption{display:none!important}
+  body[data-design="bubu"] #home>.bubu-video-card{display:none!important}
+  @media(max-width:700px){
+    body[data-design="bubu"] #home>.welcome{min-height:136px!important;padding:16px 137px 16px 17px!important}
+    body[data-design="bubu"] #home>.welcome h1{font-size:clamp(19px,4.5vw,26px)!important}
+    body[data-design="bubu"] #home>.welcome p{font-size:11px!important}
+    body[data-design="bubu"] #home>.welcome #bubuVideoCard{
+      right:8px!important;top:8px!important;bottom:8px!important;width:120px!important;
+      padding:3px!important;border-radius:12px!important;
     }
+    body[data-design="bubu"] #home>.welcome #bubuCookingVideo{border-radius:9px!important}
+  }
+  @media(max-width:380px){
+    body[data-design="bubu"] #home>.welcome{padding-right:112px!important;min-height:126px!important}
+    body[data-design="bubu"] #home>.welcome #bubuVideoCard{width:98px!important}
   }`;
 
   const style = document.createElement("style"); style.id = "bubu-real-stickers-css"; style.textContent = css;
   document.head.appendChild(style);
 
-  // The video card is a permanent Home sibling. Never move it or the stats.
-  function restoreHomeStructure() {
-    const video = document.getElementById("bubuCookingVideo");
+  // The video card belongs to Home. It is moved into the welcome banner
+  // only while Theme 7 is active, then restored immediately on other themes.
+  let homeRefs = null;
+  function captureHomeStructure() {
+    if (homeRefs) return;
+    const home = document.getElementById("home");
+    const welcome = home && home.querySelector(":scope > .welcome");
     const card = document.getElementById("bubuVideoCard");
+    if (!home || !welcome || !card) return;
+    homeRefs = { home, welcome, card };
+  }
+  function restoreHomeStructure() {
+    captureHomeStructure();
+    if (!homeRefs) return;
+    const { home, welcome, card } = homeRefs;
+    if (card.parentElement !== home) home.insertBefore(card, welcome.nextSibling);
+    card.hidden = true;
+    card.style.setProperty("display", "none", "important");
+    const video = document.getElementById("bubuCookingVideo");
     if (video) video.pause();
-    if (card) {
-      card.hidden = true;
-      card.style.setProperty("display", "none", "important");
-    }
   }
   function placeVideoInWelcome() {
-    const card = document.getElementById("bubuVideoCard");
+    captureHomeStructure();
+    if (!homeRefs) return;
+    const { home, welcome, card } = homeRefs;
     const video = document.getElementById("bubuCookingVideo");
-    if (!card || !video) return;
-    const enabled = active() && localStorage.getItem("learninglife_bubu_animation") !== "off";
+    if (!video) return;
+    if (!active()) {
+      restoreHomeStructure();
+      return;
+    }
+    if (card.parentElement !== welcome) welcome.appendChild(card);
+    const enabled = localStorage.getItem("learninglife_bubu_animation") !== "off";
     card.hidden = !enabled;
     card.style.setProperty("display", enabled ? "block" : "none", "important");
     video.muted = true;
@@ -130,10 +163,12 @@
     video.setAttribute("autoplay", "");
     video.setAttribute("playsinline", "");
     video.removeAttribute("controls");
-    if (enabled && document.getElementById("home")?.classList.contains("active")) {
+    if (enabled && home.classList.contains("active")) {
       const playPromise = video.play();
       if (playPromise && typeof playPromise.catch === "function") playPromise.catch(() => {});
-    } else video.pause();
+    } else {
+      video.pause();
+    }
   }
   function setPageStickers() {
     placeVideoInWelcome();
@@ -202,6 +237,7 @@
     renderPicker();
     setPageStickers();
   }
+  captureHomeStructure();
   renderPicker();
   if (active()) setPageStickers();
   else restoreHomeStructure();

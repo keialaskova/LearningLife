@@ -277,6 +277,7 @@ body.dark[data-design="bubu"] .moneybox{background:#342b39;border-color:#5b4657}
 </style>
 <link rel="stylesheet" href="redesign.css">
 <link rel="stylesheet" href="redesign-v30.css">
+<link rel="stylesheet" href="layout-recovery.css?v=57">
 
 <style id="bubu-home-display-fix-v45">
 /* Theme 7: greeting + cooking video form one compact welcome banner */
@@ -328,58 +329,6 @@ body[data-design="bubu"] #home>.panel#bubuVideoCard{display:none!important}
  body[data-design="bubu"] #home .welcome #bubuVideoCard{width:96px!important}
 }
 </style>
-
-
-<style id="bubu-theme7-final-layout">
-/* Theme 7 only: one readable content column; original six themes are untouched. */
-html body[data-design="bubu"] .app > .layout {
-  display:flex !important; flex-direction:column !important;
-  align-items:stretch !important; gap:16px !important;
-}
-html body[data-design="bubu"] .app > .layout > nav {
-  display:flex !important; flex-direction:row !important; flex-wrap:wrap !important;
-  align-items:center !important; justify-content:flex-start !important;
-  width:100% !important; height:auto !important; position:static !important;
-  overflow:visible !important; gap:7px !important;
-}
-html body[data-design="bubu"] .app > .layout > nav .navbtn {
-  flex:1 1 130px !important; width:auto !important; min-width:110px !important;
-}
-html body[data-design="bubu"] .app > .layout > main {
-  display:block !important; width:100% !important; min-width:0 !important; max-width:none !important;
-}
-html body[data-design="bubu"] main > .section.active {
-  display:block !important; width:100% !important; min-width:0 !important; max-width:none !important;
-}
-html body[data-design="bubu"] #settings.section.active {
-  display:block !important; width:100% !important;
-}
-html body[data-design="bubu"] #settings > .welcome,
-html body[data-design="bubu"] #settings > .panel {
-  display:block !important; width:100% !important; max-width:none !important;
-  min-width:0 !important; margin:0 0 16px !important; box-sizing:border-box !important;
-}
-html body[data-design="bubu"] #settings .theme-grid {
-  display:grid !important; grid-template-columns:repeat(3,minmax(0,1fr)) !important;
-  gap:10px !important; width:100% !important;
-}
-html body[data-design="bubu"] #settings .theme-choice {
-  min-width:0 !important; width:100% !important; overflow-wrap:anywhere !important;
-}
-html body[data-design="bubu"] #settings .mode-row {
-  display:flex !important; align-items:center !important; justify-content:space-between !important;
-  gap:12px !important; flex-wrap:wrap !important;
-}
-@media(max-width:720px) {
-  html body[data-design="bubu"] .app { padding:16px 12px 42px !important; }
-  html body[data-design="bubu"] .app > .layout > nav .navbtn { flex:1 1 105px !important; }
-  html body[data-design="bubu"] #settings .theme-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
-}
-@media(max-width:380px) {
-  html body[data-design="bubu"] #settings .theme-grid { grid-template-columns:1fr 1fr !important; }
-}
-</style>
-
 </head>
 <body>
 <div class="app">
@@ -678,7 +627,5 @@ if(load('appPin',null))$('lockScreen').classList.add('show');
 </script>
 <script src="./bubu-theme.js"></script>
 <script src="./bubu-stickers.js"></script>
-<script src="./layout-recovery.js"></script>
-
 </body>
 </html>
