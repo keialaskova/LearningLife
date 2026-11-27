@@ -175,7 +175,9 @@
     body[data-design="bubu"] main>#home.section.active>.welcome{padding-right:105px!important}
     body[data-design="bubu"] main>#home.section.active>.welcome #bubuVideoCard{width:92px!important}
   }
-\n  `;\n  const style = document.createElement("style"); style.id = "bubu-real-stickers-css"; style.textContent = css;
+
+  `;
+  const style = document.createElement("style"); style.id = "bubu-real-stickers-css"; style.textContent = css;
   document.head.appendChild(style);
 
   function placeVideoInWelcome() {
