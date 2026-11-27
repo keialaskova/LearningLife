@@ -408,11 +408,11 @@ html body[data-design="bubu"] #settings .mode-row {
 <section class="section active" id="home">
 <div class="welcome"><h1 id="greeting">Good day.</h1><p>A little progress each day adds up.</p></div>
 <div class="panel bubu-video-card" id="bubuVideoCard"><video id="bubuCookingVideo" muted loop playsinline autoplay preload="metadata"><source src="assets/bubu-dudu-cooking.mp4" type="video/mp4"></video><div class="bubu-video-caption">A little cozy moment with Bubu &amp; Dudu 🐻</div>
+</div>
 <div class="stats">
 <div class="card stat"><small>Tasks completed</small><strong id="taskStat">0 / 0</strong></div>
 <div class="card stat"><small>Today's schedules</small><strong id="scheduleStat">0</strong></div>
 <div class="card stat"><small>Available balance</small><strong id="balanceStat">₱0.00</strong></div>
-</div>
 </div>
  <div class="panel"><div class="panelhead"><div><h2>Daily Tasks</h2><div class="sub">What you want to accomplish today</div></div><button class="btn secondary" onclick="showPage('tasks')">View all</button></div><div id="homeTasks"></div></div>
 <div class="panel"><div class="panelhead"><div><h2>Today's Schedule</h2><div class="sub">Time · Schedule</div></div><button class="btn secondary" onclick="showPage('schedule')">View all</button></div><div id="homeSchedule"></div></div>
@@ -678,5 +678,7 @@ if(load('appPin',null))$('lockScreen').classList.add('show');
 </script>
 <script src="./bubu-theme.js"></script>
 <script src="./bubu-stickers.js"></script>
+<script src="./layout-recovery.js"></script>
+
 </body>
 </html>

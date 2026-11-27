@@ -1,10 +1,10 @@
-const CACHE_NAME='learninglife-shell-v54';
+const CACHE_NAME='learninglife-shell-v56';
 const APP_SHELL=[
 './','./index.html','./bible.js','./redesign.css','./redesign-v30.css','./clock.js',
 './dashboard.js','./debt-installments.js','./debt-wallet.js','./debt.js','./finance-tools.js',
 './goals-refresh.js','./learninglife-update.js','./manifest.webmanifest','./money-layout.js',
 './reset-money.js','./sw.js','./transfer.js','./wallet-sync.js','./calendar-fix.js','./text-size.js',
-'./bubu-theme.js','./bubu-stickers.js','./bubu-layout-fix.js',
+'./bubu-theme.js','./bubu-stickers.js','./bubu-layout-fix.js','./layout-recovery.js',
 './assets/bubu-bear.png','./assets/bubu-dudu-beach.jpg','./assets/bubu-dudu-cooking.mp4',
 './icon-192.png','./icon-512.png','./icon-maskable-512.png',
 './cute_bear_stickers_54/01_sleep_rest_white.png',
@@ -66,7 +66,7 @@ self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE_NAME).then(c=>
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('learninglife-shell-')&&k!==CACHE_NAME).map(k=>caches.delete(k)))));self.clients.claim()});
 async function injectScripts(response){
  const html=await response.clone().text();let updated=html;
- for(const file of ['bible.js','debt.js','transfer.js','debt-installments.js','debt-wallet.js','finance-tools.js','reset-money.js','dashboard.js','clock.js','goals-refresh.js','wallet-sync.js','money-layout.js','learninglife-update.js','calendar-fix.js','text-size.js','bubu-theme.js','bubu-stickers.js','bubu-layout-fix.js']){
+ for(const file of ['bible.js','debt.js','transfer.js','debt-installments.js','debt-wallet.js','finance-tools.js','reset-money.js','dashboard.js','clock.js','goals-refresh.js','wallet-sync.js','money-layout.js','learninglife-update.js','calendar-fix.js','text-size.js','bubu-theme.js','bubu-stickers.js','bubu-layout-fix.js','layout-recovery.js']){
   if(!updated.includes(`src="./${file}"`)&&!updated.includes(`src="${file}"`))updated=updated.replace(/<\/body\s*>/i,`<script src="./${file}"></script>\n</body>`);
  }
  if(updated===html)return response;

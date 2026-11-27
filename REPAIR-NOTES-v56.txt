@@ -1,0 +1,33 @@
+LEARNING LIFE — COMPLETE PROJECT REPAIR v56
+
+This ZIP is based on the complete LearningLife-main repository ZIP supplied in this chat.
+
+ROOT CAUSES FOUND AND CORRECTED
+1. The Dashboard statistics were nested inside #bubuVideoCard. That video card is hidden outside Theme 7, so the dashboard's statistics were coupled to Theme 7 media visibility.
+2. bubu-stickers.js was moving the video card into the Home welcome banner and moving the statistics between containers. This conflicted with the separate Theme 7 dashboard grid in bubu-theme.js and made the Home structure dependent on theme-switch timing.
+3. Settings needed a final shared layout guard: its panels must remain full-width stacked blocks and the seven theme choices must remain a readable grid.
+
+CHANGES
+- Moved the dashboard statistics out of the Bubu video card in index.html. The stats are now permanent Home content and remain visible in all themes.
+- Changed bubu-stickers.js so it never moves the video card or dashboard statistics. It only shows/plays the video in Theme 7 when Animation is On, and hides/pauses it in other themes.
+- Added layout-recovery.js. It restores full-width active page content, stacked Settings panels, and readable theme cards without changing the six themes' colors or typography.
+- Loaded the recovery script after the existing Theme 7 scripts.
+- Updated sw.js to cache and inject the recovery script and use cache version v56.
+- Kept the existing six themes, Theme 7 styling, planner feature scripts, images, and sticker assets.
+
+VALIDATION
+- All 21 JavaScript files passed Node syntax checks.
+- Checked that the Home section contains one video card and one separate stats block.
+- Checked that bubu-stickers.js no longer moves the statistics or video card between containers.
+- This is static source validation. It has not been run in a live Android/iPhone browser or deployed to GitHub from this session.
+
+INSTALL
+1. Keep a backup of your current repository.
+2. Download and extract this complete ZIP.
+3. Upload the contents of the LearningLife-main folder to your GitHub repository's main branch, replacing matching project files and adding layout-recovery.js.
+4. Do not delete the assets folder or cute_bear_stickers_54 folder.
+5. After GitHub Pages publishes, close the old app tab, reopen the website, and refresh so the new service worker can install.
+6. Test Dashboard and Settings in Zen, Luxury, Linear, Notion, Glass, Cozy, and Bubu & Dudu Beach.
+
+DATA SAFETY
+The source repair does not clear localStorage or alter planner record keys. Planner data stays in the browser on the device where it was entered. Back up important data from Settings before changing the live project.
