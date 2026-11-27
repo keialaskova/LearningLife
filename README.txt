@@ -1,24 +1,22 @@
-Learning Life — Theme 7 all-categories + real stickers v53
+Learning Life — Theme 7 isolation repair v54
 
-Upload/replace these repository-root files:
-- sw.js
-- bubu-layout-fix.js
-- bubu-stickers.js
+This small repair addresses the regression where the Bubu & Dudu script moved
+the Home video card and added its sticker picker even when one of the original
+six themes was selected.
 
-Also upload the complete folder:
-- cute_bear_stickers_54/ (all 54 PNG files)
+Upload bubu-theme-isolation.js to the ROOT of the GitHub repository.
 
-The sticker picker lets you choose Bubu, Dudu, or both for each supported
-feature. The stickers are the actual images from your cute_bear_stickers_54_HD.zip.
-The layout fix applies to all feature pages and nested panels, not just the
-screenshots.
+Then add this script tag immediately AFTER the existing bubu-stickers.js tag
+and BEFORE </body> in index.html:
 
-Keep index.html, all existing application files, assets, and browser data.
-The service worker cache version is bumped to v52 to refresh the files.
-After publishing, close old app tabs and reopen Learning Life. Do not clear
-site storage, as that can erase locally saved planner data.
+<script src="./bubu-theme-isolation.js?v=54"></script>
 
-Important: the repository's existing index.html must already load bubu-stickers.js
-and bubu-layout-fix.js via the service worker injection or script tags. The
-included sw.js injects both scripts into fetched HTML if they are not already
-included.
+Do not replace index.html with this ZIP and do not delete any existing files.
+Do not clear browser/site storage; that may erase locally stored planner data.
+
+Expected result:
+- Japanese Zen, Luxury Editorial, Linear Inspired, Notion Inspired,
+  Glassmorphism, and Cozy Pastel keep their own layouts.
+- Bubu & Dudu sticker decorations and the welcome-banner video remain
+  exclusive to Theme 7.
+- The original six themes do not show the Theme 7 sticker picker.
