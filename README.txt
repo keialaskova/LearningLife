@@ -1,17 +1,23 @@
 LEARNING LIFE — THEME 7: BUBU & DUDU BEACH
-============================================
 
-For the existing keialaskova/LearningLife repository (main branch).
+This is an additive patch. It does not replace index.html and does not alter existing app data.
+The six existing themes remain available. The new Bubu & Dudu Beach option appears as Theme 7.
 
-UPLOAD
-1. Extract this ZIP.
-2. Upload sw.js and bubu-theme.js to the repository root, replacing the existing sw.js.
-3. Upload the entire cute_bear_stickers_54 folder to the repository root. Keep its name exactly.
-4. Commit all changes to main.
-5. Reopen Learning Life, open Settings > Appearance, and choose "Bubu & Dudu Beach".
+FILES TO UPLOAD TO THE ROOT OF YOUR EXISTING GitHub repository:
+1. bubu-theme.js       (replace the existing file with this updated version)
+2. assets/             (upload the entire folder, keeping the three files inside it)
 
-The package includes the 54 original PNG stickers supplied by you. It adds a pastel beach-inspired light/dark theme and places a two-bear sticker in the dashboard greeting.
+IMPORTANT:
+- Do NOT delete or replace index.html, your existing scripts, or your existing data.
+- Keep the folder name exactly: assets
+- Keep the three filenames exactly as provided.
+- The existing service worker already loads bubu-theme.js. When the app opens online, the patch caches the three media files for later use.
 
-Keep all existing files, including index.html, calendar-fix.js, and text-size.js. Do not delete or replace other folders. Existing planner data is not intentionally modified.
+AFTER UPLOADING:
+1. Wait for GitHub Pages to finish publishing.
+2. Open Learning Life while connected to the internet.
+3. Refresh the app once. If an old version remains, close the app fully and reopen it.
+4. Go to Settings > Appearance > Bubu & Dudu Beach (Theme 7).
+5. The cooking clip appears on the Home screen. It is muted, loops, and has play/pause controls.
 
-This patch has not been tested in a live browser. Verify the new theme after upload before making further changes.
+The video is the earlier uploaded Bubu & Dudu cooking clip (about 5 seconds). The supplied beach image and bear image are used in the theme.

@@ -1,102 +1,55 @@
-/* Learning Life — Theme 7: Bubu & Dudu Beach.
-   Uses the user's supplied 54 transparent PNG sticker assets. */
+/* Learning Life — Theme 7: Bubu & Dudu Beach. Adds a separate complete visual layer.
+   Existing app features, data keys and the six original themes are not changed. */
 (() => {
   const designKey = 'workinglife_design';
-  const bubuKey = 'learninglife_bubu_theme_enabled';
   const themeName = 'Bubu & Dudu Beach';
-  const root = './cute_bear_stickers_54/';
+  const asset = './assets/';
   const css = `
-    body[data-design="bubu"] {
-      --bg:#fff7fb; --panel:#fffafd; --ink:#56352f; --muted:#936f70;
-      --line:#f4d6e1; --accent:#ec8fae; --accent2:#ffe3ed;
-      --shadow:0 8px 24px rgba(180,112,139,.10);
-      font-family: "Trebuchet MS", system-ui, sans-serif;
-      background:linear-gradient(180deg,#eaf5ff 0,#fff5f7 260px,#fffafd 100%);
-    }
-    body[data-design="bubu"] .app { max-width:1180px; }
-    body[data-design="bubu"] header { padding:18px 20px; border-radius:24px;
-      background:linear-gradient(115deg,#ffe4ed,#e4f4ff); border:1px solid #f5cbdc; }
-    body[data-design="bubu"] .brand { color:#75463f; font-weight:900; letter-spacing:-.5px; }
-    body[data-design="bubu"] nav, body[data-design="bubu"] .panel,
-    body[data-design="bubu"] .card, body[data-design="bubu"] .stat {
-      border:1px solid #f4d5e1; border-radius:22px;
-      box-shadow:0 7px 20px rgba(173,119,143,.08);
-    }
-    body[data-design="bubu"] nav { background:#fffafd; }
-    body[data-design="bubu"] .navbtn { border-radius:15px; }
-    body[data-design="bubu"] .navbtn.active, body[data-design="bubu"] .navbtn[aria-current="page"] {
-      background:#ffdce8; color:#75463f;
-    }
-    body[data-design="bubu"] .welcome {
-      position:relative; overflow:hidden; padding:28px 30px; border-radius:26px;
-      background:linear-gradient(110deg,#ffe6ef,#edf7ff);
-      border:1px solid #f4ccdc; min-height:140px;
-    }
-    body[data-design="bubu"] .welcome:after {
-      content:""; position:absolute; right:12px; bottom:-18px; width:150px; height:130px;
-      background:url("${root}54_daily_log_both.png") center/contain no-repeat;
-      pointer-events:none; opacity:.96;
-    }
-    body[data-design="bubu"] .welcome h1 { color:#70433d; position:relative; z-index:1; }
-    body[data-design="bubu"] .welcome p { color:#936b70; position:relative; z-index:1; }
-    body[data-design="bubu"] .stat:nth-child(1) { background:linear-gradient(135deg,#fff0f5,#fffafd); }
-    body[data-design="bubu"] .stat:nth-child(2) { background:linear-gradient(135deg,#edf7ff,#fffafd); }
-    body[data-design="bubu"] .panel { background:rgba(255,250,253,.96); }
-    body[data-design="bubu"] .btn { border-radius:14px; }
-    body[data-design="bubu"] .field { border-radius:13px; background:#fff; border-color:#efcfdd; color:#56352f; }
-    body[data-design="bubu"] .theme-choice[data-design="bubu"] { background:#fff0f6; }
-    body[data-design="bubu"] .empty { color:#936f70; }
-    body.dark[data-design="bubu"] {
-      --bg:#211b28; --panel:#302638; --ink:#fff0f5; --muted:#e0bfd0;
-      --line:#594257; --accent:#f2a5c0; --accent2:#493344;
-      background:linear-gradient(180deg,#302c48 0,#241d2b 280px,#211b28 100%);
-    }
-    body.dark[data-design="bubu"] header { background:linear-gradient(115deg,#493344,#303b54); border-color:#63465b; }
-    body.dark[data-design="bubu"] .welcome { background:linear-gradient(110deg,#493344,#303b54); border-color:#63465b; }
-    body.dark[data-design="bubu"] .welcome h1 { color:#fff0f5; }
-    body.dark[data-design="bubu"] .welcome p { color:#e0bfd0; }
-    body.dark[data-design="bubu"] nav, body.dark[data-design="bubu"] .panel,
-    body.dark[data-design="bubu"] .card, body.dark[data-design="bubu"] .stat {
-      background:#302638; border-color:#594257;
-    }
-    body.dark[data-design="bubu"] .stat:nth-child(1) { background:#3b2b3b; }
-    body.dark[data-design="bubu"] .stat:nth-child(2) { background:#2c3548; }
-    body.dark[data-design="bubu"] .field { background:#282230; border-color:#594257; color:#fff0f5; }
-    body.dark[data-design="bubu"] .navbtn.active { background:#594257; color:#fff0f5; }
-    @media(max-width:720px) {
-      body[data-design="bubu"] .app { padding:14px 12px 34px; }
-      body[data-design="bubu"] header { padding:14px; border-radius:18px; }
-      body[data-design="bubu"] .welcome { padding:20px 18px; min-height:112px; }
-      body[data-design="bubu"] .welcome:after { width:100px; height:95px; right:4px; bottom:-12px; }
-      body[data-design="bubu"] .welcome h1 { max-width:75%; font-size:24px; }
-      body[data-design="bubu"] .panel, body[data-design="bubu"] .stat { border-radius:18px; }
-    }
-    @media(prefers-reduced-motion:no-preference) {
-      body[data-design="bubu"] .panel, body[data-design="bubu"] .stat { transition:transform .18s ease,box-shadow .18s ease; }
-      body[data-design="bubu"] .panel:active, body[data-design="bubu"] .stat:active { transform:translateY(-1px); }
-    }
+  body[data-design="bubu"]{--bg:#fff8f7;--panel:#fffdfb;--ink:#56352f;--muted:#987773;--line:#f1d5cd;--accent:#ee8f91;--accent2:#ffe5df;--shadow:0 8px 24px rgba(129,85,73,.10);font-family:"Trebuchet MS",system-ui,sans-serif;background:linear-gradient(180deg,#a6e8f7 0,#d9f5fa 190px,#fff1dc 360px,#fff8f7 520px);color:var(--ink)}
+  body[data-design="bubu"] .app{max-width:1120px;padding:20px 18px 46px}
+  body[data-design="bubu"] header{border:1px solid #f3d2c9;border-radius:24px;padding:16px 20px;background:linear-gradient(110deg,rgba(255,239,231,.97),rgba(235,249,255,.97));box-shadow:var(--shadow)}
+  body[data-design="bubu"] .brand{color:#714238;font-weight:900;letter-spacing:-.4px}
+  body[data-design="bubu"] nav{background:#fffaf7;border:1px solid #f1d6cd;border-radius:22px;padding:8px;box-shadow:var(--shadow)}
+  body[data-design="bubu"] .navbtn{border-radius:15px;color:#76534c}
+  body[data-design="bubu"] .navbtn.active,body[data-design="bubu"] .navbtn[aria-current="page"]{background:#ffe0dc;color:#713e39}
+  body[data-design="bubu"] .welcome{position:relative;overflow:hidden;min-height:160px;padding:27px 30px;border:1px solid #efcfc4;border-radius:27px;background:linear-gradient(105deg,rgba(255,236,225,.97),rgba(231,248,255,.94)),url('${asset}bubu-dudu-beach.jpg') center 48%/cover;box-shadow:var(--shadow)}
+  body[data-design="bubu"] .welcome:after{content:"";position:absolute;right:10px;bottom:-5px;width:145px;height:115px;background:url('${asset}bubu-bear.png') center/contain no-repeat;pointer-events:none}
+  body[data-design="bubu"] .welcome h1{position:relative;z-index:1;color:#714238;font-size:clamp(24px,4vw,34px);max-width:72%}
+  body[data-design="bubu"] .welcome p{position:relative;z-index:1;color:#8b655e;max-width:70%}
+  body[data-design="bubu"] .panel,body[data-design="bubu"] .card,body[data-design="bubu"] .stat{border:1px solid #f1d8d0;border-radius:22px;background:rgba(255,253,251,.97);box-shadow:var(--shadow)}
+  body[data-design="bubu"] .panel{padding:20px}
+  body[data-design="bubu"] .stat:nth-child(1){background:linear-gradient(135deg,#fff0e9,#fffdfb)}body[data-design="bubu"] .stat:nth-child(2){background:linear-gradient(135deg,#eaf8ff,#fffdfb)}body[data-design="bubu"] .stat:nth-child(3){background:linear-gradient(135deg,#fff5dc,#fffdfb)}
+  body[data-design="bubu"] .btn{border-radius:14px;background:#ee8f91;color:#fff;border-color:#e98488}body[data-design="bubu"] .btn.secondary{background:#fff0ed;color:#75483f;border-color:#f0d0c8}
+  body[data-design="bubu"] .field{border:1px solid #edcfc6;border-radius:13px;background:#fff;color:#56352f}
+  body[data-design="bubu"] .pill{border-radius:999px;background:#eaf7ff;color:#5b7280}
+  body[data-design="bubu"] .sub,body[data-design="bubu"] small{color:#987773}
+  body[data-design="bubu"] .bubu-video-card{margin:14px 0 18px;padding:12px;border-radius:24px;background:#fffaf7;border:1px solid #efcfc4;box-shadow:var(--shadow)}
+  body[data-design="bubu"] .bubu-video-card h2{font-size:17px;margin:2px 4px 10px;color:#714238}
+  body[data-design="bubu"] .bubu-video-card video{display:block;width:100%;max-height:250px;object-fit:contain;background:#f7e8e3;border-radius:17px}
+  body[data-design="bubu"] .bubu-video-note{font-size:12px;color:#987773;margin:8px 4px 2px}
+  body[data-design="bubu"] .theme-choice[data-design="bubu"]{background:#fff0ed;border-color:#edaaa7}
+  body.dark[data-design="bubu"]{--bg:#211b28;--panel:#302638;--ink:#fff0f5;--muted:#e0bfd0;--line:#594257;--accent:#f2a5c0;--accent2:#493344;background:linear-gradient(180deg,#334b60 0,#302c48 230px,#241d2b 480px)}
+  body.dark[data-design="bubu"] header,body.dark[data-design="bubu"] nav,body.dark[data-design="bubu"] .panel,body.dark[data-design="bubu"] .card,body.dark[data-design="bubu"] .stat,body.dark[data-design="bubu"] .bubu-video-card{background:#302638;border-color:#594257;color:#fff0f5}
+  body.dark[data-design="bubu"] .welcome{background:linear-gradient(110deg,rgba(73,51,68,.96),rgba(48,59,84,.94)),url('${asset}bubu-dudu-beach.jpg') center/cover}body.dark[data-design="bubu"] .welcome h1,body.dark[data-design="bubu"] .bubu-video-card h2{color:#fff0f5}body.dark[data-design="bubu"] .welcome p,body.dark[data-design="bubu"] .sub{color:#e0bfd0}body.dark[data-design="bubu"] .field{background:#282230;color:#fff0f5;border-color:#594257}
+  @media(max-width:720px){body[data-design="bubu"] .app{padding:12px 10px 28px}body[data-design="bubu"] header{padding:13px;border-radius:18px}body[data-design="bubu"] .welcome{min-height:125px;padding:20px 17px;border-radius:21px}body[data-design="bubu"] .welcome:after{width:105px;height:90px;right:0}body[data-design="bubu"] .welcome h1{font-size:24px;max-width:72%}body[data-design="bubu"] .welcome p{font-size:13px;max-width:70%}body[data-design="bubu"] .panel{padding:15px;border-radius:18px}body[data-design="bubu"] .bubu-video-card video{max-height:205px}}
   `;
-  function init() {
-    if (!document.getElementById('bubuThemeStyles')) {
-      const style=document.createElement('style'); style.id='bubuThemeStyles';
-      style.textContent=css; document.head.appendChild(style);
-    }
-    if (typeof designNames !== 'undefined') designNames.bubu=themeName;
+  function init(){
+    if('caches' in window){caches.open('learninglife-shell-v33').then(c=>c.addAll([asset+'bubu-bear.png',asset+'bubu-dudu-beach.jpg',asset+'bubu-dudu-cooking.mp4'])).catch(()=>{});}
+    if(!document.getElementById('bubuThemeStyles')){const st=document.createElement('style');st.id='bubuThemeStyles';st.textContent=css;document.head.appendChild(st)}
+    if(typeof designNames!=='undefined')designNames.bubu=themeName;
     const grid=document.getElementById('designChoices');
-    if (grid && !grid.querySelector('[data-design="bubu"]')) {
-      const b=document.createElement('button');
-      b.type='button'; b.className='theme-choice'; b.dataset.design='bubu';
-      b.innerHTML='<span class="swatches"><i style="background:#fff0f5"></i><i style="background:#ffdce8"></i><i style="background:#dff1ff"></i><i style="background:#ec8fae"></i></span><strong>Bubu & Dudu Beach</strong><small>Pastel · cute · seaside</small>';
-      grid.appendChild(b);
-      b.addEventListener('click',()=>{ localStorage.setItem(bubuKey,'1'); if(typeof applyDesign==='function') applyDesign('bubu'); });
+    if(grid&&!grid.querySelector('[data-design="bubu"]')){
+      const b=document.createElement('button');b.type='button';b.className='theme-choice';b.dataset.design='bubu';
+      b.innerHTML='<span class="swatches"><i style="background:#fff0e9"></i><i style="background:#ffe0dc"></i><i style="background:#dff5ff"></i><i style="background:#ee8f91"></i></span><strong>Bubu & Dudu Beach</strong><small>Pastel · cute · seaside</small>';
+      grid.appendChild(b);b.addEventListener('click',()=>{if(typeof applyDesign==='function')applyDesign('bubu')});
     }
-    document.querySelectorAll('#designChoices .theme-choice:not([data-design="bubu"])').forEach(btn=>{
-      btn.addEventListener('click',()=>localStorage.removeItem(bubuKey));
-    });
-    if (localStorage.getItem(bubuKey)==='1' && typeof applyDesign==='function') applyDesign('bubu');
-    const status=document.getElementById('designStatus');
-    if(status && localStorage.getItem(designKey)==='bubu') status.textContent='Current style: '+themeName;
+    const home=document.getElementById('home');
+    if(home&&!home.querySelector('.bubu-video-card')){
+      const card=document.createElement('div');card.className='bubu-video-card';
+      card.innerHTML='<h2>♡ A little Bubu & Dudu moment</h2><video controls muted loop playsinline preload="metadata" poster="'+asset+'bubu-dudu-beach.jpg"><source src="'+asset+'bubu-dudu-cooking.mp4" type="video/mp4">Your browser does not support this video.</video><p class="bubu-video-note">A tiny happy break for your day. Use the controls to play or pause.</p>';
+      const welcome=home.querySelector('.welcome');if(welcome)welcome.insertAdjacentElement('afterend',card);else home.prepend(card);
+    }
+    if(document.body.dataset.design==='bubu'&&typeof applyDesign==='function')applyDesign('bubu');
   }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true});
-  else init();
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
