@@ -1,4 +1,4 @@
-const CACHE_NAME='learninglife-shell-v38';
+const CACHE_NAME='learninglife-shell-v40';
 const APP_SHELL=[
 './','./index.html','./bible.js','./redesign.css','./redesign-v30.css','./clock.js',
 './dashboard.js','./debt-installments.js','./debt-wallet.js','./debt.js','./finance-tools.js',
@@ -29,7 +29,7 @@ self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE_NAME).then(c=>
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('learninglife-shell-')&&k!==CACHE_NAME).map(k=>caches.delete(k)))));self.clients.claim()});
 async function injectScripts(response){
  const html=await response.clone().text();let updated=html;
- for(const file of ['bible.js','debt.js','transfer.js','debt-installments.js','debt-wallet.js','finance-tools.js','reset-money.js','dashboard.js','clock.js','goals-refresh.js','wallet-sync.js','money-layout.js','learninglife-update.js','calendar-fix.js','text-size.js','bubu-theme.js']){
+ for(const file of ['bible.js','debt.js','transfer.js','debt-installments.js','debt-wallet.js','finance-tools.js','reset-money.js','dashboard.js','clock.js','goals-refresh.js','wallet-sync.js','money-layout.js','learninglife-update.js','calendar-fix.js','text-size.js','bubu-theme.js','bubu-stickers.js']){
   if(!updated.includes(`src="./${file}"`)&&!updated.includes(`src="${file}"`))updated=updated.replace(/<\/body\s*>/i,`<script src="./${file}"></script>\n</body>`);
  }
  if(updated===html)return response;
