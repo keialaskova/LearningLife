@@ -1,4 +1,4 @@
-const CACHE_NAME='learninglife-shell-v58';
+const CACHE_NAME='learninglife-shell-v59';
 const APP_SHELL=[
 './',
 './index.html',
@@ -6,6 +6,8 @@ const APP_SHELL=[
 './redesign.css',
 './redesign-v30.css',
 './layout-recovery.css',
+'./layout-system-v59.css',
+'./bubu-mobile-nav.js',
 './clock.js',
 './dashboard.js',
 './debt-installments.js',

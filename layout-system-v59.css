@@ -1,0 +1,72 @@
+/* Learning Life v59 — shared layout guard. Applies to every theme without changing theme palettes. */
+html,body{max-width:100%;overflow-x:hidden}
+.app{width:100%;max-width:1500px;margin-inline:auto}
+.layout{display:grid;grid-template-columns:250px minmax(0,1fr);align-items:start;gap:24px;width:100%;min-width:0}
+.layout>nav{min-width:0;max-width:100%}
+.layout>main{display:block;width:100%;min-width:0;max-width:none;overflow:visible}
+main .section{width:100%;min-width:0;max-width:none;}
+main .section.active{display:block;width:100%;min-width:0;max-width:none;}
+main .section.active>*{min-width:0;max-width:100%;}
+main .section.active>.welcome,main .section.active>.panel,main .section.active>.card,main .section.active>.stats,main .section.active>#dashboardExtras{width:100%;}
+#home{display:block!important;width:100%;min-width:0}
+#home>#dashboardExtras{display:block!important;width:100%!important;max-width:none!important;min-width:0!important;margin:0 0 16px!important;}
+#dashboardExtras .dash-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;width:100%!important;min-width:0!important;}
+#dashboardExtras .dash-stat,#dashboardExtras .dash-panel{min-width:0!important;width:100%!important;max-width:none!important;overflow-wrap:anywhere}
+#dashboardExtras .dash-panel{display:block!important}
+#home>.stats{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));width:100%!important;min-width:0!important}
+#home>.panel{display:block;width:100%!important;min-width:0!important}
+.section .panel,.section .card,.section .welcome{min-width:0;max-width:100%}
+.section .formrow{min-width:0;max-width:100%}
+.section .formrow>*{min-width:0}
+.section input,.section select,.section textarea{max-width:100%}
+#calendarGrid{width:100%;min-width:0}
+#calendarGrid button{min-width:0}
+/* Long Bible passages and tables must wrap inside their own panels. */
+#bible *{min-width:0;overflow-wrap:anywhere}
+#bible .panel{width:100%;max-width:100%}
+@media(max-width:900px){
+ .layout{grid-template-columns:1fr;gap:14px}
+ .layout>nav{position:static;display:flex;flex-wrap:wrap;overflow-x:auto;max-width:100%}
+ .layout>main{width:100%;}
+}
+@media(max-width:560px){
+ .app{padding-left:12px;padding-right:12px}
+ #home>.stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #dashboardExtras .dash-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .moneygrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .theme-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+/* Theme 7 mobile navigation: four persistent destinations plus an expandable More tray. */
+.bubu-more-toggle{display:none!important}
+@media(max-width:720px){
+ body[data-design="bubu"] .app{padding-bottom:calc(94px + env(safe-area-inset-bottom))!important}
+ body[data-design="bubu"] .layout{display:flex!important;flex-direction:column!important;gap:12px!important}
+ body[data-design="bubu"] .layout>nav{
+  position:fixed!important;z-index:1000!important;left:10px!important;right:10px!important;bottom:calc(8px + env(safe-area-inset-bottom))!important;
+  width:auto!important;max-width:none!important;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:4px!important;padding:7px!important;border-radius:20px!important;box-shadow:0 8px 30px #76505b26!important;
+  background:#fffdfb!important;border:1px solid #f0dce1!important;overflow:visible!important;
+ }
+ body[data-design="bubu"] nav .navlabel{display:none!important}
+ body[data-design="bubu"] nav .navbtn{display:none!important;min-width:0!important;width:100%!important;flex:none!important;margin:0!important;padding:7px 3px!important;min-height:48px!important;flex-direction:column!important;gap:2px!important;font-size:10px!important;white-space:normal!important;border-radius:13px!important}
+ body[data-design="bubu"] nav .navbtn[data-page="home"],
+ body[data-design="bubu"] nav .navbtn[data-page="calendar"],
+ body[data-design="bubu"] nav .navbtn[data-page="money"],
+ body[data-design="bubu"] nav .bubu-more-toggle{display:flex!important}
+ body[data-design="bubu"] nav .navbtn[data-page="home"]{grid-column:1;grid-row:1}
+ body[data-design="bubu"] nav .navbtn[data-page="calendar"]{grid-column:2;grid-row:1}
+ body[data-design="bubu"] nav .navbtn[data-page="money"]{grid-column:3;grid-row:1}
+ body[data-design="bubu"] nav .bubu-more-toggle{grid-column:4;grid-row:1}
+ body[data-design="bubu"] nav.more-open{grid-template-columns:repeat(4,minmax(0,1fr))!important;max-height:min(58vh,430px)!important;overflow-y:auto!important;align-content:start!important}
+ body[data-design="bubu"] nav.more-open .navbtn{display:flex!important}
+ body[data-design="bubu"] nav.more-open .navbtn[data-page="home"],
+ body[data-design="bubu"] nav.more-open .navbtn[data-page="calendar"],
+ body[data-design="bubu"] nav.more-open .navbtn[data-page="money"],
+ body[data-design="bubu"] nav.more-open .bubu-more-toggle{display:flex!important}
+ body[data-design="bubu"] nav.more-open .navlabel{display:none!important}
+ body[data-design="bubu"] #home{display:block!important}
+ body[data-design="bubu"] #home>.stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ body[data-design="bubu"] #home>.stats .stat:last-child{grid-column:1/-1}
+ body[data-design="bubu"] #home>#dashboardExtras .dash-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}

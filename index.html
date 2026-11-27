@@ -232,7 +232,7 @@ body.dark[data-design="linear"]{--muted:#d2d4eb}
 body.dark[data-design="notion"]{--bg:#191919;--panel:#242424;--ink:#f4f4f4;--muted:#c6c6c6;--line:#454545}
 body.dark[data-design="glass"]{--bg:#20243d;--panel:#353957d9;--ink:#f7f6ff;--muted:#deddf4;--line:#666b9b;background:linear-gradient(135deg,#20243d,#34304c)}
 body.dark[data-design="cozy"]{--bg:#28212d;--panel:#382e40;--ink:#fff5ff;--muted:#e0cfe2;--line:#604e67}
-@media(max-width:720px){.app{padding:22px 18px 48px}.layout{grid-template-columns:1fr;gap:16px}nav{position:static;display:flex;overflow-x:auto;gap:5px;white-space:nowrap}.navlabel{display:none}.navbtn{width:auto;flex:0 0 auto}.welcome h1{font-size:30px}body[data-design="zen"] .layout,body[data-design="notion"] .layout,body[data-design="linear"] .layout{grid-template-columns:1fr}}
+@media(max-width:900px){.app{padding:22px 18px 48px}.layout{grid-template-columns:1fr;gap:16px}nav{position:static;display:flex;overflow-x:auto;gap:5px;white-space:nowrap}.navlabel{display:none}.navbtn{width:auto;flex:0 0 auto}.welcome h1{font-size:30px}body[data-design="zen"] .layout,body[data-design="notion"] .layout,body[data-design="linear"] .layout{grid-template-columns:1fr}}
 @media(max-width:520px){body{font-size:15px}.app{padding:16px 12px 36px}.panel{padding:17px}.welcome h1{font-size:28px}.stats{grid-template-columns:1fr 1fr}.stats .stat:last-child{grid-column:span 2}.formrow{flex-wrap:wrap}.formrow>*{flex:1 1 100%}.theme-grid{grid-template-columns:1fr 1fr}}
 
 
@@ -627,5 +627,6 @@ if(load('appPin',null))$('lockScreen').classList.add('show');
 </script>
 <script src="./bubu-theme.js"></script>
 <script src="./bubu-stickers.js"></script>
+<script src="./bubu-mobile-nav.js"></script>
 </body>
 </html>
