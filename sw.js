@@ -1,4 +1,4 @@
-const CACHE_NAME='learninglife-shell-v49';
+const CACHE_NAME='learninglife-shell-v50';
 const APP_SHELL=[
 './','./index.html','./bible.js','./redesign.css','./redesign-v30.css','./clock.js',
 './dashboard.js','./debt-installments.js','./debt-wallet.js','./debt.js','./finance-tools.js',

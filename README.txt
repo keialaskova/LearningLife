@@ -1,18 +1,17 @@
-Learning Life — Theme 7 structural repair v49
+Learning Life Theme 7 — v50 layout correction
 
-Upload/replace these two files in the repository root:
-1. sw.js
-2. bubu-layout-fix.js (new file)
+Replace these two repository-root files:
+- sw.js
+- bubu-layout-fix.js
 
-Keep index.html, bubu-theme.js, bubu-stickers.js, assets, and cute_bear_stickers_54 unchanged.
+Keep index.html, bubu-theme.js, bubu-stickers.js, all assets, and sticker folder unchanged.
 
-What this repairs:
-- Corrects the existing malformed Home layout at runtime: detaches the statistics row from the video card, then moves the video card into the welcome banner.
-- Makes the welcome banner a single horizontal greeting + video composition.
-- Overrides the old Theme 7 dashboard grid that was forcing two columns.
-- Explicitly hides inactive feature sections while Theme 7 is active.
-- Pauses the video when Theme 7 is not selected.
+This fixes the v49 regression: it no longer forces every active feature page to flex.
+The Settings page returns to a readable responsive grid, with two columns on wider
+screens and one column on narrow screens. Only the Home dashboard gets the special
+Theme 7 flex layout. Inactive sections remain hidden.
 
-After upload and deployment, close the old tab and reopen the site. If the previous service worker is still serving old code, clear the site's cached data once and reload.
-
-I have inspected the current GitHub HTML and scripts and built this correction against their current structure. I cannot run your live browser here, so please verify after deployment.
+After GitHub Pages deploys, close all old Learning Life tabs and reopen the site.
+If the old layout remains, clear the site's cached data once to remove the previous
+service-worker cache. Your saved planner data is local to the browser; do not clear
+site storage if you have not backed it up. Clearing only the browser cache is safer.
