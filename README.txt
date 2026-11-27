@@ -1,19 +1,20 @@
-Learning Life — Combined Display + Buttons Update v46
+Learning Life — Dashboard Visibility + Layout Fix v47
 
-Upload/replace these files in the repository root:
-1. index.html
-2. bubu-stickers.js
-3. sw.js
+Replace ONLY:
+- bubu-stickers.js
+- sw.js
 
-Also keep/upload the complete folder:
-- cute_bear_stickers_54/ (all 54 PNG sticker assets)
+Keep the current index.html, bubu-theme.js, and sticker folder.
 
-This is a combined package:
-- index.html: v45 display correction; moves the cooking video markup into the Home welcome banner and removes the oversized separate video-card position.
-- bubu-stickers.js: v44 clickability integration correction; removes unnecessary navigation listeners and the document MutationObserver from the sticker integration.
-- sw.js: cache v44 so the browser fetches the updated scripts and sticker assets.
+Root cause addressed:
+The older Theme 7 stylesheet sets #home to display:grid!important. That overrides the app's normal hidden-page rule, so Dashboard remains visible while Settings or other pages are open. v47 explicitly hides inactive sections and lays out the active Dashboard as a clean vertical stack.
 
-Keep all other existing app files and assets. Do not delete the existing assets/ folder or any data.
-After GitHub Pages deploys, reload the app. If the browser still shows old files, clear this site's cached data or unregister its old service worker, then reload.
+Also:
+- Moves the existing cooking video card inside the Home welcome banner.
+- Keeps the greeting on the left and video on the right.
+- Removes the separate video-card position.
+- Hides the extra static sticker from the Settings heading.
+- Keeps the dashboard stats in a two-card row.
+- Other themes are not affected.
 
-Note: The package is assembled from the display and clickability fixes; the live site has not been browser-tested from this environment.
+After GitHub Pages deploys, reload the app. This package has not been live-browser tested.

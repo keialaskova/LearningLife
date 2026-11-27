@@ -116,27 +116,79 @@
     body[data-design="bubu"] #home>.welcome #bubuVideoCard{width:98px!important}
   }`;
 
-  css += `\n  /* bubu-clickability-guard */\n
-  body[data-design="bubu"] #home>.welcome #bubuVideoCard{pointer-events:none!important}
-  body[data-design="bubu"] #home>.welcome #bubuCookingVideo{pointer-events:auto!important}
-  body[data-design="bubu"] .bubu-page-sticker{pointer-events:none!important}
-  body[data-design="bubu"] .bubu-sticker-panel{position:relative!important;z-index:1!important}
-  `;\n  const style = document.createElement("style"); style.id = "bubu-real-stickers-css"; style.textContent = css;
+  css += `\n
+  /* v47: keep inactive pages hidden; the old #home grid rule exposed Dashboard on every page */
+  body[data-design="bubu"] main>.section:not(.active){
+    display:none!important;
+  }
+  body[data-design="bubu"] main>#home.section.active{
+    display:flex!important;
+    flex-direction:column!important;
+    gap:14px!important;
+    align-items:stretch!important;
+  }
+  body[data-design="bubu"] main>#home.section.active>.welcome{
+    position:relative!important;
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+    min-height:142px!important;
+    box-sizing:border-box!important;
+    padding:20px 250px 20px 24px!important;
+    overflow:hidden!important;
+    grid-area:auto!important;
+  }
+  body[data-design="bubu"] main>#home.section.active>.welcome #bubuVideoCard{
+    display:block!important;
+    position:absolute!important;
+    right:10px!important;top:10px!important;bottom:10px!important;
+    width:215px!important;height:auto!important;min-height:0!important;
+    margin:0!important;padding:3px!important;box-sizing:border-box!important;
+    border-radius:14px!important;overflow:hidden!important;
+    background:#fffafb!important;border:1px solid #f0dce1!important;
+  }
+  body[data-design="bubu"] main>#home.section.active>.welcome #bubuCookingVideo{
+    width:100%!important;height:100%!important;max-height:none!important;
+    display:block!important;object-fit:contain!important;object-position:center!important;
+    background:#fff1ef!important;border-radius:10px!important;
+  }
+  body[data-design="bubu"] main>#home.section.active>.welcome .bubu-video-caption{display:none!important}
+  body[data-design="bubu"] main>#home.section.active>.stats{
+    display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    grid-area:auto!important;gap:10px!important;margin:0!important;
+  }
+  body[data-design="bubu"] main>#home.section.active>.stats .stat:nth-child(3){display:none!important}
+  body[data-design="bubu"] main>#home.section.active>.panel{
+    display:block!important;grid-area:auto!important;min-width:0!important;
+  }
+  body[data-design="bubu"] main>#home.section.active>.panel#bubuVideoCard{display:none!important}
+  body[data-design="bubu"] #settings.section.active>.welcome .bubu-page-sticker{display:none!important}
+  @media(max-width:700px){
+    body[data-design="bubu"] main>#home.section.active>.welcome{
+      min-height:126px!important;padding:15px 128px 15px 16px!important;
+    }
+    body[data-design="bubu"] main>#home.section.active>.welcome #bubuVideoCard{
+      right:7px!important;top:7px!important;bottom:7px!important;width:112px!important;
+    }
+  }
+  @media(max-width:380px){
+    body[data-design="bubu"] main>#home.section.active>.welcome{padding-right:105px!important}
+    body[data-design="bubu"] main>#home.section.active>.welcome #bubuVideoCard{width:92px!important}
+  }
+\n  `;\n  const style = document.createElement("style"); style.id = "bubu-real-stickers-css"; style.textContent = css;
   document.head.appendChild(style);
 
   function placeVideoInWelcome() {
-    const card = document.getElementById("bubuVideoCard");
     const home = document.getElementById("home");
     const welcome = home && home.querySelector(".welcome");
+    const card = document.getElementById("bubuVideoCard");
     const video = document.getElementById("bubuCookingVideo");
-    if (!card || !welcome || !video) return;
+    if (!home || !welcome || !card || !video) return;
 
-    // The video card itself becomes the right-hand media slot in the greeting banner.
     if (card.parentElement !== welcome) welcome.appendChild(card);
 
-    // Remove the old static home sticker and any legacy duplicate media panels.
-    welcome.querySelectorAll(".bubu-page-sticker").forEach(el => el.remove());
-    document.querySelectorAll("#home .bubu-home-sticker").forEach(el => el.remove());
+    // Home uses the video instead of decorative static art.
+    welcome.querySelectorAll(".bubu-page-sticker,.bubu-home-sticker").forEach(el => el.remove());
 
     const enabled = active() && localStorage.getItem("learninglife_bubu_animation") !== "off";
     card.hidden = !enabled;
@@ -148,10 +200,9 @@
     video.setAttribute("muted", "");
     video.setAttribute("autoplay", "");
     video.setAttribute("playsinline", "");
-    video.removeAttribute("controls");
     if (enabled) {
-      const playPromise = video.play();
-      if (playPromise && typeof playPromise.catch === "function") playPromise.catch(() => {});
+      const p = video.play();
+      if (p && typeof p.catch === "function") p.catch(() => {});
     } else {
       video.pause();
     }
@@ -224,20 +275,14 @@
   placeVideoInWelcome();
   requestAnimationFrame(placeVideoInWelcome);
   document.addEventListener("DOMContentLoaded", placeVideoInWelcome, { once: true });
-  document.addEventListener("click", themeClickHandler, true);
-  function themeClickHandler(event) {
-    const button = event.target && event.target.closest ? event.target.closest(".theme-choice") : null;
-    if (button) setTimeout(() => { refresh(); placeVideoInWelcome(); }, 80);
-  }
-  function navSyncHandler(event) {
-    const button = event.target && event.target.closest ? event.target.closest(".navbtn") : null;
-    if (button) setTimeout(() => {
-      if (button.dataset.page === "home") placeVideoInWelcome();
-    }, 100);
-  }
-  document.addEventListener("click", navSyncHandler, false);
+  document.querySelectorAll(".theme-choice").forEach(button => button.addEventListener("click", () => setTimeout(refresh, 0)));
+  document.querySelectorAll(".navbtn").forEach(button => button.addEventListener("click", () => {
+    setTimeout(() => { refresh(); placeVideoInWelcome(); }, 0);
+  }));
   document.addEventListener("change", e => {
     if (e.target && e.target.id === "bubuAnimation") setTimeout(placeVideoInWelcome, 0);
   });
+  const observer = new MutationObserver(() => { if (active()) setPageStickers(); else setPageStickers(); });
+  observer.observe(document.body, {attributes:true,attributeFilter:["data-design"]});
   document.addEventListener("visibilitychange", () => { if (!document.hidden) refresh(); });
 })();
