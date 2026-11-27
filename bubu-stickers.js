@@ -116,7 +116,12 @@
     body[data-design="bubu"] #home>.welcome #bubuVideoCard{width:98px!important}
   }`;
 
-  const style = document.createElement("style"); style.id = "bubu-real-stickers-css"; style.textContent = css;
+  css += `\n  /* bubu-clickability-guard */\n
+  body[data-design="bubu"] #home>.welcome #bubuVideoCard{pointer-events:none!important}
+  body[data-design="bubu"] #home>.welcome #bubuCookingVideo{pointer-events:auto!important}
+  body[data-design="bubu"] .bubu-page-sticker{pointer-events:none!important}
+  body[data-design="bubu"] .bubu-sticker-panel{position:relative!important;z-index:1!important}
+  `;\n  const style = document.createElement("style"); style.id = "bubu-real-stickers-css"; style.textContent = css;
   document.head.appendChild(style);
 
   function placeVideoInWelcome() {
@@ -219,14 +224,20 @@
   placeVideoInWelcome();
   requestAnimationFrame(placeVideoInWelcome);
   document.addEventListener("DOMContentLoaded", placeVideoInWelcome, { once: true });
-  document.querySelectorAll(".theme-choice").forEach(button => button.addEventListener("click", () => setTimeout(refresh, 0)));
-  document.querySelectorAll(".navbtn").forEach(button => button.addEventListener("click", () => {
-    setTimeout(() => { refresh(); placeVideoInWelcome(); }, 0);
-  }));
+  document.addEventListener("click", themeClickHandler, true);
+  function themeClickHandler(event) {
+    const button = event.target && event.target.closest ? event.target.closest(".theme-choice") : null;
+    if (button) setTimeout(() => { refresh(); placeVideoInWelcome(); }, 80);
+  }
+  function navSyncHandler(event) {
+    const button = event.target && event.target.closest ? event.target.closest(".navbtn") : null;
+    if (button) setTimeout(() => {
+      if (button.dataset.page === "home") placeVideoInWelcome();
+    }, 100);
+  }
+  document.addEventListener("click", navSyncHandler, false);
   document.addEventListener("change", e => {
     if (e.target && e.target.id === "bubuAnimation") setTimeout(placeVideoInWelcome, 0);
   });
-  const observer = new MutationObserver(() => { if (active()) setPageStickers(); else setPageStickers(); });
-  observer.observe(document.body, {attributes:true,attributeFilter:["data-design"]});
   document.addEventListener("visibilitychange", () => { if (!document.hidden) refresh(); });
 })();

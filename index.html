@@ -519,6 +519,58 @@ html body[data-design="bubu"] .app > .layout > main {
 }
 </style>
 
+
+<style id="bubu-home-display-fix-v45">
+/* Theme 7: greeting + cooking video form one compact welcome banner */
+body[data-design="bubu"] #home .welcome{
+  position:relative!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  min-height:156px!important;
+  box-sizing:border-box!important;
+  padding:22px 280px 22px 26px!important;
+  overflow:hidden!important;
+}
+body[data-design="bubu"] #home .welcome:before,
+body[data-design="bubu"] #home .welcome:after{display:none!important;content:none!important}
+body[data-design="bubu"] #home .welcome h1,
+body[data-design="bubu"] #home .welcome p{max-width:100%!important;position:relative!important;z-index:1!important}
+body[data-design="bubu"] #home .welcome #bubuVideoCard{
+  display:block!important;position:absolute!important;right:12px!important;top:12px!important;
+  bottom:12px!important;width:240px!important;height:auto!important;min-height:0!important;
+  box-sizing:border-box!important;margin:0!important;padding:4px!important;
+  border:1px solid #f0dce1!important;border-radius:15px!important;
+  background:#fffafb!important;overflow:hidden!important;box-shadow:none!important;
+}
+body[data-design="bubu"] #home .welcome #bubuCookingVideo{
+  display:block!important;width:100%!important;height:100%!important;max-height:none!important;
+  object-fit:contain!important;object-position:center!important;background:#fff1ef!important;
+  border-radius:10px!important;
+}
+body[data-design="bubu"] #home .welcome .bubu-video-caption{display:none!important}
+body[data-design="bubu"] #home>.stats{
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:12px!important;margin:12px 0 16px!important;
+}
+body[data-design="bubu"] #home>.stats .stat{min-width:0!important}
+body[data-design="bubu"] #home>.stats .stat:nth-child(3){display:none!important}
+body[data-design="bubu"] #home>.panel#bubuVideoCard{display:none!important}
+@media(max-width:700px){
+ body[data-design="bubu"] #home .welcome{min-height:132px!important;padding:15px 132px 15px 17px!important}
+ body[data-design="bubu"] #home .welcome h1{font-size:clamp(18px,4.5vw,25px)!important}
+ body[data-design="bubu"] #home .welcome p{font-size:11px!important}
+ body[data-design="bubu"] #home .welcome #bubuVideoCard{
+   right:8px!important;top:8px!important;bottom:8px!important;width:116px!important;padding:3px!important
+ }
+ body[data-design="bubu"] #home>.stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+}
+@media(max-width:380px){
+ body[data-design="bubu"] #home .welcome{padding-right:108px!important;min-height:120px!important}
+ body[data-design="bubu"] #home .welcome #bubuVideoCard{width:96px!important}
+}
+</style>
+
 </head>
 <body>
 <div class="app">
@@ -546,12 +598,13 @@ html body[data-design="bubu"] .app > .layout > main {
 <main>
 <section class="section active" id="home">
 <div class="welcome"><h1 id="greeting">Good day.</h1><p>A little progress each day adds up.</p></div>
+<div class="panel bubu-video-card" id="bubuVideoCard"><video id="bubuCookingVideo" muted loop playsinline autoplay preload="metadata"><source src="assets/bubu-dudu-cooking.mp4" type="video/mp4"></video><div class="bubu-video-caption">A little cozy moment with Bubu &amp; Dudu 🐻</div>
 <div class="stats">
 <div class="card stat"><small>Tasks completed</small><strong id="taskStat">0 / 0</strong></div>
 <div class="card stat"><small>Today's schedules</small><strong id="scheduleStat">0</strong></div>
 <div class="card stat"><small>Available balance</small><strong id="balanceStat">₱0.00</strong></div>
 </div>
-<div class="panel bubu-video-card" id="bubuVideoCard"><video id="bubuCookingVideo" muted loop playsinline autoplay preload="metadata"><source src="assets/bubu-dudu-cooking.mp4" type="video/mp4"></video><div class="bubu-video-caption">A little cozy moment with Bubu &amp; Dudu 🐻</div></div>
+</div>
  <div class="panel"><div class="panelhead"><div><h2>Daily Tasks</h2><div class="sub">What you want to accomplish today</div></div><button class="btn secondary" onclick="showPage('tasks')">View all</button></div><div id="homeTasks"></div></div>
 <div class="panel"><div class="panelhead"><div><h2>Today's Schedule</h2><div class="sub">Time · Schedule</div></div><button class="btn secondary" onclick="showPage('schedule')">View all</button></div><div id="homeSchedule"></div></div>
 </section>
