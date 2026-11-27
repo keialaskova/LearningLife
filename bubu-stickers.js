@@ -49,11 +49,11 @@
   const css = `
   body[data-design="bubu"] .bubu-page-sticker{
     position:absolute!important;right:18px!important;bottom:2px!important;
-    width:clamp(92px,15vw,158px)!important;height:clamp(92px,15vw,158px)!important;
+    width:clamp(130px,19vw,200px)!important;height:clamp(130px,19vw,200px)!important;
     object-fit:contain!important;z-index:2!important;pointer-events:none!important;
     filter:drop-shadow(0 7px 8px rgba(120,80,90,.12))!important;
   }
-  body[data-design="bubu"] .welcome{padding-right:clamp(125px,19vw,195px)!important}
+  body[data-design="bubu"] .welcome{padding-right:clamp(150px,22vw,230px)!important}
   body[data-design="bubu"] .welcome:after{display:none!important}
   body[data-design="bubu"] .welcome:before{opacity:.10!important}
   body[data-design="bubu"] .bubu-sticker-panel{margin-top:18px!important}
@@ -71,23 +71,79 @@
     width:100%!important;min-width:0!important;padding:7px!important;border-radius:10px!important;
     border:1px solid #ecd9df!important;background:#fff!important;color:#725663!important;font-size:12px!important
   }
-  body[data-design="bubu"] .bubu-home-sticker{
-    display:flex!important;align-items:center!important;justify-content:center!important;
-    padding:8px!important;margin:0 0 14px!important;border:1px solid #f1dfe3!important;
-    border-radius:20px!important;background:linear-gradient(110deg,#fff0f2,#effaff)!important
-  }
-  body[data-design="bubu"] .bubu-home-sticker img{width:min(210px,48vw)!important;height:138px!important;object-fit:contain!important}
-  @media(max-width:560px){
-    body[data-design="bubu"] .welcome{padding-right:116px!important}
-    body[data-design="bubu"] .bubu-page-sticker{right:7px!important;width:112px!important;height:112px!important}
+      @media(max-width:560px){
+    body[data-design="bubu"] .welcome{padding-right:132px!important}
+    body[data-design="bubu"] .bubu-page-sticker{right:7px!important;width:124px!important;height:124px!important}
     body[data-design="bubu"] .bubu-sticker-panel .bubu-picker-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
   }`;
+
+  css += `
+  /* Cooking video lives inside the Home welcome banner */
+  body[data-design="bubu"] #home{
+    display:flex!important;flex-direction:column!important;gap:0!important;
+  }
+  body[data-design="bubu"] #home>.welcome{
+    position:relative!important;display:block!important;min-height:176px!important;
+    padding:28px 290px 24px 30px!important;overflow:hidden!important;
+  }
+  body[data-design="bubu"] #home>.welcome h1,
+  body[data-design="bubu"] #home>.welcome p{max-width:100%!important;position:relative!important;z-index:2!important}
+  body[data-design="bubu"] #home>.welcome .bubu-page-sticker{display:none!important}
+  body[data-design="bubu"] #home>.welcome #bubuVideoCard{
+    display:block!important;position:absolute!important;right:12px!important;top:12px!important;
+    bottom:12px!important;width:250px!important;height:auto!important;margin:0!important;
+    padding:5px!important;overflow:hidden!important;border:1px solid #f0dce1!important;
+    border-radius:17px!important;background:#fffafb!important;box-shadow:none!important;
+  }
+  body[data-design="bubu"] #home>.welcome #bubuCookingVideo{
+    display:block!important;width:100%!important;height:100%!important;max-height:none!important;
+    aspect-ratio:16/9!important;object-fit:contain!important;object-position:center!important;
+    background:#fff1ef!important;border-radius:12px!important;
+  }
+  body[data-design="bubu"] #home>.welcome .bubu-video-caption{display:none!important}
+  @media(max-width:700px){
+    body[data-design="bubu"] #home>.welcome{min-height:140px!important;padding:17px 138px 17px 17px!important}
+    body[data-design="bubu"] #home>.welcome h1{font-size:clamp(20px,4.5vw,27px)!important}
+    body[data-design="bubu"] #home>.welcome p{font-size:11px!important}
+    body[data-design="bubu"] #home>.welcome #bubuVideoCard{
+      right:8px!important;top:8px!important;bottom:8px!important;width:122px!important;
+      padding:3px!important;border-radius:12px!important;
+    }
+    body[data-design="bubu"] #home>.welcome #bubuCookingVideo{border-radius:9px!important}
+  }
+  @media(max-width:380px){
+    body[data-design="bubu"] #home>.welcome{padding-right:116px!important;min-height:126px!important}
+    body[data-design="bubu"] #home>.welcome #bubuVideoCard{width:100px!important}
+  }`;
+
   const style = document.createElement("style"); style.id = "bubu-real-stickers-css"; style.textContent = css;
   document.head.appendChild(style);
 
+  let videoOriginalParent = null;
+  let videoOriginalNext = null;
+  function placeVideoInWelcome() {
+    const card = document.getElementById("bubuVideoCard");
+    const homeWelcome = document.querySelector("#home > .welcome");
+    if (!card) return;
+    if (active() && homeWelcome) {
+      if (!videoOriginalParent) {
+        videoOriginalParent = card.parentNode;
+        videoOriginalNext = card.nextSibling;
+      }
+      if (card.parentNode !== homeWelcome) homeWelcome.appendChild(card);
+      card.style.display = localStorage.getItem("learninglife_bubu_animation") === "off" ? "none" : "block";
+    } else if (!active() && videoOriginalParent && card.parentNode !== videoOriginalParent) {
+      if (videoOriginalNext && videoOriginalNext.parentNode === videoOriginalParent) {
+        videoOriginalParent.insertBefore(card, videoOriginalNext);
+      } else {
+        videoOriginalParent.appendChild(card);
+      }
+    }
+  }
   function setPageStickers() {
+    placeVideoInWelcome();
     if (!active()) {
-      document.querySelectorAll(".bubu-page-sticker,.bubu-home-sticker").forEach(n => n.remove());
+      document.querySelectorAll(".bubu-page-sticker").forEach(n => n.remove());
       const panel = document.getElementById("bubuStickerSettings"); if (panel) panel.hidden = true;
       return;
     }
@@ -96,6 +152,11 @@
       const page = section.id;
       const welcome = section.querySelector(".welcome");
       if (!welcome) return;
+      if (page === "home") {
+        const oldSticker = welcome.querySelector(".bubu-page-sticker");
+        if (oldSticker) oldSticker.remove();
+        return;
+      }
       let img = welcome.querySelector(".bubu-page-sticker");
       if (!img) {
         img = document.createElement("img");
@@ -108,15 +169,6 @@
       img.src = fileFor(key, choices[key] || "both");
       img.dataset.stickerKey = key;
     });
-    const home = document.getElementById("home");
-    if (home && !home.querySelector(".bubu-home-sticker")) {
-      const box = document.createElement("div"); box.className = "bubu-home-sticker";
-      const img = document.createElement("img"); img.alt = "Bubu and Dudu daily life sticker";
-      img.src = fileFor("journal", choices.journal || "both");
-      box.appendChild(img);
-      const welcome = home.querySelector(".welcome");
-      if (welcome) welcome.insertAdjacentElement("afterend", box);
-    }
   }
   function renderPicker() {
     const settings = document.getElementById("settings");
@@ -143,10 +195,6 @@
         try { localStorage.setItem(PREF, JSON.stringify(choices)); } catch (_) {}
         img.src = fileFor(key, select.value);
         document.querySelectorAll('.bubu-page-sticker[data-sticker-key="'+key+'"]').forEach(el => el.src = fileFor(key, select.value));
-        if (key === "journal") {
-          const hero = document.querySelector(".bubu-home-sticker img");
-          if (hero) hero.src = fileFor(key, select.value);
-        }
       });
       card.append(title,img,select); grid.appendChild(card);
     });
@@ -159,6 +207,7 @@
   refresh();
   document.querySelectorAll(".theme-choice").forEach(button => button.addEventListener("click", () => setTimeout(refresh, 0)));
   document.querySelectorAll(".navbtn").forEach(button => button.addEventListener("click", () => setTimeout(refresh, 0)));
+  document.addEventListener("change", e => { if (e.target && e.target.id === "bubuAnimation") setTimeout(placeVideoInWelcome, 0); });
   const observer = new MutationObserver(() => { if (active()) setPageStickers(); else setPageStickers(); });
   observer.observe(document.body, {attributes:true,attributeFilter:["data-design"]});
   document.addEventListener("visibilitychange", () => { if (!document.hidden) refresh(); });
