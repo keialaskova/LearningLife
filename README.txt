@@ -1,10 +1,9 @@
-Learning Life — index.html loader fix
+Learning Life — Theme 7 direct index layout fix
 
 Replace the ROOT index.html in your GitHub repository with this file.
 
-This is based on the latest Theme 7 index update and adds the missing direct script include:
-<script src="./bubu-theme.js"></script>
+This version puts Theme 7's structural layout CSS directly into index.html after the existing stylesheet links. It does not depend on bubu-theme.js to change the navigation layout. The bubu-theme.js script is still loaded at the bottom for the animation/video behavior.
 
-The script tag is placed immediately before </body>, after the app's existing inline JavaScript. This ensures bubu-theme.js actually runs when the page loads. Keep bubu-theme.js v38 and sw.js v38 in the repository root, along with all existing assets and folders.
+Keep your current bubu-theme.js and sw.js, and keep all existing assets and other app files. The rules only apply when body[data-design="bubu"], so the other six themes are not targeted.
 
-Do not upload this README as an app file.
+After upload, reload the site. The Theme 7 navigation should become a horizontal toolbar instead of the left sidebar. If the browser still shows the old version, the service worker may need to be refreshed.
