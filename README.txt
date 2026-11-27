@@ -1,23 +1,19 @@
-LEARNING LIFE — THEME 7: BUBU & DUDU BEACH
+Learning Life — Theme 7 complete file update
 
-This is an additive patch. It does not replace index.html and does not alter existing app data.
-The six existing themes remain available. The new Bubu & Dudu Beach option appears as Theme 7.
+Upload/replace these three files in the ROOT of your GitHub repository:
+- index.html
+- bubu-theme.js
+- sw.js
 
-FILES TO UPLOAD TO THE ROOT OF YOUR EXISTING GitHub repository:
-1. bubu-theme.js       (replace the existing file with this updated version)
-2. assets/             (upload the entire folder, keeping the three files inside it)
+The updated service worker cache is v35. It keeps the existing app shell and 54 sticker asset paths, and includes the Bubu & Dudu theme assets.
 
-IMPORTANT:
-- Do NOT delete or replace index.html, your existing scripts, or your existing data.
-- Keep the folder name exactly: assets
-- Keep the three filenames exactly as provided.
-- The existing service worker already loads bubu-theme.js. When the app opens online, the patch caches the three media files for later use.
+Required existing asset paths:
+- assets/bubu-bear.png
+- assets/bubu-dudu-beach.jpg
+- assets/bubu-dudu-cooking.mp4
+- cute_bear_stickers_54/ (54 sticker files)
 
-AFTER UPLOADING:
-1. Wait for GitHub Pages to finish publishing.
-2. Open Learning Life while connected to the internet.
-3. Refresh the app once. If an old version remains, close the app fully and reopen it.
-4. Go to Settings > Appearance > Bubu & Dudu Beach (Theme 7).
-5. The cooking clip appears on the Home screen. It is muted, loops, and has play/pause controls.
+Do not delete your existing assets or other app JavaScript/CSS files.
+After uploading, open the app and refresh/reload it. If the old version remains, close the installed PWA and reopen it after the service worker updates.
 
-The video is the earlier uploaded Bubu & Dudu cooking clip (about 5 seconds). The supplied beach image and bear image are used in the theme.
+Note: this package contains the three updated app files, not the image/video/sticker asset files themselves.

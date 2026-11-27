@@ -239,6 +239,41 @@ body.dark[data-design="cozy"]{--bg:#28212d;--panel:#382e40;--ink:#fff5ff;--muted
 /* Theme 7 media belongs only to Bubu & Dudu; the original six themes stay unchanged. */
 .bubu-video-card{display:none}
 body[data-design="bubu"] .bubu-video-card{display:block}
+
+/* Bubu & Dudu Beach — Theme 7 only */
+body[data-design="bubu"]{--bg:#fff4ef;--panel:#fffdfb;--ink:#594653;--muted:#927d8c;--line:#f3dce2;--accent:#e88f9d;--accent2:#ffe5e8;--shadow:0 12px 32px rgba(194,132,154,.13);font-family:"Trebuchet MS",system-ui,sans-serif;background:linear-gradient(145deg,#fff4ef,#fcebf1 48%,#eaf8ff)}
+body[data-design="bubu"] .app{max-width:1420px;padding:28px 26px 64px}
+body[data-design="bubu"] header,body[data-design="bubu"] nav{background:#fffdfb;border:1px solid #f5dce4;border-radius:24px;box-shadow:var(--shadow)}
+body[data-design="bubu"] header{padding:14px 20px}
+body[data-design="bubu"] .brand{font-size:27px;color:#d87991}
+body[data-design="bubu"] .brand:after{content:" 🐻"}
+body[data-design="bubu"] .layout{grid-template-columns:235px minmax(0,1fr);gap:22px}
+body[data-design="bubu"] nav{padding:14px}
+body[data-design="bubu"] .navlabel{color:#c18b9d}
+body[data-design="bubu"] .navbtn{color:#806879;border-radius:15px;padding:12px}
+body[data-design="bubu"] .navbtn.active,body[data-design="bubu"] .navbtn:hover{background:#ffe5e8;color:#b85f7b}
+body[data-design="bubu"] .welcome{padding:22px 24px;margin:4px 0 18px;border-radius:26px;background:linear-gradient(115deg,#ffe4e8,#fff2e9 55%,#e7f6ff);border:1px solid #f6dce5}
+body[data-design="bubu"] .welcome h1{font-size:36px;color:#b96883}
+body[data-design="bubu"] .panel,body[data-design="bubu"] .card{border:1px solid #f3dce2;border-radius:23px;box-shadow:var(--shadow);background:#fffdfbf2}
+body[data-design="bubu"] .panel{padding:23px}
+body[data-design="bubu"] h2{color:#a9637c}
+body[data-design="bubu"] .btn{background:#e88f9d;border-radius:14px}
+body[data-design="bubu"] .btn.secondary,body[data-design="bubu"] .pill{background:#e8f5fc;color:#648ba1}
+body[data-design="bubu"] .field{background:#fffafb;color:#594653;border:1px solid #f0d8e1;border-radius:14px}
+body[data-design="bubu"] .moneybox{background:#fff4f5;border:1px solid #f4dfe5;border-radius:17px}
+body[data-design="bubu"] .time{color:#d47f98}
+body[data-design="bubu"] .bubu-video-card{overflow:hidden;padding:12px}
+body[data-design="bubu"] .bubu-video-card video{display:block;width:100%;max-height:270px;object-fit:cover;border-radius:17px;background:#eaf7ff}
+body[data-design="bubu"] .bubu-video-caption{padding:8px 5px 2px;color:#b96883;font-weight:700}
+body.dark[data-design="bubu"]{--bg:#29232d;--panel:#382f3b;--ink:#fff0f5;--muted:#e0c4d0;--line:#5b4657;--accent:#f0a2b1;--accent2:#4c3b50;background:linear-gradient(145deg,#29232d,#3b3446 55%,#283d4b)}
+body.dark[data-design="bubu"] header,body.dark[data-design="bubu"] nav,body.dark[data-design="bubu"] .panel,body.dark[data-design="bubu"] .card{background:#382f3b;border-color:#5b4657}
+body.dark[data-design="bubu"] .welcome{background:linear-gradient(115deg,#533d50,#55434a 55%,#344c59)}
+body.dark[data-design="bubu"] .welcome h1,body.dark[data-design="bubu"] h2{color:#ffd1df}
+body.dark[data-design="bubu"] .field{background:#302936;color:#fff0f5;border-color:#665064}
+body.dark[data-design="bubu"] .moneybox{background:#342b39;border-color:#5b4657}
+@media(max-width:900px){body[data-design="bubu"] .layout{grid-template-columns:1fr}body[data-design="bubu"] nav{position:static;display:flex;overflow-x:auto;white-space:nowrap}body[data-design="bubu"] .navbtn{flex:0 0 auto}}
+@media(max-width:520px){body[data-design="bubu"] .app{padding:12px 10px 34px}body[data-design="bubu"] .welcome{padding:18px}body[data-design="bubu"] .welcome h1{font-size:29px}body[data-design="bubu"] .panel{padding:16px}}
+
 </style>
 <link rel="stylesheet" href="redesign.css">
 <link rel="stylesheet" href="redesign-v30.css">
@@ -274,7 +309,8 @@ body[data-design="bubu"] .bubu-video-card{display:block}
 <div class="card stat"><small>Today's schedules</small><strong id="scheduleStat">0</strong></div>
 <div class="card stat"><small>Available balance</small><strong id="balanceStat">₱0.00</strong></div>
 </div>
-<div class="panel"><div class="panelhead"><div><h2>Daily Tasks</h2><div class="sub">What you want to accomplish today</div></div><button class="btn secondary" onclick="showPage('tasks')">View all</button></div><div id="homeTasks"></div></div>
+<div class="panel bubu-video-card" id="bubuVideoCard"><video id="bubuCookingVideo" muted loop playsinline autoplay preload="metadata"><source src="assets/bubu-dudu-cooking.mp4" type="video/mp4"></video><div class="bubu-video-caption">A little cozy moment with Bubu &amp; Dudu 🐻</div></div>
+ <div class="panel"><div class="panelhead"><div><h2>Daily Tasks</h2><div class="sub">What you want to accomplish today</div></div><button class="btn secondary" onclick="showPage('tasks')">View all</button></div><div id="homeTasks"></div></div>
 <div class="panel"><div class="panelhead"><div><h2>Today's Schedule</h2><div class="sub">Time · Schedule</div></div><button class="btn secondary" onclick="showPage('schedule')">View all</button></div><div id="homeSchedule"></div></div>
 </section>
 <section class="section" id="tasks">
@@ -361,8 +397,10 @@ body[data-design="bubu"] .bubu-video-card{display:block}
 <button type="button" class="theme-choice" data-design="notion"><span class="swatches"><i></i><i></i><i></i><i></i></span><strong>Notion Inspired</strong><small>Simple · clear · organized</small></button>
 <button type="button" class="theme-choice" data-design="glass"><span class="swatches"><i></i><i></i><i></i><i></i></span><strong>Glassmorphism</strong><small>Soft · translucent · fresh</small></button>
 <button type="button" class="theme-choice" data-design="cozy"><span class="swatches"><i></i><i></i><i></i><i></i></span><strong>Cozy Pastel</strong><small>Gentle · friendly · warm</small></button>
+ <button type="button" class="theme-choice" data-design="bubu"><span class="swatches"><i style="background:#fff0e9"></i><i style="background:#ffe0dc"></i><i style="background:#dff5ff"></i><i style="background:#ee8f91"></i></span><strong>Bubu &amp; Dudu Beach</strong><small>Beach · pastel · kawaii</small></button>
 </div>
-<div class="mode-row"><div><strong>Color mode</strong><p class="sub">Switch between light and dark appearance.</p></div><select class="field" id="settingsTheme" style="max-width:160px"><option value="light">Light mode</option><option value="dark">Dark mode</option></select></div>
+<div class="mode-row"><div><strong>Animation</strong><p class="sub">Show or hide the Bubu &amp; Dudu home video when Theme 7 is active.</p></div><select class="field" id="bubuAnimation" style="max-width:160px"><option value="on">On</option><option value="off">Off</option></select></div>
+ <div class="mode-row"><div><strong>Color mode</strong><p class="sub">Switch between light and dark appearance.</p></div><select class="field" id="settingsTheme" style="max-width:160px"><option value="light">Light mode</option><option value="dark">Dark mode</option></select></div>
 <p class="sub" id="designStatus" role="status">Current style: Japanese Zen</p>
 </div>
 <div class="panel" id="privacySettings">
@@ -394,11 +432,13 @@ const load=(k,d)=>{try{return JSON.parse(localStorage.getItem('myday_'+k))??d}ca
 const save=(k,v)=>localStorage.setItem('myday_'+k,JSON.stringify(v));
 // Appearance preferences are stored separately; planner records are untouched.
 const themeToggle=$('themeToggle');
-const designNames={zen:'Japanese Zen',luxury:'Luxury Editorial',linear:'Linear Inspired',notion:'Notion Inspired',glass:'Glassmorphism',cozy:'Cozy Pastel'};
+const designNames={zen:'Japanese Zen',luxury:'Luxury Editorial',linear:'Linear Inspired',notion:'Notion Inspired',glass:'Glassmorphism',cozy:'Cozy Pastel',bubu:'Bubu & Dudu Beach'};
 let savedDesign=localStorage.getItem('workinglife_design')||'zen';
-function applyDesign(name){if(!designNames[name])name='zen';savedDesign=name;document.body.dataset.design=name;localStorage.setItem('workinglife_design',name);document.querySelectorAll('.theme-choice').forEach(b=>{const active=b.dataset.design===name;b.classList.toggle('selected',active);b.setAttribute('aria-pressed',String(active))});if($('designStatus'))$('designStatus').textContent='Current style: '+designNames[name]}
+function applyDesign(name){if(!designNames[name])name='zen';savedDesign=name;document.body.dataset.design=name;localStorage.setItem('workinglife_design',name);document.querySelectorAll('.theme-choice').forEach(b=>{const active=b.dataset.design===name;b.classList.toggle('selected',active);b.setAttribute('aria-pressed',String(active))});if($('designStatus'))$('designStatus').textContent='Current style: '+designNames[name];syncBubuMedia()}
 function applyTheme(mode){document.body.classList.toggle('dark',mode==='dark');if(themeToggle){themeToggle.textContent=mode==='dark'?'☀ Light mode':'☾ Dark mode';themeToggle.setAttribute('aria-label',mode==='dark'?'Switch to light mode':'Switch to dark mode')}if($('settingsTheme'))$('settingsTheme').value=mode}
+function syncBubuMedia(){const card=$('bubuVideoCard'),video=$('bubuCookingVideo'),toggle=$('bubuAnimation');const enabled=localStorage.getItem('learninglife_bubu_animation')!=='off';if(toggle)toggle.value=enabled?'on':'off';if(card)card.style.display=(savedDesign==='bubu'&&enabled)?'block':'none';if(video){if(savedDesign==='bubu'&&enabled){video.play().catch(()=>{});}else{video.pause();}}}
 let savedTheme=localStorage.getItem('learninglife_theme')||'light';applyDesign(savedDesign);applyTheme(savedTheme);
+if($('bubuAnimation'))$('bubuAnimation').onchange=e=>{localStorage.setItem('learninglife_bubu_animation',e.target.value);syncBubuMedia()};
 document.querySelectorAll('.theme-choice').forEach(b=>b.addEventListener('click',()=>applyDesign(b.dataset.design)));
 // Removed obsolete header theme-toggle handler; Settings controls color mode.
 
